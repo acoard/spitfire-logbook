@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    font-size: 16px;
+  }
+
+  body {
+    @apply bg-stone-800 text-stone-900 antialiased overflow-hidden min-h-screen;
+    font-family: 'Special Elite', system-ui, sans-serif;
+    margin: 0;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}
+
+.font-typewriter {
+  font-family: 'Special Elite', 'Courier New', monospace;
+}
+
+.font-handwriting {
+  font-family: 'Patrick Hand', cursive;
+}
+
+.font-old-print {
+  font-family: 'Old Standard TT', serif;
+}
+
+.bg-paper {
+  background-color: #f4f1ea;
+  background-image:
+    linear-gradient(#e5e5e5 1px, transparent 1px),
+    linear-gradient(90deg, #e5e5e5 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
