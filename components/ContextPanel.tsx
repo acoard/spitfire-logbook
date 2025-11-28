@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+
+import React, { useState, useRef, useEffect } from 'react';
 import { LogEntry } from '../types';
 import { AIRCRAFT_SPECS } from '../services/flightData';
-import { FolderOpen, Plane, FileText } from 'lucide-react';
+import { FolderOpen, Plane, FileText, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface ContextPanelProps {
   selectedEntry: LogEntry | null;
@@ -11,6 +12,13 @@ type Tab = 'MISSION' | 'AIRCRAFT';
 
 const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
   const [activeTab, setActiveTab] = useState<Tab>('MISSION');
+  const [showTranscription, setShowTranscription] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Reset transcription view when entry changes
+  useEffect(() => {
+    setShowTranscription(false);
+  }, [selectedEntry?.id]);
 
   if (!selectedEntry) {
     return (
@@ -63,7 +71,8 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
 
              {/* Content Switching */}
              {activeTab === 'MISSION' && (
-                 <div className="mt-2 font-old-print text-stone-800 leading-relaxed text-sm animate-in fade-in duration-300">
+                 <div className="mt-2 font-old-print text-stone-800 leading-relaxed text-sm animate-in fade-in duration-300 space-y-4">
+                    {/* Historical Note */}
                     {selectedEntry.historicalNote ? (
                         <div className="bg-white p-4 shadow-sm border border-stone-300 transform -rotate-1 relative">
                             {/* Pin effect */}
@@ -74,6 +83,52 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
                         <div className="text-stone-500 italic font-handwriting text-lg pl-4 border-l-4 border-stone-300 py-2">
                             "Routine flight operations. No special incident reports filed for this date."
                         </div>
+                    )}
+
+                    {/* D-Day Handwritten Note Section */}
+                    {selectedEntry.handwrittenNoteTranscription && (
+                         <div className="mt-6 border-t border-stone-300 pt-4">
+                            <h4 className="font-typewriter text-xs font-bold uppercase text-stone-600 mb-3 flex items-center gap-2">
+                                <span className="w-2 h-2 bg-stone-500 rounded-full"></span>
+                                Logbook Annotation
+                            </h4>
+                            
+                            {/* Image Container (Visual placeholder if image is missing) */}
+                            {selectedEntry.handwrittenNoteImg && (
+                                <div className="mb-3 border-4 border-white shadow-md rotate-1 transition-transform hover:rotate-0">
+                                    <img 
+                                        src={selectedEntry.handwrittenNoteImg} 
+                                        alt="Handwritten Logbook Note" 
+                                        className="w-full h-auto object-cover grayscale sepia contrast-125"
+                                        onError={(e) => {
+                                            (e.target as HTMLImageElement).src = 'https://placehold.co/600x200/e8e4db/57534e?text=Original+Handwritten+Note';
+                                        }}
+                                    />
+                                </div>
+                            )}
+
+                            {/* Transcription Toggle */}
+                            <div className="flex flex-col">
+                                <button 
+                                    onClick={() => setShowTranscription(!showTranscription)}
+                                    className="self-start text-[10px] font-typewriter uppercase tracking-widest text-stone-500 hover:text-amber-600 flex items-center gap-1 transition-colors focus:outline-none mb-2"
+                                >
+                                    {showTranscription ? (
+                                        <>Hide Transcription <ChevronUp className="w-3 h-3" /></>
+                                    ) : (
+                                        <>View Transcription <ChevronDown className="w-3 h-3" /></>
+                                    )}
+                                </button>
+                                
+                                <div 
+                                    className={`overflow-hidden transition-all duration-500 ease-in-out ${showTranscription ? 'opacity-100 max-h-96' : 'opacity-0 max-h-0'}`}
+                                >
+                                    <div className="bg-stone-100 p-3 border-l-2 border-amber-500 font-handwriting text-lg text-stone-700 leading-snug italic">
+                                        "{selectedEntry.handwrittenNoteTranscription}"
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
                     )}
                  </div>
              )}
