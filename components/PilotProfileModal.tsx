@@ -40,7 +40,7 @@ const PilotProfileModal: React.FC<PilotProfileModalProps> = ({ isOpen, onClose }
             <h3 className="font-typewriter text-lg font-bold uppercase text-stone-900 border-b border-stone-400 mb-2">I. Personal Particulars</h3>
             
             <p className="mb-4">
-              <span className="font-bold">Name:</span> Captain H. A. Glen (Robin)<br/>
+              <span className="font-bold">Name:</span> Captain R. Glen (Robin)<br/>
               <span className="font-bold">Service Period:</span> 1941 – 1946<br/>
               <span className="font-bold">Total Flying Hours:</span> 741 hrs 05 mins (as of Mar 1946)
             </p>
