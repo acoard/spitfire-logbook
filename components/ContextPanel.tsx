@@ -12,7 +12,7 @@ type Tab = 'MISSION' | 'AIRCRAFT';
 
 const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
   const [activeTab, setActiveTab] = useState<Tab>('MISSION');
-  const [showBriefText, setShowBriefText] = useState(false);
+  const [showBriefText, setShowBriefText] = useState(true);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);

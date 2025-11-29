@@ -1,4 +1,5 @@
 import React from 'react';
+import StickyNote from './StickyNote';
 
 interface LoadingScreenProps {
   isLoaded: boolean;
@@ -7,19 +8,19 @@ interface LoadingScreenProps {
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ isLoaded, onEnter }) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#dcd0b2] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#dcd0b2] overflow-y-auto overflow-x-hidden">
       {/* Background Texture/Effects */}
-      <div className="absolute inset-0 opacity-30 pointer-events-none" 
+      <div className="fixed inset-0 opacity-30 pointer-events-none" 
            style={{ 
              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%235c4033' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` 
            }} 
       />
       
       {/* Coffee stains / vintage texture overlays */}
-      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_10%_20%,_rgba(101,67,33,0.15)_0%,_transparent_20%)] pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_90%_80%,_rgba(101,67,33,0.2)_0%,_transparent_25%)] pointer-events-none" />
+      <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_10%_20%,_rgba(101,67,33,0.15)_0%,_transparent_20%)] pointer-events-none" />
+      <div className="fixed bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_90%_80%,_rgba(101,67,33,0.2)_0%,_transparent_25%)] pointer-events-none" />
 
-      <div className="relative w-full max-w-4xl h-full max-h-[90vh] p-8 flex flex-col items-center justify-center">
+      <div className="relative w-full max-w-4xl min-h-screen md:min-h-0 md:h-full md:max-h-[90vh] p-4 md:p-8 flex flex-col items-center justify-center my-auto">
         
         {/* Main Content Container */}
         <div className="relative bg-[#f4f1ea] p-4 shadow-[0_0_15px_rgba(0,0,0,0.3)] rotate-1 max-w-2xl w-full border border-stone-300 transition-all duration-1000">
@@ -137,6 +138,14 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ isLoaded, onEnter }) => {
           </div>
 
         </div>
+
+        {/* Dramatic Quote Note - Pinned to the side */}
+        <StickyNote 
+          signature="Robin Glen, D-Day"
+          className="md:absolute mt-8 md:mt-0 bottom-auto md:bottom-[200px] right-auto md:-right-4 lg:-right-16 transform rotate-1 md:rotate-2 md:w-72 mx-auto md:mx-0"
+        >
+          "30 months elapsed from the time I got my pilots' 'wings' to getting to a squadron - and what could be a more dramatic way of starting on 'ops' than to fly daily over the tiny beach head where the Allies struggled to get ashore and open up the Second Front."
+        </StickyNote>
         
         {/* Official Stamps */}
         <div className="absolute top-12 right-8 transform rotate-12 opacity-60 pointer-events-none hidden md:block">
