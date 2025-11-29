@@ -6,7 +6,8 @@ import WorkspaceLayout from './components/WorkspaceLayout';
 import LoadingScreen from './components/LoadingScreen';
 
 const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isAssetsLoading, setIsAssetsLoading] = useState(true);
+  const [hasEntered, setHasEntered] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [filterPhase, setFilterPhase] = useState<Phase | 'ALL'>('ALL');
   const [shouldCenterMap, setShouldCenterMap] = useState(true);
@@ -15,8 +16,8 @@ const App: React.FC = () => {
   // Temporary loading simulation
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 5000); // 5 seconds delay
+      setIsAssetsLoading(false);
+    }, 250); // 5 seconds delay
 
     return () => clearTimeout(timer);
   }, []);
@@ -44,7 +45,7 @@ const App: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-stone-900 font-sans">
-      {isLoading && <LoadingScreen />}
+      {!hasEntered && <LoadingScreen isLoaded={!isAssetsLoading} onEnter={() => setHasEntered(true)} />}
       <PilotProfileModal isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
       <WorkspaceLayout
         entries={filteredEntries}
