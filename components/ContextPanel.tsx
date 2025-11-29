@@ -98,8 +98,19 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
                  <div className="mt-2 font-old-print text-stone-800 leading-relaxed text-sm animate-in fade-in duration-300 space-y-4">
                     {/* Historical Note */}
                     {selectedEntry.historicalNote ? (
-                        <div className="bg-white p-4 shadow-sm border border-stone-300 transform -rotate-1 relative">
-                            <p className="whitespace-pre-line">{selectedEntry.historicalNote}</p>
+                        <div className="relative my-4 mx-1">
+                            <div className="bg-[#f8f5f0] p-4 shadow-sm border border-stone-300 relative">
+
+                                {/* Stamped Header */}
+                                <div className="mb-2 border-b border-stone-300 pb-1 flex justify-between items-end">
+                                    <span className="font-typewriter text-[10px] uppercase tracking-widest text-stone-500">Historical Record</span>
+                                    <span className="font-typewriter text-[10px] text-stone-400">{selectedEntry.date}</span>
+                                </div>
+                                
+                                <p className="whitespace-pre-line font-typewriter text-sm text-stone-800 leading-relaxed">
+                                    {selectedEntry.historicalNote}
+                                </p>
+                            </div>
                         </div>
                     ) : (
                         <div className="text-stone-500 italic font-handwriting text-lg pl-4 border-l-4 border-stone-300 py-2">
@@ -140,7 +151,7 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
                                             Next
                                         </button>
                                     </div>
-                                    <div className="mb-3 border-4 border-white shadow-md rotate-1 transition-transform hover:rotate-0">
+                                    <div className="mb-3 border-4 border-white shadow-md max-w-[50rem] mx-auto rotate-1 transition-transform hover:rotate-0">
                                         <div className="relative">
                                             <img 
                                                 src={activeGalleryImage ?? undefined}
