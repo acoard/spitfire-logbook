@@ -11,7 +11,7 @@ import MapPanel from './MapPanel';
 import { LogEntry, Phase } from '../types';
 
 const MIN_SIDE = 0;
-const MAX_SIDE = 1900;
+const MAX_SIDE = 4000;
 const MIN_RATIO = 0.3;
 const MAX_RATIO = 1;
 const DRAG_HANDLE_WIDTH = 32; // corresponds to w-8
@@ -54,14 +54,14 @@ const useMediaQuery = (query: string) => {
 };
 
 type PresetConfig = {
-  ratio: number;
+  ratio?: number;
   side?: number;
   sideFraction?: number;
 };
 
 const layoutPresets: Record<'balanced' | 'logbook' | 'map', PresetConfig> = {
   balanced: { side: 560, ratio: 0.64 },
-  logbook: { sideFraction: 1, ratio: 1 },
+  logbook: { sideFraction: 1 },
   map: { sideFraction: 0, ratio: 0.3 }
 };
 
@@ -233,7 +233,9 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
         ? config.sideFraction * maxWidth
         : clamp(config.side ?? maxWidth, MIN_SIDE, maxWidth);
     setSidePanelWidth(targetWidth);
-    setLogbookHeightRatio(config.ratio);
+    if (config.ratio !== undefined) {
+      setLogbookHeightRatio(config.ratio);
+    }
     setActivePreset(preset);
   };
 
