@@ -1,64 +1,42 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { FLIGHT_LOG } from './services/flightData';
-import { LogEntry, Phase } from './types';
-import PilotProfileModal from './components/PilotProfileModal';
-import WorkspaceLayout from './components/WorkspaceLayout';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LoadingScreen from './components/LoadingScreen';
+import { NavBar } from './components/NavBar';
+import { Gallery } from './components/Gallery';
+import FlightBookView from './components/FlightBookView';
 
 const App: React.FC = () => {
   const [isAssetsLoading, setIsAssetsLoading] = useState(true);
   const [hasEntered, setHasEntered] = useState(false);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [filterPhase, setFilterPhase] = useState<Phase | 'ALL'>('ALL');
-  const [shouldCenterMap, setShouldCenterMap] = useState(true);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   // Temporary loading simulation
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsAssetsLoading(false);
-    }, 250); // 5 seconds delay
+    }, 250); // 0.25 seconds delay
 
     return () => clearTimeout(timer);
   }, []);
 
-  const filteredEntries = useMemo(() => {
-    if (filterPhase === 'ALL') return FLIGHT_LOG;
-    return FLIGHT_LOG.filter((entry) => entry.phase === filterPhase);
-  }, [filterPhase]);
-
-  // Derived state
-  const selectedEntry = useMemo(
-    () => FLIGHT_LOG.find((e) => e.id === selectedId) || null,
-    [selectedId]
-  );
-
-  const handleLogbookSelect = (entry: LogEntry) => {
-    setSelectedId(entry.id);
-    setShouldCenterMap(true);
-  };
-
-  const handleMarkerSelect = (entry: LogEntry) => {
-    setSelectedId(entry.id);
-    setShouldCenterMap(false);
-  };
-
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-stone-900 font-sans">
-      {!hasEntered && <LoadingScreen isLoaded={!isAssetsLoading} onEnter={() => setHasEntered(true)} />}
-      <PilotProfileModal isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
-      <WorkspaceLayout
-        entries={filteredEntries}
-        selectedEntry={selectedEntry}
-        selectedId={selectedId}
-        filterPhase={filterPhase}
-        setFilterPhase={setFilterPhase}
-        onLogbookSelect={handleLogbookSelect}
-        onMarkerSelect={handleMarkerSelect}
-        shouldCenterMap={shouldCenterMap}
-        onOpenProfile={() => setIsProfileOpen(true)}
-      />
-    </div>
+    <Router>
+      <div className="flex flex-col h-screen w-screen overflow-hidden bg-stone-900 font-sans">
+        {!hasEntered && <LoadingScreen isLoaded={!isAssetsLoading} onEnter={() => setHasEntered(true)} />}
+        
+        {hasEntered && (
+          <>
+            <NavBar />
+            <div className="flex-1 overflow-hidden flex flex-col">
+              <Routes>
+                <Route path="/" element={<FlightBookView />} />
+                <Route path="/gallery" element={<Gallery />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </div>
+          </>
+        )}
+      </div>
+    </Router>
   );
 };
 
