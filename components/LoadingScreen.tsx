@@ -129,7 +129,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ isLoaded, onEnter }) => {
         {/* Official Stamps */}
         <div className="absolute top-12 right-8 transform rotate-12 opacity-60 pointer-events-none hidden md:block">
             <div className="border-4 border-red-900/50 text-red-900/50 rounded-full w-32 h-32 flex items-center justify-center font-old-print font-bold text-xl p-2 text-center rotate-[-15deg] mask-image">
-                RAF<br/>CONFIDENTIAL
+                RAF<br/>OFFICIAL
             </div>
         </div>
       </div>
