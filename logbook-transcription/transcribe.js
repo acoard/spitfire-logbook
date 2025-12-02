@@ -49,8 +49,8 @@ Follow this exact template structure. Do not deviate.
 [This is often written at the very top of the page above the log table]
 
 # SQUADRON
-[Squadron Name]
-[Typically 313 Squadron, if you are unsure leave it blank.]
+[Squadron Name, always in the format of "Number Squadron", eg "313 Squadron"]
+[Typically 313 Squadron, if you are unsure leave it blank. If it is just letters w/o number, it's the Airport Name not Squadron!]
 
 # TOTALS PREVIOUS
 - Day Dual: [Value]
@@ -87,6 +87,7 @@ example: - Bottom right page next to "Convoy Patrol" (June 10th): lorem ipsum...
 
 # HUMAN COMMENTS
 - This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
+- [Add any other notes here the reviewer should know, for example any uncertainties in transcription, inconsistencies, areas that need closer review, etc.]
 --------------------------------
 
 If a section is empty or not present, write "None".

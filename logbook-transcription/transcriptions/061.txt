@@ -4,52 +4,48 @@
 May 1944
 
 # AIRPORT
-RAF Acton Down
+None
 
 # SQUADRON
 313 Squadron
 
 # TOTALS PREVIOUS
-- Day Dual: 100.10
-- Day Pilot: 120.00
-- Night Dual: None
-- Night Pilot: None
+- Day Dual: 0.00
+- Day Pilot: 0.00
+- Night Dual: 0.00
+- Night Pilot: 0.00
 
 # LOGBOOK ENTRIES
 | Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
 |---|---|---|---|---|---|---|
-| May | 30 | | | Sgt. Slon | Posted from 84 G.S.U. Acton Down to 313 Sqd. | |
 
 # TOTALS MONTH
-- Day Pilot: 43.50
-- Night Pilot: None
+- Day Pilot: 42.45
+- Night Pilot: 0.00
 
 # GRAND TOTAL
-317.05
+273.25
 
 # NOTES
-- Bottom right, section starting with "On May 30/1944": On May 30/1944 I was posted from 84 G.S.U (R.A.F Acton Down) to 313 Squadron in 2 Tactical Air Force - I'd lived my a Good Spitfire pilot's wing for 30 months - and arrived on Convoy Patrol at Chudleigh, near Teignmouth. We were under canvas. It was just a week before the invasion.
-- Bottom left, near "GRAND TOTAL [Cols. (1) to (10)]": 21.00
+- Top right of summary box: (*)11212 Wt. 40572-2665 20,000 1/43 T.S. 700
+- Top right of summary box: (*)12278-11212 Wt. 15036-517 50M 6/43 T.S. 700
+- Summary section next to "FORM 414 (A)": PERIOD ENDING 26th May 1944
+- Summary section above S.E. AIRCRAFT table: [ * For Officer, insert "JUNE" ; For Airman Pilot, insert "AUGUST."]
+- Assessment of Ability (i) AS A F PILOT: Good Average
+- Assessment of Ability (ii) AS PILOT-NAVIGATOR/NAVIGATOR: NTW
+- Assessment of Ability (iii) IN BOMBING: Average
+- Assessment of Ability (iv) IN AIR GUNNERY: w GROUND GRAFING Average
+- Assessment of Ability (v) IN S.B.A.: w R.P. Above Average
+- Assessment of Ability footer: † Insert :- "F", "L.B.", "G.R.", "F.B.", "Instructor", etc. e
+- Bottom left of main log table (May 30 1944): Sgt. Sloan P.O. P.O. From 84 G.S.U. Acton Down to 313 Sgn.
+- Bottom handwritten note (May 30 1944): On May 30/1944 I was posted from 84 G.S.U. (R.A.F. Acton Down) to 313 Squadron in 2 Tactical Air Force - I'd had my pilot's wings for 30 months - and arrived on a good Spitfire flying unit at a temporary airfield at Appeledon - Sandford near Stoney Cross Bill. We were under canvas. It was just a week before the invasion.
 
 # PHOTOS
 None
 
 # OTHER
-- **Assessment of Ability (To be assessed as :-Exceptional, Above the Average, Average):**
-    - (i) AS A F PILOT: Good Average
-    - (ii) AS PILOT-NAVIGATOR/NAVIGATOR: N/A
-    - (iii) IN BOMBING: Average
-    - (iv) IN AIR GUNNERY: Average w Gyro Sight
-    - (v) IN S.B.A.: Average
-- **Any points in flying or airmanship which should be watched:** None
-- **Signatures and Dates:**
-    - Date: 26 May 1944
-    - Signature: [illegible] Norwood w/cc
-    - For Officer Commanding: No 1 T.E.U.
-- **Printed Text (top right summary box):**
-    - FORM 414 (A)
-    - Period ENDING
-    - YEAR COMMENCING 1st 26th May *1944
-    - * For Officer, insert "JUNE"; for Airman Pilot, insert "AUGUST."
-    - (*11212) Wt. 40572-2665 20,000 1/43 T.S. 700
-    - (*12278-11212) Wt. 15036-517 50M 6/43 T.S. 700
+- Signature below Assessment: Gordon Harwood W/CDR
+- Title below Assessment: For Officer Commanding N° 1 T.E.U.
+
+# HUMAN COMMENTS
+- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.

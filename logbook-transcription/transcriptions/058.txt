@@ -16,8 +16,7 @@ None
 - Night Pilot: None
 
 # LOGBOOK ENTRIES
-| Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
-|---|---|---|---|---|---|---|
+None
 
 # TOTALS MONTH
 - Day Pilot: None
@@ -27,19 +26,23 @@ None
 None
 
 # NOTES
-- Left page, top left corner: T. 91-4759. Wt. 324. 4/43. 15,000 Bks. W. & S. Ltd. 165960F.
-- Left page, center: INSTRUCTIONS [see K.R. & A.C.I., para. 786]
-- Left page, Instruction 1: This book is an official document and is the property of His Majesty's Government.
-- Left page, Instruction 2: An accurate and detailed record is to be kept in the log of all flights undertaken by the individual to whom it relates.
-- Left page, Instruction 3: Monthly flying will be analysed by aircraft types and inserted in red ink. The stamp will be inserted on the left-hand page appropriately aligned to the ruling.
-- Left page, Instruction 4: The annual summary and assessment will be completed on Form 414A and inserted in the appropriate page of the log. This form will also be used when a pilot is posted or attached to another unit for flying duties.
-- Right page, top: CERTIFICATES OF QUALIFICATION AS FIRST PILOT [K.R. & A.C.I., para. 805, clause 5]
-- Right page, (i) table header: Certified that the above named has qualified as a First Pilot (day only)
-- Right page, (ii) table header: Certified that the above named has qualified as a First Pilot
+- Top left page: T. 91-4759. Wt. 324. 4/43. 15,000 Bks. W. & S. Ltd. 165960F.
+- Left page, under "INSTRUCTIONS": 1. This book is an official document and is the property of His Majesty's Government.
+- Left page, under "INSTRUCTIONS": 2. An accurate and detailed record is to be kept in the log of all flights undertaken by the individual to whom it relates.
+- Left page, under "INSTRUCTIONS": 3. Monthly flying will be analysed by aircraft types and inserted in red ink. The stamp will be inserted on the left-hand page appropriately aligned to the ruling.
+- Left page, under "INSTRUCTIONS": 4. The annual summary and assessment will be completed on Form 414A and inserted in the appropriate page of the log. This form will also be used when a pilot is posted or attached to another unit for flying duties.
 
 # PHOTOS
 None
 
 # OTHER
-- Right page, Name field: R.A. Glen
-- Right page, Rank field: [illegible]
+- Right page, top title: CERTIFICATES OF QUALIFICATION AS FIRST PILOT [K.R. & A.C.I., para. 805, clause 5]
+- Right page, Name field: R.A. Glew
+- Right page, Rank field: w/o
+- Right page, Section (i) description: Certified that the above named has qualified as a First Pilot (day only)
+- Right page, Section (i) table headers: On (Type), Date, Unit, Signature and Rank
+- Right page, Section (ii) description: Certified that the above named has qualified as a First Pilot
+- Right page, Section (ii) table headers: On (Type), Date, Unit, Signature and Rank
+
+# HUMAN COMMENTS
+- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.

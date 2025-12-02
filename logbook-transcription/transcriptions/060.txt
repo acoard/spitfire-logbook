@@ -1,13 +1,13 @@
 # FILENAME: 060.jpg
 
 # DATE
-1944
+March-April 1944
 
 # AIRPORT
 None
 
 # SQUADRON
-I.T.E.U. Tealing
+1 TEU
 
 # TOTALS PREVIOUS
 - Day Dual: 90.00
@@ -18,38 +18,55 @@ I.T.E.U. Tealing
 # LOGBOOK ENTRIES
 | Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
 |---|---|---|---|---|---|---|
-| March | 9 | Master II | AZ 309 w/o Lawryski | Self | Check for Solo | 0.20 |
-| " | 10 | Spitfire I | X 4674 | " | Familiarisation | 1.15 |
-| " | 11 | " | FR 219 | " | Aerobatics | 1.10 |
-| " | 14 | " | " | " | Sector Recce | 1.30 |
-| " | 16 | " | X 4068 | " | Formation | 1.30 |
-| " | 18 | " | N 3265 | " | " | 1.05 |
-| " | 24 | " | R 6837 | " | " | 1.15 |
-| " | 27 | " | " | " | Aerobatics | 0.45 |
-| " | 29 | " | " | " | Formation | 1.30 |
-| " | 30 | Ve | 504 | " | 1st Solo on type | 1.20 |
-| April | 5 | Hurricane II | BM 885 | " | Formation | 1.50 |
-| " | 5 | " | JS 330 | " | Bombing | 1.20 |
-| " | 10 | " | HV 862 | " | & Ground Firing | 1.40 |
-| " | 11 | " | HV 556 | " | Aerobatics & Cross Country | 2.00 |
-| " | 12 | " | BE 394 | " | Low level Cross Country, Bombing & Ground Firing | 2.00 |
-| " | 23 | " | HV 506 | " | Practice Dive Bombing | 2.05 |
-| " | 25 | " | " | " | Formation | 1.20 |
+| March | 9 | Master II | AZ 309 | self | Check for Solo | 0.20 |
+| March | 9 | Spitfire I | X 464 | " | Familiarisation | 1.15 |
+| March | 10 | Spitfire I | FR 219 | " | Aerobatics | 1.10 |
+| March | 11 | " | " | " | Sector Recce | 1.30 |
+| March | 14 | " | X 4068 | " | Formation | 1.30 |
+| March | 16 | " | N 3265 | " | Formation | 1.05 |
+| March | 18 | " | R 6837 | " | Aerobatics | 1.15 |
+| March | 24 | " | " | " | Formation | 0.45 |
+| March | 30 | " | FR 223 | " | 1st Solo on type | 1.30 |
+| March | 30 | " | " | " | Formation | 1.20 |
+| April | 5 | Hurricane II | BM 885 | " | Bombing | 1.40 |
+| April | 5 | " | JS 330 | " | & A/Ground Firing | 2.00 |
+| April | 10 | " | HV 882 | " | Aerobatics & Cross Country | 2.00 |
+| April | 11 | " | HV 556 | " | Low Level Cross Country, Bombing & A/G F. | 2.05 |
+| April | 12 | " | BE 394 | " | Practice Dive Bombing | 1.20 |
+| April | 23 | " | HV 506 | " | Formation | 1.40 |
+| April | 25 | " | " | " | Formation | None |
 
 # TOTALS MONTH
-- Day Pilot: 25.15
-- Night Pilot: 0.00
+- Day Pilot: 24.75
+- Night Pilot: None
 
 # GRAND TOTAL
 356.25
 
 # NOTES
-- Bottom left page, summary box: Summary for I TEU Tealing. Unit I TEU. Aircraft Types Master II Spitfires I & V Hurricane. Date -. Times: Dual: .20, Pilot: 11.20, Pilot: 13.55.
-- Bottom left page, below summary box: GRAND TOTAL [Cols. (1) to (10)]
-- Bottom right page: Totals Carried Forward
+- Aircraft No. column (March 9th, first entry): w/o Lawryshi
+- Aircraft No. column (March 9th, second entry): Sef
 
 # PHOTOS
 None
 
 # OTHER
-- Signature (bottom left, within summary box): R.A. Glyn
+- Summary block "Summary FOR 1 TEU Training":
+  - UNIT: 1 TEU
+  - AIRCRAFT Types: Master II, Spitfire I & V, Hurricane
+  - Signature: P.A. Clem
+- Totals Carried Forward (bottom right):
+  - Day Dual: 90.20
+  - Day Pilot: 251.45
+  - Night Dual: 9.50
+  - Night Pilot: 4.40
+
+# HUMAN COMMENTS
+- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
+- There are inconsistencies in the numerical totals as written in the original document:
+    - The sum of individual Spitfire pilot flight times (11.25) differs from the "Summary FOR 1 TEU Training" total (11.20).
+    - The sum of individual Hurricane pilot flight times (10.05) differs significantly from the "Summary FOR 1 TEU Training" total (13.55).
+    - The "Totals Carried Forward - Day Pilot" (251.45) does not match the sum of "Totals Previous - Day Pilot" (226.30) and "Totals Month - Day Pilot" (24.75), which would be 251.05 (a difference of 0.40).
+    - The "GRAND TOTAL" (356.25) does not match the sum of all "Totals Carried Forward" columns (90.20 + 251.45 + 9.50 + 4.40 = 355.55) (a difference of 0.70).
+- The logbook entry for April 25 is present but has no time recorded in the original document. Transcribed as "None".
+- The values ".45" and ".20" were transcribed as "0.45" and "0.20" for consistency.
