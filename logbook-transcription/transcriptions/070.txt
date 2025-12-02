@@ -1,0 +1,55 @@
+# FILENAME: 070.jpg
+
+# DATE
+January 1945
+
+# AIRPORT
+None
+
+# SQUADRON
+313 Squadron
+
+# TOTALS PREVIOUS
+- Day Dual: 90.20
+- Day Pilot: 390.50
+- Night Dual: 9.50
+- Night Pilot: 6.20
+
+# LOGBOOK ENTRIES
+| Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
+|---|---|---|---|---|---|---|
+| January | 4 | Spitfire IX | N | self | Fir Test | 1.20 |
+| " | 14 | " | P | Formation | 1.25 |
+| " | 20 | " | " | Fir Test | 1.00 |
+| " | 21 | " | W | .15 |
+| " | 22 | " | " | X-Country | .20 |
+| " | 23 | " | " | Formation | 1.15 |
+
+# TOTALS MONTH
+- Day Pilot: 6.25
+- Night Pilot: None
+
+# GRAND TOTAL
+503.45
+
+# NOTES
+- Bottom right, below S/LDR signature: 5/29 0.23 Sqdn.
+
+# PHOTOS
+- Right side of page: Black and white photo of two men, one in uniform, one in a flight suit, in what appears to be an aircraft cockpit.
+
+# OTHER
+- Summary for January 1945:
+  - Unit: 313 Squadron
+  - Date: 31. 1. 45.
+  - Signature: D. C. [illegible]
+- Left page, below signature block: Wood F/LT. O.C. 'B' Flight.
+- Right page, below photo: [illegible]era S/LDR O.C. 313 Sqon.
+
+# HUMAN COMMENTS
+- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
+- TO REVIEWER: The Duty for the first and third entries is written as "Fir Test" or possibly "Five Test". I have transcribed it as "Fir Test".
+- TO REVIEWER: Aircraft number for the third, fifth, and sixth entries are ditto marks.
+- TO REVIEWER: Pilot column has "self" then ditto marks.
+- TO REVIEWER: Signature under "SUMMARY FOR" is partially illegible.
+- TO REVIEWER: Signature on the right side of the page ([illegible]era) is partially illegible.

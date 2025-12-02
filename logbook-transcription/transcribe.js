@@ -87,7 +87,7 @@ example: - Bottom right page next to "Convoy Patrol" (June 10th): lorem ipsum...
 
 # HUMAN COMMENTS
 - This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- [Add any other notes here the reviewer should know, for example any uncertainties in transcription, inconsistencies, areas that need closer review, etc.]
+- [Add any other notes here the reviewer should know, for example any uncertainties in transcription, inconsistencies, areas that need closer review, etc. Preface each line for this this with "TO REVIEWER: "]
 --------------------------------
 
 If a section is empty or not present, write "None".
