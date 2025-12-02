@@ -21,14 +21,12 @@ Tangmere
 | June | 22 | Spitfire IX | R | self | Beach Head Patrol | 2.15 |
 | " | 23 | " | " | " | Convoy Patrol | 1.55 |
 | " | " | " | " | " | Beach Head Patrol | 2.05 |
-| " | 24 | " | " | " | " | 2.05 |
-| " | " | " | " | " | Air Test | .30 |
-| " | 28 | " | Z | " | Base - B.10. A.L.G in France | .45 |
-| " | " | " | " | " | Armed Recco | 1.00 |
+| " | 24 | " | " | " | Air Test | .30 |
+| " | " | " | " | " | Base - B.10. ALG in France | .45 |
+| " | 28 | " | Z | " | Armed Recce | 1.00 |
 | " | " | " | " | " | Convoy Patrol | 1.20 |
 | " | 29 | " | " | " | Front Line Patrol | 1.05 |
-| " | " | " | " | " | " | 1.10 |
-| " | " | " | " | " | B.10. A.L.G in France - Base | .35 |
+| " | " | " | " | " | B.10. ALG in France - Base | .35 |
 
 # TOTALS MONTH
 - Day Pilot: 51.15
@@ -38,17 +36,13 @@ Tangmere
 426.00
 
 # NOTES
-- Right page, next to Day Pilot (2.05, June 24th): The first of 2 nights just behind the Front Line - under airfield.
-- Right page, next to Day Pilot (.30, June 24th): Got shot up - my plane's tailplane sustaining Ack Ack damage.
-- Right page, next to Day Pilot (.45, June 28th): Back to B.10. - It was after we landed back from France - that we had some P.R. photographs taken of our picture around the C.O.'s plane. (See Photos in Memorabilia Album)
+- Right side of page, next to the first few entries: The first of 2 nights just behind the Front Line - under self/fire.
+- Right side of page, next to June 23rd entry: Got shot up - my plane's tailplane sustaining Ack Ack damage.
+- Right side of page, next to June 29th entry: Back to B.10./ - It was after we landed back from France - that we had some P.R. photographs taken of our plane and the C.O.'s plane. (See Photos in "Memorabilia Album").
 
 # PHOTOS
-None
+- Notes section: "See Photos in "Memorabilia Album"".
 
 # OTHER
-- Summary section, stamped text: UNIT 313 SQDN
-- Summary section, stamped text: DATE 30. 6. 44.
-- Summary section, stamped text: SIGNATURE R.A. Glen
-- Handwritten signature below notes: N. W. Wood F/Lt.
-- Handwritten text below N.W. Wood: O.C. 'B' Flt.
-- Handwritten signature at bottom right: A. C. Walch S/LDR O.C. 313 Sqdn.
+- Right side of page below last entry: Rwood F/Lt. O.C. 'B' Flt.
+- Right side of page below Rwood signature: Rae Smalridge S/LDR O.C. 313 Sqdn.

@@ -2,21 +2,41 @@ import { GoogleGenAI } from "@google/genai";
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+/**
+ * Logbook Transcription Script
+ * 
+ * Usage:
+ * 
+ * 1. Process all files in logbook-transcription/files:
+ *    npm run transcribe
+ * 
+ * 2. Process a single file (e.g., 063.jpg):
+ *    npm run transcribe -- 63
+ * 
+ * 3. Process a range of files (e.g., 063.jpg to 066.jpg):
+ *    npm run transcribe -- 63..66
+ * 
+ * Requirements:
+ * - .env file with GEMINI_API_KEY
+ * - Images in logbook-transcription/files/
+ */
 
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const FILES_DIR = path.join("logbook-transcription", "files");
+const OUTPUT_DIR = path.join("logbook-transcription", "transcriptions");
+
+/**
+ * Transcribes a single logbook image file using Gemini API.
+ * @param {string} fileName - The name of the file to transcribe (e.g., "063.jpg")
+ * @returns {Promise<string|null>} The transcription text or null if failed.
+ */
 async function transcribe(fileName) {
   try {
-    const filePath = path.join("logbook-transcription", "files", fileName);
+    const filePath = path.join(FILES_DIR, fileName);
     const fileBuffer = await fs.readFile(filePath);
     const base64Image = fileBuffer.toString("base64");
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: [
-        {
-          parts: [
-            {
-              text: `Transcribe this flight logbook page into strict Markdown format. 
+    const promptText = `Transcribe this flight logbook page into strict Markdown format. 
 Follow this exact template structure. Do not deviate.
 
 # FILENAME: ${fileName}
@@ -69,8 +89,14 @@ Transcribe everything exactly as written, do not correct any spelling or grammar
 If something is illegible, write "[illegible]" in the field or portion of the text.
 Do not add conversational text. Only output the Markdown.
 Use standard markdown formatting for lists and tables.
-Ensure all table rows have the same number of columns.`
-            },
+Ensure all table rows have the same number of columns.`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [
+        {
+          parts: [
+            { text: promptText },
             {
               inlineData: {
                 mimeType: "image/jpeg",
@@ -84,31 +110,88 @@ Ensure all table rows have the same number of columns.`
 
     return response.text;
   } catch (error) {
-    console.error("Error generating content:", error);
-    throw error;
+    console.error(`Error generating content for ${fileName}:`, error);
+    return null;
   }
 }
 
+/**
+ * Filters the list of files based on command line arguments.
+ * @param {string[]} allFiles - List of all available files.
+ * @param {string[]} args - Command line arguments.
+ * @returns {string[]} List of files to process.
+ */
+function getFilesToProcess(allFiles, args) {
+  if (args.length === 0) {
+    return allFiles;
+  }
+
+  const arg = args[0];
+
+  if (arg.includes('..')) {
+    // Handle range: 63..66
+    const [start, end] = arg.split('..').map(Number);
+    
+    if (!isNaN(start) && !isNaN(end)) {
+      return allFiles.filter(file => {
+        const match = file.match(/^(\d+)/);
+        if (match) {
+          const num = parseInt(match[1], 10);
+          return num >= start && num <= end;
+        }
+        return false;
+      });
+    }
+  } else {
+    // Handle single file: 63
+    const num = parseInt(arg, 10);
+    if (!isNaN(num)) {
+      return allFiles.filter(file => {
+        const match = file.match(/^(\d+)/);
+        return match && parseInt(match[1], 10) === num;
+      });
+    }
+  }
+  
+  return [];
+}
+
 async function run() {
-  // Just hardcoding a filename for now to verify things work, will iterate over all files later.
-  const fileName = '063.jpg';
-  console.log(`Transcribing ${fileName}...`);
+  const args = process.argv.slice(2);
   
   try {
-    const transcription = await transcribe(fileName);
-    
-    if (transcription) {
-      // console.log(transcription); // Optional: print to console
-      
-      const outputDir = path.join("logbook-transcription", "transcriptions");
-      await fs.mkdir(outputDir, { recursive: true });
-      
-      const outputName = fileName.replace(/\.[^/.]+$/, ".txt");
-      const outputPath = path.join(outputDir, outputName);
-      
-      await fs.writeFile(outputPath, transcription);
-      console.log(`Saved transcription to ${outputPath}`);
+    const allFiles = (await fs.readdir(FILES_DIR))
+      .filter(file => /\.(jpg|jpeg|png|webp)$/i.test(file))
+      .sort();
+
+    const filesToProcess = getFilesToProcess(allFiles, args);
+
+    if (filesToProcess.length === 0) {
+      if (args.length > 0) {
+        console.log(`No files matched argument: ${args[0]}`);
+      } else {
+        console.log("No image files found in files directory.");
+      }
+      return;
     }
+
+    console.log(`Processing ${filesToProcess.length} files:`, filesToProcess);
+
+    await fs.mkdir(OUTPUT_DIR, { recursive: true });
+
+    for (const fileName of filesToProcess) {
+      console.log(`Transcribing ${fileName}...`);
+      const transcription = await transcribe(fileName);
+      
+      if (transcription) {
+        const outputName = fileName.replace(/\.[^/.]+$/, ".txt");
+        const outputPath = path.join(OUTPUT_DIR, outputName);
+        
+        await fs.writeFile(outputPath, transcription);
+        console.log(`Saved transcription to ${outputPath}`);
+      }
+    }
+
   } catch (error) {
     console.error("Failed to run transcription:", error);
   }

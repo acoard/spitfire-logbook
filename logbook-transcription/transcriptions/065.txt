@@ -1,0 +1,59 @@
+# FILENAME: 065.jpg
+
+# DATE
+August 1944
+
+# AIRPORT
+Skeabrae, Orkneys; Sumburgh, Shetlands
+
+# SQUADRON
+313 Squadron
+
+# TOTALS PREVIOUS
+- Day Dual: 90.20
+- Day Pilot: 326.35
+- Night Dual: 9.50
+- Night Pilot: 5.20
+
+# LOGBOOK ENTRIES
+| Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
+|---|---|---|---|---|---|---|
+| August | 3 | Spitfire V | W | self | G C 1 | 0.25 |
+| " | " | " | " | " | Dusk Flying | 0.20 |
+| " | " | " | B | " | Ain test | 0.45 |
+| " | 4 | " | E | " | Dusk Patrol | 0.15 |
+| " | " | " | B | " | Formation | 0.25 |
+| " | 8 | " | X | " | Air Firing | 0.35 |
+| " | 9 | " | W | " | Skeabrae - Sumburgh | 0.35 |
+| " | " | " | " | " | " | 0.30 |
+| " | 14 | " | P | " | Affiliation with Sunderland | 1.05 |
+| " | 22 | " | V | " | Formation | 0.35 |
+| " | 24 | " | P | " | Sumburgh - Skeabrae | 0.30 |
+| " | 26 | " | Y | " | Dusk Patrol | 1.10 |
+| " | 27 | " | U | " | Dive Bombing | 1.00 |
+| " | 30 | " | X | " | Dusk Patrol | 1.15 |
+| " | " | " | Y | " | Dusk Patrol | 1.10 |
+| " | 31 | " | U | " | Dusk Patrol | 0.20 |
+
+# TOTALS MONTH
+- Day Pilot: 10.50
+- Night Pilot: None
+
+# GRAND TOTAL
+462.75
+
+# NOTES
+- Right page next to date 4 and 8: nothing done on the fleet - in Scapa Flow.
+- Bottom left page in summary box: UNIT 313 Squadron
+- Bottom left page in summary box: DATE 31.8.44.
+- Bottom left page in summary box: AIRCRAFT Spitfire V
+- Bottom right page next to "SUMMARY FOR August 1944": Masoak F/Lt.
+- Bottom right page next to "SUMMARY FOR August 1944": O.C. B. Flt.
+- Bottom right page below O.C. B. Flt.: Accumulator S/Ldr 8/44
+
+# PHOTOS
+None
+
+# OTHER
+- Signature in summary box: R.A. C[illegible]
+- Stamp: 313 Squadron

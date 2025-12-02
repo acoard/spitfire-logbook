@@ -1,0 +1,50 @@
+# FILENAME: 064.jpg
+
+# DATE
+July 1944
+
+# AIRPORT
+Lympne
+
+# SQUADRON
+313 Squadron
+
+# TOTALS PREVIOUS
+- Day Dual: 90.20
+- Day Pilot: 320.30
+- Night Dual: 9.50
+- Night Pilot: 5.20
+
+# LOGBOOK ENTRIES
+| Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
+|---|---|---|---|---|---|---|
+| July | 2 | Spitfire IX | U | self | Bomber Escort | 1.20 |
+| " | 2 | " | " | " | Lympne - Tangmere | 0.30 |
+| " | 4 | " | Z | " | Bomber Escort | 1.20 |
+| " | 6 | " | R | " | " | 1.25 |
+| " | 8 | " | W | " | Ranber | 1.25 |
+| " | 31 | " | F | " | Air Test | 0.05 |
+
+# TOTALS MONTH
+- Day Pilot: 6.05
+- Night Pilot: None
+
+# GRAND TOTAL
+432.05
+
+# NOTES
+- Right page, next to the "1.20" time entry (July 2nd): The U.S.A.A.F. Bomber (heavy shower) flew over 2hrs in many daylight raids on Caen. The pattern bombing was devastating - so was the ack ack.
+- Right page, next to the "1.25" time entry and an asterisk (July 8th), referring to July 4th: Just one flight. (Pilot F/Lt. [illegible] Masaryk) We flew well into occupied France at about 15.000ft and dove down for a low level sweep in open formation. At one point we swept across an airfield and I wiped out the crew of an A.A. post scrambling to train their gun on the leading planes.
+
+# PHOTOS
+None
+
+# OTHER
+- Bottom right of "SUMMARY FOR JULY 1944" box, under "SIGNATURE": D.A.Cren
+- Right page, below the note from July 4th:
+    - F/Lt
+    - Masaryk
+    - OC B Flight
+    - HOCHMAL, 9/7
+    - OC 313 Sqdn.
+    - Hochmal
