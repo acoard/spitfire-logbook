@@ -1,0 +1,45 @@
+# FILENAME: 058.jpg
+
+# DATE
+None
+
+# AIRPORT
+None
+
+# SQUADRON
+None
+
+# TOTALS PREVIOUS
+- Day Dual: None
+- Day Pilot: None
+- Night Dual: None
+- Night Pilot: None
+
+# LOGBOOK ENTRIES
+| Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
+|---|---|---|---|---|---|---|
+
+# TOTALS MONTH
+- Day Pilot: None
+- Night Pilot: None
+
+# GRAND TOTAL
+None
+
+# NOTES
+- Left page, top left corner: T. 91-4759. Wt. 324. 4/43. 15,000 Bks. W. & S. Ltd. 165960F.
+- Left page, center: INSTRUCTIONS [see K.R. & A.C.I., para. 786]
+- Left page, Instruction 1: This book is an official document and is the property of His Majesty's Government.
+- Left page, Instruction 2: An accurate and detailed record is to be kept in the log of all flights undertaken by the individual to whom it relates.
+- Left page, Instruction 3: Monthly flying will be analysed by aircraft types and inserted in red ink. The stamp will be inserted on the left-hand page appropriately aligned to the ruling.
+- Left page, Instruction 4: The annual summary and assessment will be completed on Form 414A and inserted in the appropriate page of the log. This form will also be used when a pilot is posted or attached to another unit for flying duties.
+- Right page, top: CERTIFICATES OF QUALIFICATION AS FIRST PILOT [K.R. & A.C.I., para. 805, clause 5]
+- Right page, (i) table header: Certified that the above named has qualified as a First Pilot (day only)
+- Right page, (ii) table header: Certified that the above named has qualified as a First Pilot
+
+# PHOTOS
+None
+
+# OTHER
+- Right page, Name field: R.A. Glen
+- Right page, Rank field: [illegible]

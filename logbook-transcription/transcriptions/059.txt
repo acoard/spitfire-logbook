@@ -1,0 +1,53 @@
+# FILENAME: 059.jpg
+
+# DATE
+None
+
+# AIRPORT
+None
+
+# SQUADRON
+None
+
+# TOTALS PREVIOUS
+- Day Dual: 0.00
+- Day Pilot: 0.00
+- Night Dual: 0.00
+- Night Pilot: 0.00
+
+# LOGBOOK ENTRIES
+| Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
+|---|---|---|---|---|---|---|
+| | | Tiger Moth | | self | Day Dual hours (Previous Logbook Summary) | 26.00 |
+| | | " | | " | Day Pilot hours (Previous Logbook Summary) | 27.00 |
+| | | Harvard II | | " | Day Dual hours (Previous Logbook Summary) | 35.00 |
+| | | " | | " | Day Pilot hours (Previous Logbook Summary) | 45.00 |
+| | | " | | " | Night Dual hours (Previous Logbook Summary) | 7.30 |
+| | | " | | " | Night Pilot hours (Previous Logbook Summary) | 4.40 |
+| | | Masters I II & III | | " | Day Dual hours (Previous Logbook Summary) | 29.00 |
+| | | " | | " | Day Pilot hours (Previous Logbook Summary) | 40.00 |
+| | | " | | " | Night Dual hours (Previous Logbook Summary) | 2.10 |
+| | | Battle II | | " | Day Pilot hours (Previous Logbook Summary) | 35.00 |
+| | | Martinet | | " | Day Pilot hours (Previous Logbook Summary) | 22.00 |
+| | | Spitfire I & II | | " | Day Pilot hours (Previous Logbook Summary) | 57.30 |
+
+# TOTALS MONTH
+None
+
+# GRAND TOTAL
+331.00
+
+# NOTES
+- Left page, top handwritten note: Previous Log Book Stolen, on 4th January 1944.
+- Left page, middle handwritten note: The following flying times are approximately correct:-
+- Left page, under "The following flying times...": B. F. Clem
+
+# PHOTOS
+None
+
+# OTHER
+- Right page, bottom "Totals Carried Forward": Single-Engine Aircraft Day Dual (1): 90.00
+- Right page, bottom "Totals Carried Forward": Single-Engine Aircraft Day Pilot (2): 226.30
+- Right page, bottom "Totals Carried Forward": Single-Engine Aircraft Night Dual (3): 9.50
+- Right page, bottom "Totals Carried Forward": Single-Engine Aircraft Night Pilot (4): 4.40
+- Right page, bottom "Totals Carried Forward": Passenger (11): 20.00

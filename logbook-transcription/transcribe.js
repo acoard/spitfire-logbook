@@ -46,9 +46,11 @@ Follow this exact template structure. Do not deviate.
 
 # AIRPORT
 [Airport Name]
+[This is often written at the very top of the page above the log table]
 
 # SQUADRON
 [Squadron Name]
+[Typically 313 Squadron, if you are unsure leave it blank.]
 
 # TOTALS PREVIOUS
 - Day Dual: [Value]
@@ -61,7 +63,7 @@ Follow this exact template structure. Do not deviate.
 |---|---|---|---|---|---|---|
 [Logbook rows here. Use " for ditto marks if present in original.]
 [Pilot will be "self" or ditto mark for all flights, transcribe as such.]
-[Duty should be written with normal capitalization, not ALLCAPS.]
+[Duty should be written with normal capitalization, not ALLCAPS. Duty will be something like "Convoy Patrol", "Beach Head Patrol", "Formation" and other similar ones, but not a long prose description.]
 
 # TOTALS MONTH
 - Day Pilot: [Value]
@@ -73,6 +75,7 @@ Follow this exact template structure. Do not deviate.
 # NOTES
 - [Location on page]: [Content]
 example: - Bottom right page next to "Convoy Patrol" (June 10th): lorem ipsum....
+[If the text is written as a paragraph over multiple lines, write it as a single entry. Do not split it into multiple entries unless they are separate notes with whitespace between them.]
 [Only write the date if the note seems to be relevant to that date, otherwise just write the page location.]
 
 # PHOTOS
@@ -81,6 +84,10 @@ example: - Bottom right page next to "Convoy Patrol" (June 10th): lorem ipsum...
 
 # OTHER
 - [Signatures, stamps, assessments, etc]
+
+# HUMAN COMMENTS
+- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
+--------------------------------
 
 If a section is empty or not present, write "None".
 Do not write in allcaps, use normal capitalization.

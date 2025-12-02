@@ -1,0 +1,68 @@
+# FILENAME: 062.jpg
+
+# DATE
+June 1944
+
+# AIRPORT
+Appledram
+
+# SQUADRON
+313 Squadron (Czech)
+
+# TOTALS PREVIOUS
+- Day Dual: 90.20
+- Day Pilot: 269.15
+- Night Dual: 9.50
+- Night Pilot: 4.40
+
+# LOGBOOK ENTRIES
+| Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
+|---|---|---|---|---|---|---|
+| June | 1 | Spitfire IX | U | Self | Familiarisation | 1.05 |
+| " | " | " | R | " | Formation | 1.00 |
+| " | " | " | T | " | Sector Recce. | 1.00 |
+| " | " | " | " | " | Formation | .35 |
+| " | 2 | " | V | " | Dusk landings | .40 |
+| " | " | " | N | " | Convoy PATROL | 1.00 |
+| " | " | " | U | " | Formation | 1.20 |
+| " | 5 | " | W | " | Beach Head PATROL | .40 |
+| " | " | " | Z | " | " | 1.50 |
+| " | 6 | " | " | " | " | 2.00 |
+| " | 7 | " | " | " | " | 2.00 |
+| " | 8 | " | T | " | " | 1.50 |
+| " | " | " | O | " | " | 2.10 |
+| " | 10 | " | " | " | " | 2.05 |
+| " | 11 | " | " | " | " | 2.10 |
+| " | 12 | " | " | " | " | 2.05 |
+| " | 13 | " | R | " | Air Test | 2.05 |
+| " | 14 | " | Z | " | Beach Head PATROL | .35 |
+| " | 15 | " | R | " | " | 1.55 |
+| " | 17 | " | " | " | Dive Bombing | 2.00 |
+| " | 18 | " | " | " | Bomber Escort | 2.10 |
+| " | 19 | " | Z | " | " | 2.05 |
+| " | 21 | " | W | " | " | 1.10 |
+
+# TOTALS MONTH
+- Day Pilot: 36.30
+- Night Pilot: 0.40
+
+# GRAND TOTAL
+411.15
+
+# NOTES
+- Top right of page, general note: An underlining in RED indicates an operational flight - a mission where action with the enemy was possible.
+- Mid right page next to "Convoy Patrol" (June 2): This "Convoy" was - in part - the Invasion Fleet.
+- Mid right page next to "Beach Head Patrol" (June 5): Normandy provided the Beach Head for the Invasion on D-Day.
+- Mid right page, general note: At our very detailed and comprehensive "briefing" on the evening before the invasion - we were told that the outcome of the war required the armies to get safely ashore at all costs - and (as far as the 2nd Tactical Air Force was concerned) there were enough pilots and aircraft in close reserve for all squadrons to suffer 90% casualties on the first day - and still be fully up to strength and operational with pilots and planes on Day 2.
+- Bottom right page next to "Dive Bombing" (June 17): Against V.1 Rocket launching site - with 500 lb bomb. Spitfire Mk IX was capable of carrying a 1000 lb bomb.
+- Bottom right page, below V.1 note: *Also known as "Doodlebug"
+- Pilot column (June 5-12): 30 months elapsed from the time I got my pilots' wings to getting to a squadron - and what could be a more dramatic way of starting on 'ops' than to fly daily over the tiny beach head where the Allies struggled to get ashore and open up the Second Front.
+
+# PHOTOS
+None
+
+# OTHER
+None
+
+# HUMAN COMMENTS
+- Have manually adjusted some of the notes which it repeatedly gets wrong ("Normandy provided the Beach Head" for june 6th)
