@@ -51,3 +51,5 @@ None
 - TO REVIEWER: The "Aircraft Type", "Pilot", and "2nd Pilot" (here "202 S.P.") values are associated with this summary line and are therefore included in the 'NOTES' section rather than 'LOGBOOK ENTRIES'.
 - TO REVIEWER: "SKATFOR." was transcribed as "SKAYFOR." based on visual inspection.
 - TO REVIEWER: "R.A. Glen" signature was confirmed against common transcription errors.
+- TO REVIEWER: The 'TOTALS MONTH' section is missing the 'Passenger' total of 48.15, despite the 'NOTES' section correctly identifying 48.15 as a monthly total for the passenger category.
+- TO REVIEWER: The 'Aircraft Type' on the summary line in the 'NOTES' section is transcribed as 'SKAYFOR.' but appears to be 'SKAFOR.' in the image.

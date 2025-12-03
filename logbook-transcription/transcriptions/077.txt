@@ -66,3 +66,20 @@ None
 - This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
 - TO REVIEWER: The "TOTALS MONTH" for Day Pilot (40.60) has been calculated by summing the relevant "Pilot" time columns on this page. This calculated total does not align with the differences between "Totals Carried Forward" and "Totals Brought Forward" values on the logbook page, which suggests the running totals incorporate data from beyond the entries visible on this page.
 - TO REVIEWER: Passenger times are noted in the "NOTES" section for entries where both pilot and passenger times were recorded, as the template has a single 'Time' column which was prioritized for pilot time.
+- TO REVIEWER: The transcription contains several substantive inaccuracies and transcription errors:
+- TO REVIEWER: *   **TO REVIEWER: Missing "TOTALS PREVIOUS" entries:** The transcription is missing the following "Totals Brought Forward" from the logbook header:
+- TO REVIEWER: *   Multi-Engine Day Dual: 8.20
+- TO REVIEWER: *   Multi-Engine Day 1st Pilot: 8.40
+- TO REVIEWER: *   Passenger: 71.05
+- TO REVIEWER: *   **TO REVIEWER: Incorrect `No.` column transcriptions and missing `Pilot` details:**
+- TO REVIEWER: *   For Spitfire XIV entries (August 3, 4), `S/P` is incorrectly placed in the `No.` column. In the logbook, `S/P` refers to "Single Pilot" and is found under the "Pilot or 1st Pilot" column. The `No.` column for these entries is blank.
+- TO REVIEWER: *   For Lysander entries (August 11, 12, 14, 15, 18, 19, 25, 26), `S/P` is redundantly and incorrectly included in the `No.` column alongside `V9289`. `V9289` is the correct aircraft number, but `S/P` is a pilot classification (found in the "Pilot or 1st Pilot" column in the logbook) and should not be in the `No.` column.
+- TO REVIEWER: *   For Ensign entries (August 21), `V.BL` is incorrectly placed in the `No.` column. In the logbook, "V.BL" is part of the "Aircraft Type" description ("Ensign V.BL"). The `No.` column for these entries is blank.
+- TO REVIEWER: *   For the Argus entry (August 24), `B/C` is incorrectly placed in the `No.` column. In the logbook, `B/C` appears to be a remark in the "Pilot or 1st Pilot" column, not an aircraft number. The `No.` column for this entry is blank.
+- TO REVIEWER: *   **TO REVIEWER: Missing specific pilot/passenger names:**
+- TO REVIEWER: *   For August 11 and August 12, the logbook lists `P/O Jones (NAV)` under the "2nd Pilot, Pupil or Passenger" column, which is completely missed in the transcription.
+- TO REVIEWER: *   For the August 24 Argus entry, the transcription incorrectly lists "self" as the pilot. The logbook explicitly shows `W/O Croucott` as the "Pilot or 1st Pilot" and `W/O Lander` as the "2nd Pilot, Pupil or Passenger", neither of which are captured.
+- TO REVIEWER: *   **TO REVIEWER: Incorrect flight times for August 19 entries:**
+- TO REVIEWER: *   The entry for August 19 (Ramree - Mawbi) has a time of `.20` (20 minutes) in the logbook, but is transcribed as `None`.
+- TO REVIEWER: *   The entry for August 19 (Mawbi - Rangoon, Mingaladon) has a time of `.30` (30 minutes) in the logbook, but is transcribed as `None`.
+- TO REVIEWER: *   **TO REVIEWER: Incorrect `TOTALS MONTH - Day Pilot` value:** The transcribed value of `40.60` for "Day Pilot" does not match the sum of all visible "Day Pilot" (Single-Engine and Multi-Engine) flight times on this page, which calculates to `43.00`.

@@ -4,7 +4,7 @@
 November 1944
 
 # AIRPORT
-None
+North Weald
 
 # SQUADRON
 313 Squadron
@@ -44,9 +44,9 @@ None
 489.35
 
 # NOTES
-- Top right of page: Novi, Wald - a pertime airfield (Regular RAF Station) was just a long, direct and exposed (Tube) runway. Run The part at 27 from Upper Aldda Gds — Floyloyd? Butha if we had not get commission. Po Air Ack Ack Pilots office was a fairly attractive blonde - I wanted to her well. Novi Wald was definately my favourite RAF station.
+- Top right of page: North Weald - a peacetime airfield (Regular RAF Station) was just a low, decent underground (Tube) journey from The flat at 27, Upper Addiso Gdns - off Holland Pk Road. It was here I got my Commission. The Airn Ack Ack. Recruiting officer was a strikingly attractive blonde - I remember, too well. North Weald was definitely my favourite RAF Station.
 - Right side of page, next to Nov 27 entry: Gloomy but a clear day was a 1000 Bomber Raid. What devastation.
-- Right side of page, next to Nov 29 and 30 entries: These Bomber Escort trips took place in all weather. This day was cloudless tho covering flights had a fantastic view of power bombing by ± 1000 bombers But sometimes we never saw the target – God knew where it was by the ack ack aimed at the bombers. I need a comment in a fellow pilot's log book. Even the clouds were red – and fires were raging underneath.....
+- Right side of page, next to Nov 29 and 30 entries: These Bomber Escort trips took place in all weather. This day was cloudless the covering flights had a fantastic view of power bombing by ± 1000 bombers But sometimes we never saw the target – God knew where it was by the ack ack aimed at the bombers. I need a comment in a fellow pilot's log book. Even the clouds were red – and fires were raging underneath.....
 
 # PHOTOS
 None
@@ -57,7 +57,4 @@ None
 - Stamp/Signature (bottom right): J. R. [illegible] S/LDR O.C. 313 Sqdn
 
 # HUMAN COMMENTS
-- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: The "No." column for the last few Bomber Escort flights is blank in the original, so it has been transcribed as such.
-- TO REVIEWER: There are numbers (28, 29, 30, 31, 32, 33) written to the right of the 'Time' column in the original. These appear to be internal numbering or daily totals and are not part of the 'Time' value itself; they have been excluded as per instructions to only transcribe the time.
---------------------------------
+- Reviewed 2/12/2025

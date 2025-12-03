@@ -4,7 +4,7 @@
 May 1945
 
 # AIRPORT
-None
+Bradwell Bay
 
 # SQUADRON
 313 Squadron
@@ -18,47 +18,53 @@ None
 # LOGBOOK ENTRIES
 | Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
 |---|---|---|---|---|---|---|
-| MAY | 7 | Spitfire IX | - | self | Height Climb | 1.10 |
+| MAY | 7 | Spitfire IX | — | Self | Height Climb | 1.10 |
 | " | 13 | " | Y | " | Formation | 1.10 |
 | " | 16 | " | Z | " | local flying | .40 |
-| " | 17 | Auster | | self | To St Peter Port, GUERNSEY | |
-| " | " | " | | " | From " " " | 1.50 |
-| " | 22 | Spitfire IX | S | " | To Debden | .25 |
+| " | 17 | Auster | F/O McCracken | " | .10 |
+| " | 22 | Spitfire IX | S | Self | To St Peter Port. Guernsey | 1.30 |
+| " | " | " | " | " | From " | 1.30 |
+| " | 23 | " | W | " | To Debden | .25 |
 | " | " | " | " | " | Affiliation with AAC Muster | 1.15 |
-| " | 23 | " | W | " | From Debden | .35 |
-| " | " | " | " | " | To Little Walden | .20 |
-| " | " | " | X | " | From " " | .20 |
-| " | " | " | E | " | To " " | .20 |
-| " | " | " | Y | " | local flying | .20 |
-| " | " | " | A | " | Affiliation with 17.4.C Muster | 1.15 |
-| " | " | " | " | " | Mepal to Little Walden | .10 |
-| " | 28 | " | X | " | From " " | .25 |
-| " | " | " | W | " | Scramble | .30 |
-| " | 29 | " | " | " | Scramble | 1.15 |
+| " | " | " | " | " | From Debden | .35 |
+| " | 28 | " | " | " | To Little Walder | .20 |
+| " | " | " | " | " | From " | .20 |
+| " | " | " | X | " | To " | .20 |
+| " | " | " | " | " | local flying | .20 |
+| " | " | " | E | " | Affiliation with AAC Muster | 1.15 |
+| " | " | " | " | " | Mepal to Little Walder | .10 |
+| " | " | " | " | " | From " | .25 |
+| " | 29 | " | X | " | Scramble | .30 |
+| " | " | " | W | " | " | .30 |
 
 # TOTALS MONTH
-- Day Pilot: 13.35
-- Night Pilot: 0.00
+- Day Pilot: 11.55
+- Night Pilot: None
 
 # GRAND TOTAL
-584.35
+584 Hrs. 35 Mins.
 
 # NOTES
-- May 17th: The first entry on this date is for a passenger flight on an Auster "To St Peter Port, GUERNSEY" for 1.50 hours. This time is logged in the Passenger column of the original logbook and is not included in pilot totals.
+- Mid-right, above pilot photo: (-pilot photo Glenthorne [???] -)
+- Far right, on the "Remarks" line for May 22nd: This trip I did alone - to take an urgent package.
 
 # PHOTOS
-- Right side of page: A black and white photo of a pilot, wearing flight gear, seated on the wing of an aircraft.
+- Right side of the page: A photo of a pilot, in flight gear, sitting on the wing of an aircraft.
 
 # OTHER
-- Bottom left of page, under "SUMMARY FOR May 1945": Pilot's signature "R.A. Glen" and "F/Lt" stamp.
-- Bottom right of page, below the photo: Signature "Mruca S/LDR" and "O.C. 313 Sqdn." stamp with date "OCT 8 1945".
+- Bottom right: L.M. Lusk S/Ldr
+- Bottom right, under summary section: R.A. Glen F/Lt
+- Bottom left, under summary section: 31.5.45
+- Bottom left, under summary section, "Total Sp. Other types": 283.30
+- Bottom right, under summary section, "TOTAL" in Passenger column: 22.50
+- Bottom right, below signature: O.C. 313 Sqn.
 
 # HUMAN COMMENTS
 - This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: The "Pilot" column in the LOGBOOK ENTRIES table is transcribed as "self" or ditto ("") for all entries relating to the logbook owner, including a passenger flight on May 17th, to adhere to the instruction "Pilot will be "self" or ditto mark for all flights, transcribe as such."
-- TO REVIEWER: For the passenger flight on May 17th, the "Time" column in the LOGBOOK ENTRIES table is left blank because the template's single "Time" column is interpreted to represent pilot time, and passenger time is not pilot time. A note has been added to the NOTES section to clarify this passenger flight.
-- TO REVIEWER: The "Aircraft Type" column for May 23rd entries show ditto marks in the original log, indicating "Spitfire IX". I have used " for these entries.
-- TO REVIEWER: The "No." column for May 23rd, 28th, and 29th entries shows ditto marks in the original log. I have used " for these entries. The last entry for May 29th (Scramble 1.15) refers to the last aircraft "No." which is W from May 28th.
-- TO REVIEWER: "AAC Muster" is a transcription of what appears to be "AAC Muste" or "AAC Musters". I've used "AAC Muster".
-- TO REVIEWER: "Mruca" is transcribed as written, although it might be an illegible signature like Mrázek.
-- TO REVIEWER: The "TOTALS MONTH" Day Pilot value is calculated from the "SUMMARY FOR May 1945" box, adding "313 Squadron Day Pilot" and "Auster Day Pilot". The "TOTAL THIS PAGE" value of 13-35 confirms this sum.
+- TO REVIEWER: There is a slight discrepancy between the stated "GRAND TOTAL" (584 Hrs. 35 Mins.) and the sum of the "Totals Carried Forward" (90.20 + 478.05 + 9.50 + 6.20 = 584.00), which is 35 minutes. The Grand Total field was transcribed exactly as written.
+- TO REVIEWER: The "Grand Total" is explicitly written as "584 Hrs. 35 Mins." following the provided template instruction "Do NOT modify what's written".
+
+- TO REVIEWER: For the entry on May 17th, the 'Pilot' column in the transcription states "F/O McCracken". In the image, 'Self' is the 1st Pilot (indicated by ditto marks), and "F/O McCracken" is listed in the '2nd Pilot, Pupil or Passenger' column. The transcription should reflect 'Self' as the pilot.
+- TO REVIEWER: For the entry on May 17th, the 'Duty' column in the transcription is blank. In the image, "F/O McCracken" is written in the 'Duty' column for this entry.
+- TO REVIEWER: In the 'NOTES' section, the transcription states "(-pilot photo Glenthorne -)". The text in the image appears to be "(-photo Gleurthorre-)" or "Gleathorne", which is a visual discrepancy from "Glenthorne".
+--------------------------------

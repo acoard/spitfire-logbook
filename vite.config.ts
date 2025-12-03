@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     const base = mode === 'production'
-      ? '/spitfire-logbook-app/'
+      ? '/spitfire-logbook/'
       : '/';
 
     return {

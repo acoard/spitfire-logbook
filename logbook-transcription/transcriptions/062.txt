@@ -53,7 +53,7 @@ Appledram
 - Right page, top of remarks column: An underlining in RED indicates an operational flight - a mission where action with the enemy was possible.
 - Right page, mid-top of remarks column: This "Convoy" was in Part-the Invasion Fleet.
 - Left page, next to logbook entry for June 5: 30 mths elapsed from the time I got my pilots "wings" to getting to a squadron - and what could be a more dramatic way of starting on ops' than to fly daily over the tiny beach head where the Allies struggled to get ashore and open up the second front.
-- Right page, mid of remarks column: Memorably provided the briefers for the invasion on D Day.
+- Right page, mid of remarks column: Normandy provided the Beach Head for the invasion on D Day.
 - Right page, mid-bottom of remarks column: At our very detailed and comprehensive "briefing" on the morning before the invasion - we were told that the outcome of the war required the armies to get safely ashore at all costs - and (as far as the 2nd Tactical Air Force was concerned) there were enough pilots and aircraft - in close reserve for all squadrons to suffer 90% casualties on the first day - and they'd be fully up to strength and operational pilots and planes on Day 2.
 - Left page, next to logbook entry for June 13: Air Test
 - Right page, bottom of remarks column: Attack on V.1 Rocket launching site - with 500 lb bomb. (Spitfire Mk IX was capable of carrying a 1000 lb bomb)
@@ -65,5 +65,5 @@ Appledram
 None
 
 # HUMAN COMMENTS
-- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: Duty entries "Convoy PATROL", "Beach HEAD PATROL" and "BOMBER ESCORT" have parts in all caps as per original document. Times in the table are converted from M.S format to decimal. Example: 1-05 is 1.05.
+- Reviewed 2/12/2025, left minor issue below unresolved as not worrying about night hours currently.
+- TO REVIEWER: For the logbook entry on June 2, Aircraft No. U, Duty "Convoy PATROL", the transcription lists a time of `1.20`. The original logbook shows `1-20` in the Day Pilot column and `.-40` in the Night Pilot column. This indicates the flight had a night component of 40 minutes, which is not reflected in the transcription's `Time` column for that entry, making the total flight time misrepresented (it should be 2.00, or the night component should be separately noted).

@@ -4,7 +4,8 @@
 October 1944
 
 # AIRPORT
-None
+RAF Skeabrae 
+North Weald
 
 # SQUADRON
 313 Squadron
@@ -62,6 +63,4 @@ None
   - O.C. 313 Sqdn.
 
 # HUMAN COMMENTS
-- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: There is a discrepancy in the Night Pilot totals for the month. The logbook entries show red numbers "26" and "27" in the Night Pilot column for two flights. However, the "Totals Brought Forward" and "Totals Carried Forward" for Night Pilot are both 6.20, indicating no night pilot time was added this month. I have transcribed "0.00" for "Night Pilot" in "TOTALS MONTH" based on the carried forward totals remaining unchanged.
-- TO REVIEWER: The note in the left column has a phrase "I can't think we had not recorded operations". It's transcribed as written, but grammatically it might have intended "I can't think why we had no recorded operations".
+- Reviewed 2/12/2025

@@ -62,3 +62,13 @@ None
 - This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
 - TO REVIEWER: There are discrepancies in the logbook's own summation for total flight hours and totals carried forward compared to the sum of individual entries. I have transcribed the stated totals (e.g., 6.10 for Feb Day Pilot, 3.30 for March SE Day Pilot, 16.15 for March ME 1st Pilot) for the "TOTALS MONTH" and the "GRAND TOTAL" as written.
 - TO REVIEWER: For February 7th and 8th, the logbook owner was a passenger for 3.00 and 5.30 hours respectively. For March 5th, 6th, 16th, and 17th, the flights were multi-engine, with the pilot logging 1.45, 2.00, 5.30, and 6.00 hours respectively as 1st Pilot. The "Time" column in the logbook entries reflects the pilot time for the specific flight type or 0.00 if it was passenger time.
+- TO REVIEWER: The 'TOTALS PREVIOUS' section is missing the 'Passenger' total of 182.35 from the logbook's "Totals Brought Forward" row.
+- TO REVIEWER: For the logbook entry on February 27, the 'Aircraft No.' is transcribed as blank, but the image clearly shows "TZ 162".
+- TO REVIEWER: For the logbook entry on March 3 (second entry), the 'Duty' is transcribed as "Jodhpur - Maharajpur", but the image shows "Jodhpur - Mahargah".
+- TO REVIEWER: The 'TOTALS MONTH' section presents a combined "Day Pilot: 25.55". However, the logbook explicitly provides separate monthly summary totals: 6.10 for February (SE Day Pilot/Dual), 3.30 for March (SE Day Pilot), and 16.15 for March (ME 1st Pilot). The transcription combines these into a single figure, which is a misrepresentation of how the totals are presented in the original logbook. This also contradicts the 'HUMAN COMMENTS' which state the intention was to transcribe "as written".
+- TO REVIEWER: In the 'NOTES' section for the March 5th-17th entries, "F/Lt Federman" should be "F/Lt Feddeman".
+- TO REVIEWER: In the 'NOTES' section for the March 5th-17th entries, "Dennis Yearty" should be "Denis Yearty".
+- TO REVIEWER: In the 'NOTES' section for the March 5th-17th entries, the phrase "(another pilot)" is an interpretation added by the transcriber and is not present in the logbook's text. The text reads "this time - it was my pleasure...".
+- TO REVIEWER: In the 'NOTES' section for the March 5th-17th entries, "Frank D & D" should be "Frank & D".
+- TO REVIEWER: In the 'NOTES' section for the March 5th-17th entries, "daugab" should be "dugout".
+- TO REVIEWER: In the 'OTHER' section, the rank "1st Lt" for R.A. Glen is incorrect; the image shows "F/Lt R. A. Glen".

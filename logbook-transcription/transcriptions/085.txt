@@ -67,4 +67,6 @@ None
 - TO REVIEWER: "Aircraft Type" has been set to "Link Trainer" and "No." to "None" for all entries, as the page is specifically for "RECORD OF LINK TRAINER PRACTICES" and these columns are blank in the source log.
 - TO REVIEWER: "Pilot" has been set to "self" for all entries as per instructions for such logs when no specific pilot is noted.
 - TO REVIEWER: The "Duty" column combines content from two sub-columns under "PRACTICE" in the original log, including "WEALD." where present, as it appears to be a location/type of practice.
+
+- TO REVIEWER: The transcription of the label "Totals Carried" under the "NOTES" section is missing the word "Forward". The image clearly shows "Totals Carried Forward".
 --------------------------------

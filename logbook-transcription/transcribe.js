@@ -1,6 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 /**
  * Logbook Transcription Script
@@ -22,8 +23,8 @@ import path from "node:path";
  */
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-const FILES_DIR = path.join("logbook-transcription", "files");
-const OUTPUT_DIR = path.join("logbook-transcription", "transcriptions");
+export const FILES_DIR = path.join("logbook-transcription", "files");
+export const OUTPUT_DIR = path.join("logbook-transcription", "transcriptions");
 
 /**
  * Transcribes a single logbook image file using Gemini API.
@@ -133,7 +134,7 @@ COMMON TRANSCRIPTION ERRORS:
  * @param {string[]} args - Command line arguments.
  * @returns {string[]} List of files to process.
  */
-function getFilesToProcess(allFiles, args) {
+export function getFilesToProcess(allFiles, args) {
   if (args.length === 0) {
     return allFiles;
   }
@@ -209,4 +210,6 @@ async function run() {
   }
 }
 
-run();
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  run();
+}

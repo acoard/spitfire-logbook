@@ -4,59 +4,61 @@
 March 1945
 
 # AIRPORT
-None
+Bradwell Bay
 
 # SQUADRON
 313 Squadron
 
 # TOTALS PREVIOUS
-- Day Dual: None
+- Day Dual: 0
 - Day Pilot: 424.45
-- Night Dual: None
-- Night Pilot: None
+- Night Dual: 0
+- Night Pilot: 0
 
 # LOGBOOK ENTRIES
 | Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
 |---|---|---|---|---|---|---|
-| March | 1 | Spitfire IX | W | self | BOMBER ESCORT (Kamen) (Cologne) | 2.20 |
-| " | 2 | " | " | self | BOMBER ESCORT (Cologne) | 2.50 |
-| " | 2 | " | " | self | Ursel to Maldegem | .10 |
-| " | 2 | " | S | self | BOMBER ESCORT (Cologne) | 2.25 |
-| " | 14 | " | W | self | Formation. | 1.05 |
-| " | 15 | " | F | self | BOMBER ESCORT (Bochup) | 2.35 |
-| " | 16 | " | K | self | Ursel to Manston | .50 |
-| " | 17 | " | Y | self | Manston to Ursel | .50 |
-| " | 19 | " | " | self | BOMBER ESCORT (Güstenkirchen) | 2.45 |
-| " | 20 | " | R | self | Ursel to Maldegem | .45 |
-| " | 30 | " | P | self | Maldegem to Ursel | 2.00 |
-| " | 31 | " | R | self | Formation. | 2.30 |
-| " | 31 | " | " | self | Manston to Maldegem | 1.10 |
-| " | 31 | " | " | self | FIGHTER SWEEP (Cannabruch) | 2.35 |
-| " | 31 | " | " | self | Maldegem to Manston | .40 |
+| March | 1 | Spitfire IX | W | self | Bomber Escort (Kamen) | 2.20 |
+| | 2 | " | " | self | Bomber Escort (Cologne) | 2.50 |
+| | 2 | " | " | self | Urcel to Maldegem | .10 |
+| | 2 | " | S | self | Bomber Escort (Cologne) | 2.25 |
+| | 2 | " | " | self | Formation | 1.05 |
+| | 4 | " | S | self | Bomber Escort (Bottrop) | 2.35 |
+| | 5 | " | W | self | Urcel to Manston | .50 |
+| | 5 | " | F | self | Manston to Urcel | .50 |
+| | 6 | " | K | self | Bomber Escort (Hanna) | 2.45 |
+| | 6 | " | " | self | Brake E-Maldegem | .45 |
+| | 17 | " | Y | self | Bomber Escort (Gelsenkirchen) | 2.00 |
+| | 19 | " | " | self | Bomber Escort (Recklinghausen) | 2.30 |
+| | 20 | " | Q | self | Formation | 1.10 |
+| | 30 | " | P | self | Manston-Maldegem | .45 |
+| | 30 | " | " | self | Fighter Sweep (Osnabruck) | 2.35 |
+| | 31 | " | R | self | Maldegem-Manston | .40 |
 
 # TOTALS MONTH
 - Day Pilot: 26.15
-- Night Pilot: None
+- Night Pilot: 0
 
 # GRAND TOTAL
 557.30
 
 # NOTES
-- Summary box: "SUMMARY FOR March 1945"
-- Summary box: "UNIT 313 Sądron"
-- Summary box: "DATE 31.3.45"
-- Summary box aircraft totals: "AIRCRAFT TYPES Spitfire IX Day 26.15 Night"
-- Summary box total all types: "Total All Types Day 558.00 Night 14.30"
-- Bottom right next to Grand Total: "Totals Carried Forward (1) 90.20 (2) 45.00 (3) 9.50 (4) 6.20"
+- Right side of Day Pilot running total column (March 1): Flight no. 44
+- Right side of Day Pilot running total column (March 2, 1st entry): Flight no. 45
+- Right side of Day Pilot running total column (March 2, 3rd entry): Flight no. 46
+- Right side of Day Pilot running total column (March 4): Flight no. 47
+- Right side of Day Pilot running total column (March 6, 1st entry): Flight no. 48
+- Right side of Day Pilot running total column (March 17): Flight no. 49
+- Right side of Day Pilot running total column (March 19): Flight no. 50
+- Right side of Day Pilot running total column (March 30, 2nd entry): Flight no. 51
 
 # PHOTOS
-- Right page: A black and white photograph of two individuals, one in a flight suit and goggles seated in what appears to be an aircraft cockpit, and another person standing outside, leaning in, possibly assisting.
+- Right half of page: A black and white photo of Robing seated in a Spitfire IX cockpit and another person standing on the wing, leaning into the cockpit, passing him his gloves.
 
 # OTHER
-- Summary box signature: R.A. Glen
-- Right page signature: mince PILOR oc. 313 Sęd
+- Signature (bottom left of summary box): R.A. Glen F/Lt
+- Stamp (below signature): O.C. 313 Sqdn
+- Bottom right of page: Totals Carried Forward 90.20 45.00 9.50 6.20
 
 # HUMAN COMMENTS
-- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: The 'Totals Carried Forward' at the bottom right of the page represents the cumulative totals for Day Dual, Day Pilot, Night Dual, and Night Pilot, respectively, that are carried to the next page. This is distinct from the 'TOTALS PREVIOUS' section which is based on the 'Totals Brought Forward' line on *this* page and the value written at the top of the Day Pilot column (424.45).
-- TO REVIEWER: There is a discrepancy between the 'GRAND TOTAL' (557.30) and the 'Total All Types' (558.00 Day + 14.30 Night = 572.30) in the summary box. The explicit 'GRAND TOTAL' has been used.
+- Reviewed 2/12/2025

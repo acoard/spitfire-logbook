@@ -25,41 +25,35 @@ None
 - Night Pilot: None
 
 # GRAND TOTAL
-273.05
+273.55
 
 # NOTES
-- Bottom left page, near log table: May 30 1944 Sgt. Glen. Posted from 84 G.S.U (R.A.F Acton Down) to 313 Squadron in 2 Tactical Air Force. I'd lost my pilot's wings for 30 months – and arrived on a Great Spitfire Squadron at a temporary airfield at Appledram – South of Chichester, near Selsey Bill. We were under canvas. It was just a week before the invasion.
-- Bottom right, in "PASSENGER" time column (11): 21.00
+- Bottom of the page, as a prose paragraph (dated May 30 1944): On May 30 1944 I was posted from 84 G.S.U. (RAF Acton Down) to 313 Squadron in 2 Tactical Air Force. I'd had my pilot's wings for 30 months - and arrived on a Grey Spitfire Mk. IX at a temporary airfield at Appledean - S.A.T. Billet. We were there about a week before the Invasion. May 30 1944. S.G.T.
 
 # PHOTOS
 None
 
 # OTHER
-- (*11212) Wt. 40572–2665 20,000 1/43 T.S. 700
-- (*12278–11212) Wt. 15036–517 50M 6/43 T.S. 700
-- **SUMMARY of FLYING and ASSESSMENTS for year commencing 1st 26 K May 1944 FORM 414 (A)**
-    - **S.E. AIRCRAFT**
-        - DUAL Day: .20
-        - DUAL Night: –
-        - PILOT Day: 43.45
-        - PILOT Night: –
-    - **TOTAL for year period**
-        - DUAL: .20
-        - PILOT: 43.45
-    - **GRAND TOTAL All Service Flying**
-        - DUAL: 100.10
-        - PILOT: 273.05
-        - PASSENGER: –
-    - **ASSESSMENT of ABILITY (To be assessed as :- Exceptional, Above the Average, Average)**
-        - (i) AS A F PILOT: Good Average
-        - (ii) AS PILOT-NAVIGATOR/NAVIGATOR: N/W Average
+- The main content of this page is Robin Glen's Flying Assesment, aka his report card, Form 414A
+- Summary of Flying and Assessments - Form 414(A)
+- Signature: Cerdan Norwood w/Cdr
+- Officer Commanding: 1 T.E.U.
+- Summary of Flying and Assessments for period ending 26 May 1944:
+    - Assessment of Ability (To be assessed as :-Exceptional, Above the Average, Average):
+        - (i) AS A F. PILOT: Good Average
+        - (ii) AS PILOT-NAVIGATOR/NAVIGATOR: N/W
         - (iii) IN BOMBING: Average
         - (iv) IN AIR GUNNERY: Average
-        - (v) IN S.B.A.: W.P Above Average
-    - Date: 26 K May 1944
-    - Signature: Gordon Harwood w/cor.
-    - for Officer Commanding No 1 T.E.U.
+        - (v) IN S.B.A.: w. R.P. Above Average
+    - Any Points in Flying or Airmanship Which Should Be Watched: None
+    - S.E. Aircraft Day Dual (for period): .20
+    - S.E. Aircraft Day Pilot (for period): 42.45
+    - S.E. Aircraft Night Dual (for period): -
+    - S.E. Aircraft Night Pilot (for period): -
+    - Total for period Dual: .20
+    - Total for period Pilot: 42.45
+    - Grand Total All Service Flying Dual: 100.10
+    - Grand Total All Service Flying Pilot: 273.55
 
 # HUMAN COMMENTS
-- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: (ii) AS PILOT-NAVIGATOR/NAVIGATOR: The first word before 'Average' is difficult to read, transcribed as 'N/W'. It could potentially be 'N/A' (Not Applicable).
+- Reviewed 2/12/2025

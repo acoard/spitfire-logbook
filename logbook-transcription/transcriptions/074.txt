@@ -4,7 +4,7 @@
 June 1945
 
 # AIRPORT
-None
+Bradwell Bay
 
 # SQUADRON
 313 Squadron
@@ -51,3 +51,9 @@ None
 - TO REVIEWER: The time format for the grand total was "593 .... Hrs. 30 .... Mins.", which has been transcribed as "593.30" following the instruction to assume dashes are periods and not convert 7-30 to 7.5.
 - TO REVIEWER: The "Duty" for June 4th combines "Formation" with its description, as the description details the flight's purpose.
 - TO REVIEWER: Several notes were extracted from the "Remarks" column and areas below the log entries.
+- TO REVIEWER: The Duty description for the June 4th entry has a transcription error: "Wallisham" should be "Wattisham".
+- TO REVIEWER: The "No." column for the June 18th entries (both flights) is blank in the logbook image, but the transcription implies "W" by using a ditto mark. This is a substantive inaccuracy.
+- TO REVIEWER: In the note "Under log entries, before 'Totals Brought Forward'", the transcription states "The Squadron to escort their Majesties...". The handwritten text appears to be "the Squadron to escort Her Majesties...", so "Her" was transcribed as "their". While "their" makes contextual sense with King & Queen, it is not what is visually written.
+- TO REVIEWER: In the "OTHER" section, under "SUMMARY FOR June per 1945", the line "S/LDR Q.C. 313 Sqdn" (below the signature) is missing.
+- TO REVIEWER: In the "OTHER" section, under "SUMMARY FOR 313 Sqdn 1944-45", the specific UNIT ("313 Sqdn") and DATE ("19. 6. 45") entries are missing.
+- TO REVIEWER: In the "OTHER" section, under "SUMMARY FOR 313 Sqdn 1944-45", the additional signature/initials "Q.C. B. Flt." below the date is missing.

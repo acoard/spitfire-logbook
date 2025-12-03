@@ -41,4 +41,6 @@ None
 
 # HUMAN COMMENTS
 - This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
+
+- TO REVIEWER: In the 'OTHER' section, "G.R. Kay F/P." should be "G.R. Kay F/F." based on the image.
 --------------------------------

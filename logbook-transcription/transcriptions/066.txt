@@ -4,7 +4,7 @@
 September 1944
 
 # AIRPORT
-None
+RAF Skeabrae (not specified, but carried over from previous logs)
 
 # SQUADRON
 313 Squadron
@@ -55,8 +55,4 @@ None
 - Bottom right, below log entries: W.A. Cale S/LDR O.C. 313 Sqdn. (signature and rank/role)
 
 # HUMAN COMMENTS
-- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: The sum of individual Day Pilot entries on this page (8.90) does not match the "TOTALS MONTH Day Pilot" value (10.15) which is confirmed by the "Totals Carried Forward" calculation. There appears to be 1.25 hours of Day Pilot time missing from the visible logbook entries.
-- TO REVIEWER: The "Squadron Formation" duty for Date 12 is written across two lines, with the second part aligned with the "D" aircraft entry.
-- TO REVIEWER: The name "W.A. Cale" for the S/LDR signature is an interpretation; the last name is particularly difficult to read.
---------------------------------
+- Reviewed 2/12/2025

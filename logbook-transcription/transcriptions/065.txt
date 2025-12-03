@@ -5,6 +5,7 @@ August 1944
 
 # AIRPORT
 Skeabrae Orkneys
+(Also some from Sumburgh Shetlands)
 
 # SQUADRON
 313 Squadron
@@ -57,5 +58,4 @@ None
 - Summary box - SIGNATURE: R.A. Glen
 
 # HUMAN COMMENTS
-- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: The "Airport" field lists only "Skeabrae Orkneys", as it's at the very top. However, Sumburgh Shetlands is also mentioned as a base for a block of flights. The template only allows one airport name.
+- Reviewed 2/12/2025

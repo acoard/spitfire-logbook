@@ -31,7 +31,7 @@ None
 | " | 30 | Ve | 504 | " | 1st Solo on type | 1.20 |
 | April | 5 | Hurricane II | BM 885 | " | Formation | 1.50 |
 | " | 5 | " | JS 330 | " | Bombing | 1.20 |
-| " | 10 | " | HV 882 | " | & Air/Ground Firing | 1.40 |
+| " | 10 | " | HV 882 | " | Bombing & Air/Ground Firing | 1.40 |
 | " | 11 | " | HV 556 | " | Aerobatics & Cross Country | 2.00 |
 | " | 12 | " | BE 394 | " | Low-level Cross Country Bombing & Air/G Firing | 2.00 |
 | " | 23 | " | HV 506 | " | Practice Dive Bombing | 2.05 |
@@ -56,8 +56,4 @@ None
 - Signature: R.A. Glen
 
 # HUMAN COMMENTS
-- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: There is a discrepancy between the calculated total Day Pilot time from individual log entries (24.65) and the explicitly summarized Day Pilot total (24.75) for the month in the 'Summary for I TEU Tealing' section. I have used the explicit summary total (24.75) as it is directly stated on the page for "Totals Month".
-- TO REVIEWER: There is a discrepancy between the sum of the "Totals Carried Forward" values (90.20 + 251.45 + 9.50 + 4.40 = 355.55) and the explicitly written "GRAND TOTAL [Cols. (1) to (10)] 356 Hrs. 25 Mins" (356.25). I have transcribed the explicitly written "GRAND TOTAL" as instructed.
-- TO REVIEWER: The April 10th entry's duty "& Air/Ground Firing" appears to be a continuation or clarification of the April 5th "Bombing" duty, but it's listed as a separate entry on a different date. I have transcribed it as written.
-- TO REVIEWER: The time entry for March 29th is "-.45". I have transcribed this exactly as written.
+- Reviewed 2/12/2025

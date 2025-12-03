@@ -4,7 +4,7 @@
 December 1944
 
 # AIRPORT
-Manston
+North Weald
 Bradwell Bay
 
 # SQUADRON
@@ -34,8 +34,8 @@ Bradwell Bay
 497.20
 
 # NOTES
-- Right side of logbook table, opposite logbook entries: My mission was to fly over Brussels at 15000' to relay radio messages from Wing Commander. I passed on a message to abort the operational mission on account of rapid deteriorating weather and though we were No 3 Squadron for home to [illegible]-be for awhile to base. The weather was too bad for bombers and fighters, mission was for Germany. Of the 37 Spitfires in our wing, I was one of only two who made it across the sea back to Olfad. I made it to Bradwell Bay. Flight Commander actually got back to N. World.
-- Bottom right of page, below summary box: I think the squadron moved to Bradwell Bay in mid-December. After the luxury and sophistication of our base, Bradwell Bay certainly didn't live up to North Weald. If we had to rely on a small country house, [illegible] a bitterly cold winter and no fuel for the fire. We were billeted in a light to find a warm fire in a shared bedroom. My fellow officers were [illegible] on a chart of Stowe.
+- Right side of logbook table, opposite logbook entries: My mission was to fly over Brussels at 15000' to relay radio messages from Wing Commander. I passed on a message to abort the operational mission on account of rapid deteriorating weather and though we were No 3 Squadron for home to Dorset for awhile to base. The weather was too bad for bombers and fighters, mission was for Germany. Of the 37 Spitfires in our wing, I was one of only two who made it across the sea back to England. I made it to Bradwell Bay. Flight Commander actually got back to N. World.
+- Bottom right of page, below summary box: I think the squadron moved to Bradwell Bay in mid-December. After the luxury and sophistication of our base, Bradwell Bay certainly didn't live up to North Weald. It was a bitterly cold winter and no fuel for the fire. We were billeted in a large country house, I suppose [illegible], in one night to a room, fire in a shared bedroom. My fellow officers were occupying my chest of drawers.
 
 # PHOTOS
 None
@@ -47,6 +47,4 @@ None
 - Bottom right of page, below Total Carried Forward: O.C. 313 Sqdn. (Stamp)
 
 # HUMAN COMMENTS
-- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: One word in the first note is illegible ([illegible]), and one word in the second note is illegible ([illegible]).
-- TO REVIEWER: "Olfad" is transcribed as written, though the common place name "Manston" is also referenced in the flights and notes, and "N. World" (North Weald) is also referenced.
+- Reviewed 2/12/2025, though bottom note is really hard to transcribe.
