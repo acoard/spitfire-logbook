@@ -60,7 +60,7 @@ Bradwell Bay
 - Bottom right, below signature: O.C. 313 Sqn.
 
 # HUMAN COMMENTS
-- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
+- Reviewed 12/3/2025
 - TO REVIEWER: There is a slight discrepancy between the stated "GRAND TOTAL" (584 Hrs. 35 Mins.) and the sum of the "Totals Carried Forward" (90.20 + 478.05 + 9.50 + 6.20 = 584.00), which is 35 minutes. The Grand Total field was transcribed exactly as written.
 - TO REVIEWER: The "Grand Total" is explicitly written as "584 Hrs. 35 Mins." following the provided template instruction "Do NOT modify what's written".
 
