@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown, ChevronUp, Plane, Target, Shield, Crown, Globe, Home, Award, Zap, MapPin, Calendar, Clock, AlertTriangle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronDown, ChevronUp, Plane, Target, Shield, Crown, Globe, Home, Award, Zap, MapPin, Calendar, Clock, AlertTriangle, BookOpen } from 'lucide-react';
+import { LOCATIONS } from '../services/flightData';
 
 // Types for the Hero's Journey
 interface JourneyMoment {
@@ -13,6 +15,8 @@ interface JourneyMoment {
   significance: 'major' | 'minor' | 'milestone';
   type: 'training' | 'combat' | 'personal' | 'honor' | 'adventure';
   location?: string;
+  coordinates?: { lat: number; lng: number }; // For map linking
+  logbookEntryId?: string; // For deep linking to logbook
   stats?: {
     label: string;
     value: string;
@@ -38,7 +42,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
     subtitle: 'Forging a Fighter Pilot',
     icon: <Award className="w-6 h-6" />,
     color: 'amber',
-    dateRange: '1941 - May 1944',
+    dateRange: '1940 - May 1944',
     summary: 'Robin Glen earned his pilot wings and waited 30 months before finally joining an operational squadron—a long period of preparation that would prove invaluable.',
     moments: [
       {
@@ -77,6 +81,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         quoteSource: 'Form 414A Assessment',
         significance: 'milestone',
         type: 'training',
+        logbookEntryId: '4',
         stats: [
           { label: 'Total Hours', value: '273.55' },
           { label: 'Assessment', value: 'Good Average' },
@@ -104,6 +109,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'milestone',
         type: 'combat',
         location: 'Appledram, Sussex',
+        coordinates: LOCATIONS.APPLEDRAM,
       },
       {
         id: 'dday-2',
@@ -116,6 +122,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'major',
         type: 'combat',
         location: 'English Channel',
+        logbookEntryId: 'c-062-1',
       },
       {
         id: 'dday-3',
@@ -126,6 +133,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         quoteSource: 'D-Day Briefing',
         significance: 'major',
         type: 'combat',
+        logbookEntryId: 'c-062-2',
       },
       {
         id: 'dday-4',
@@ -138,6 +146,8 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'milestone',
         type: 'combat',
         location: 'Normandy, France',
+        coordinates: LOCATIONS.NORMANDY_BEACH,
+        logbookEntryId: 'c-062-3',
         stats: [
           { label: 'Mission Duration', value: '2 hours' },
           { label: 'Mission Type', value: 'Beach Head Patrol' },
@@ -151,6 +161,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'major',
         type: 'combat',
         location: 'Normandy, France',
+        coordinates: LOCATIONS.NORMANDY_BEACH,
         stats: [
           { label: 'Patrols Flown', value: '12+' },
           { label: 'Total Hours', value: '24+' },
@@ -176,6 +187,8 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'major',
         type: 'combat',
         location: 'Northern France',
+        coordinates: LOCATIONS.V1_SITE,
+        logbookEntryId: 'c-062-5',
         stats: [
           { label: 'Ordnance', value: '500 lb bomb' },
         ]
@@ -191,6 +204,8 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'milestone',
         type: 'combat',
         location: 'ALG B.10, France',
+        coordinates: LOCATIONS.B10_PLUMETOT,
+        logbookEntryId: 'c-063-2',
       },
       {
         id: 'combat-3',
@@ -202,6 +217,8 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'major',
         type: 'combat',
         location: 'Caen, France',
+        coordinates: LOCATIONS.CAEN,
+        logbookEntryId: 'c-064-1',
       },
       {
         id: 'combat-4',
@@ -213,6 +230,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'major',
         type: 'combat',
         location: 'Northern France',
+        logbookEntryId: 'c-064-2',
       },
       {
         id: 'combat-5',
@@ -225,6 +243,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'milestone',
         type: 'combat',
         location: 'Germany',
+        logbookEntryId: 'c-068-4',
         stats: [
           { label: 'Major Raids', value: '8+' },
           { label: 'Deepest Target', value: 'Hamburg' },
@@ -241,6 +260,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'milestone',
         type: 'combat',
         location: 'Brussels / Bradwell Bay',
+        coordinates: LOCATIONS.BRADWELL_BAY,
       },
       {
         id: 'combat-7',
@@ -251,6 +271,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         quoteSource: 'Robin Glen\'s reapplication',
         significance: 'major',
         type: 'personal',
+        logbookEntryId: 'c-072-1',
       },
       {
         id: 'combat-8',
@@ -263,6 +284,8 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'major',
         type: 'combat',
         location: 'Heligoland, North Sea',
+        coordinates: LOCATIONS.HELIGOLAND,
+        logbookEntryId: 'c-072-2',
       },
     ]
   },
@@ -295,6 +318,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'minor',
         type: 'honor',
         location: 'Guernsey, Channel Islands',
+        coordinates: { lat: 49.45, lng: -2.53 }, // St Peter Port
       },
       {
         id: 'honor-3',
@@ -307,6 +331,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'milestone',
         type: 'honor',
         location: 'Jersey → Warmwell → Poole',
+        logbookEntryId: 'c-074-1',
         stats: [
           { label: 'Mission Duration', value: '3 hrs 5 min' },
         ]
@@ -341,6 +366,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'milestone',
         type: 'adventure',
         location: 'Multiple Countries',
+        coordinates: LOCATIONS.KARACHI,
         stats: [
           { label: 'Flight Time', value: '30 hours' },
           { label: 'Days', value: '3' },
@@ -356,6 +382,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'major',
         type: 'personal',
         location: 'Calcutta, India',
+        coordinates: LOCATIONS.CALCUTTA,
       },
       {
         id: 'india-3',
@@ -368,6 +395,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'major',
         type: 'personal',
         location: 'Mesra / Ranchi, India',
+        coordinates: LOCATIONS.RANCHI,
       },
       {
         id: 'india-4',
@@ -380,6 +408,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'milestone',
         type: 'adventure',
         location: 'Allahabad, India',
+        coordinates: LOCATIONS.ALLAHABAD,
         stats: [
           { label: 'Aircraft Destroyed', value: '2' },
           { label: 'Aircraft Damaged', value: '1' },
@@ -393,6 +422,8 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'major',
         type: 'adventure',
         location: 'Karachi → Bangkok',
+        coordinates: LOCATIONS.BANGKOK,
+        logbookEntryId: 'f-080-4',
       },
       {
         id: 'india-6',
@@ -404,6 +435,8 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'minor',
         type: 'adventure',
         location: 'Kohat, Northwest Frontier',
+        coordinates: LOCATIONS.KOHAT,
+        logbookEntryId: 'f-080-6',
       },
       {
         id: 'india-7',
@@ -415,6 +448,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'major',
         type: 'personal',
         location: 'Ranchi, India',
+        coordinates: LOCATIONS.RANCHI,
       },
     ]
   },
@@ -435,6 +469,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'major',
         type: 'personal',
         location: 'India',
+        logbookEntryId: 'f-083-2',
       },
       {
         id: 'home-2',
@@ -447,6 +482,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'major',
         type: 'personal',
         location: 'Calcutta / Bombay',
+        coordinates: LOCATIONS.BOMBAY,
       },
       {
         id: 'home-3',
@@ -579,6 +615,21 @@ const MomentCard: React.FC<{
 }> = ({ moment, color, isLast }) => {
   const colors = getColorClasses(color);
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
+  
+  const handleLocationClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (moment.coordinates) {
+      navigate(`/?lat=${moment.coordinates.lat}&lng=${moment.coordinates.lng}&zoom=8`);
+    }
+  };
+
+  const handleLogbookClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (moment.logbookEntryId) {
+      navigate(`/?entryId=${moment.logbookEntryId}`);
+    }
+  };
   
   return (
     <div 
@@ -619,10 +670,18 @@ const MomentCard: React.FC<{
             )}
           </div>
           {moment.location && (
-            <div className="flex items-center gap-1 text-xs text-stone-500 shrink-0">
+            <button 
+                onClick={handleLocationClick}
+                disabled={!moment.coordinates}
+                className={`flex items-center gap-1 text-xs shrink-0 transition-colors ${
+                    moment.coordinates 
+                        ? 'text-stone-400 hover:text-amber-500 cursor-pointer' 
+                        : 'text-stone-500 cursor-default'
+                }`}
+            >
               <MapPin className="w-3 h-3" />
               {moment.location}
-            </div>
+            </button>
           )}
         </div>
         
@@ -641,17 +700,33 @@ const MomentCard: React.FC<{
           </blockquote>
         )}
         
-        {/* Stats */}
-        {moment.stats && moment.stats.length > 0 && (
-          <div className="flex flex-wrap gap-4 mt-4 pt-3 border-t border-stone-700/50">
-            {moment.stats.map((stat, idx) => (
-              <div key={idx} className="flex items-center gap-2">
-                <span className="text-xs text-stone-500">{stat.label}:</span>
-                <span className={`text-sm font-semibold ${colors.text}`}>{stat.value}</span>
-              </div>
-            ))}
-          </div>
-        )}
+        {/* Actions & Stats */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mt-4 pt-3 border-t border-stone-700/50">
+            {moment.stats && moment.stats.length > 0 ? (
+                <div className="flex flex-wrap gap-4">
+                    {moment.stats.map((stat, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                        <span className="text-xs text-stone-500">{stat.label}:</span>
+                        <span className={`text-sm font-semibold ${colors.text}`}>{stat.value}</span>
+                    </div>
+                    ))}
+                </div>
+            ) : <div></div>}
+
+            {/* View in Logbook Button */}
+            {moment.logbookEntryId && (
+                <button
+                    onClick={handleLogbookClick}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono uppercase tracking-wider transition-all
+                        ${isHovered 
+                            ? 'bg-stone-700 text-stone-200 hover:bg-stone-600' 
+                            : 'bg-stone-800 text-stone-400'}`}
+                >
+                    <BookOpen className="w-3 h-3" />
+                    <span>View in Logbook</span>
+                </button>
+            )}
+        </div>
       </div>
     </div>
   );
@@ -715,7 +790,7 @@ const HeroSection: React.FC = () => {
           <div className="flex-1 text-center md:text-left">
             <div className="inline-flex items-center gap-2 text-amber-500/80 text-sm font-mono mb-4">
               <Plane className="w-4 h-4" />
-              <span>1941 - 1946</span>
+              <span>1940 - 1946</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-stone-100 mb-4">
               The Hero's Journey

@@ -1,15 +1,47 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { FLIGHT_LOG } from '../services/flightData';
 import { LogEntry, Phase } from '../types';
 import PilotProfileModal from './PilotProfileModal';
 import WorkspaceLayout from './WorkspaceLayout';
 
 const FlightBookView: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [filterPhase, setFilterPhase] = useState<Phase | 'ALL'>('ALL');
   const [shouldCenterMap, setShouldCenterMap] = useState(true);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [showSignificantOnly, setShowSignificantOnly] = useState(false);
+
+  // Handle URL parameters for deep linking
+  useEffect(() => {
+    const entryId = searchParams.get('entryId');
+    if (entryId) {
+      // Find the entry to ensure it exists and maybe switch phase if needed
+      const entry = FLIGHT_LOG.find(e => e.id === entryId);
+      if (entry) {
+        setSelectedId(entryId);
+        setShouldCenterMap(true);
+        // Optional: switch filter if entry is hidden?
+        // For now, let's just select it.
+      }
+    }
+  }, [searchParams]);
+
+  const customMapCenter = useMemo(() => {
+    const lat = parseFloat(searchParams.get('lat') || '');
+    const lng = parseFloat(searchParams.get('lng') || '');
+    if (!isNaN(lat) && !isNaN(lng)) {
+      return [lat, lng] as [number, number];
+    }
+    return undefined;
+  }, [searchParams]);
+
+  const customMapZoom = useMemo(() => {
+    const zoom = parseInt(searchParams.get('zoom') || '');
+    if (!isNaN(zoom)) return zoom;
+    return undefined;
+  }, [searchParams]);
 
   const filteredEntries = useMemo(() => {
     let result = FLIGHT_LOG;
@@ -53,6 +85,8 @@ const FlightBookView: React.FC = () => {
         onOpenProfile={() => setIsProfileOpen(true)}
         showSignificantOnly={showSignificantOnly}
         setShowSignificantOnly={setShowSignificantOnly}
+        customMapCenter={customMapCenter}
+        customMapZoom={customMapZoom}
       />
     </>
   );

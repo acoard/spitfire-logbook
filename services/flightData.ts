@@ -2,7 +2,7 @@
 import { LogEntry, Phase, AircraftCategory } from '../types';
 
 // Coordinates for key locations
-const LOCATIONS = {
+export const LOCATIONS = {
   // UK Bases
   KIRTON: { lat: 53.476, lng: -0.584, name: "Kirton-in-Lindsay (OTU)" },
   ASTON_DOWN: { lat: 51.706, lng: -2.128, name: "Aston Down" },

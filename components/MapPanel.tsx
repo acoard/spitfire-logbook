@@ -18,6 +18,8 @@ interface MapPanelProps {
   selectedEntry: LogEntry | null;
   onMarkerSelect: (entry: LogEntry) => void;
   shouldCenter: boolean;
+  customCenter?: [number, number];
+  customZoom?: number;
 }
 
 // Robust coordinate validation
@@ -54,17 +56,17 @@ const MapController: React.FC<{ center: [number, number]; zoom: number; shouldCe
   return null;
 };
 
-const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, onMarkerSelect, shouldCenter }) => {
+const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, onMarkerSelect, shouldCenter, customCenter, customZoom }) => {
   
   // Calculate map center based on selection with validation
   // Default to English Channel/Europe view
-  let centerPosition: [number, number] = [50.5, 0.0]; 
+  let centerPosition: [number, number] = customCenter || [50.5, 0.0]; 
 
-  if (selectedEntry && selectedEntry.origin && isValidCoord(selectedEntry.origin.lat) && isValidCoord(selectedEntry.origin.lng)) {
+  if (!customCenter && selectedEntry && selectedEntry.origin && isValidCoord(selectedEntry.origin.lat) && isValidCoord(selectedEntry.origin.lng)) {
     centerPosition = [selectedEntry.origin.lat, selectedEntry.origin.lng];
   }
 
-  const zoomLevel = selectedEntry ? 7 : 5;
+  const zoomLevel = customZoom || (selectedEntry ? 7 : 5);
 
   const getColor = (cat: AircraftCategory) => {
     switch (cat) {

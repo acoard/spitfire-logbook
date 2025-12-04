@@ -17,6 +17,8 @@ interface WorkspaceLayoutProps {
   onOpenProfile: () => void;
   showSignificantOnly: boolean;
   setShowSignificantOnly: (show: boolean) => void;
+  customMapCenter?: [number, number];
+  customMapZoom?: number;
 }
 
 const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
@@ -30,7 +32,9 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
   shouldCenterMap,
   onOpenProfile,
   showSignificantOnly,
-  setShowSignificantOnly
+  setShowSignificantOnly,
+  customMapCenter,
+  customMapZoom
 }) => {
   
   return (
@@ -62,6 +66,8 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
           selectedEntry={selectedEntry}
           onMarkerSelect={onMarkerSelect}
           shouldCenter={shouldCenterMap}
+          customCenter={customMapCenter}
+          customZoom={customMapZoom}
         />
       )}
     />
