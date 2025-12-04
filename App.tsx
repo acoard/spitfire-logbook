@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoadingScreen from './components/LoadingScreen';
 import { NavBar } from './components/NavBar';
 import { Gallery } from './components/Gallery';
+import { HeroJourney } from './components/HeroJourney';
 import FlightBookView from './components/FlightBookView';
 
 const App: React.FC = () => {
@@ -29,6 +30,7 @@ const App: React.FC = () => {
             <div className="flex-1 overflow-hidden flex flex-col">
               <Routes>
                 <Route path="/" element={<FlightBookView />} />
+                <Route path="/journey" element={<HeroJourney />} />
                 <Route path="/gallery" element={<Gallery />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
