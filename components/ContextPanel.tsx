@@ -100,6 +100,7 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
         </div>
 
         <div className="p-5 relative z-10 overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-stone-400">
+             <div className="max-w-2xl mx-auto w-full">
              {/* Title */}
              <h3 className="font-typewriter text-lg font-bold text-stone-900 mb-1 border-b-2 border-stone-800 inline-block pb-1">
                 {selectedEntry.origin.name} 
@@ -118,7 +119,6 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
                                 <h4 className="font-typewriter text-xs font-bold uppercase text-stone-600 flex items-center gap-2">
                                     <span className="w-2 h-2 bg-stone-800 rounded-full"></span>
                                     Pilot's Log 
-                                    <span className="normal-case text-stone-400 font-serif italic text-[11px] ml-1">- by R. Glen</span>
                                 </h4>
                                 <button 
                                     onClick={() => setActiveTab('LOGBOOK')}
@@ -129,8 +129,11 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
                                     <span>View in Logbook</span>
                                 </button>
                             </div>
-                            <div className="font-handwriting text-xl text-blue-900 leading-snug bg-[#fffdf5] p-5 border border-stone-200 shadow-md rounded-sm relative">
+                            <div className="font-handwriting text-xl text-blue-900 leading-snug bg-[#fffdf5] p-5 pb-8 border border-stone-200 shadow-md rounded-sm relative">
                                 "{selectedEntry.pilotNotes}"
+                                <div className="absolute bottom-2 right-3 text-stone-400 font-serif italic text-[11px]">
+                                    - by R. Glen
+                                </div>
                             </div>
                         </div>
                     )}
@@ -285,7 +288,7 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
                     <span className="block font-typewriter text-[10px] text-stone-500 uppercase">Aircraft Type</span>
                     <button 
                         onClick={() => setActiveTab('AIRCRAFT')}
-                        className="font-typewriter text-sm font-bold text-stone-900 hover:text-amber-700 hover:underline decoration-amber-700/50 decoration-2 transition-all text-left"
+                        className="font-typewriter text-sm font-bold text-stone-900 hover:text-amber-700 hover:underline decoration-amber-700/50 decoration-2 transition-all text-left cursor-pointer"
                     >
                         {selectedEntry.aircraftType}
                     </button>
@@ -294,6 +297,7 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
                      <span className="block font-typewriter text-[10px] text-stone-500 uppercase text-right">Flight Duration</span>
                     <span className="font-handwriting text-xl">{selectedEntry.time} hrs</span>
                 </div>
+             </div>
              </div>
         </div>
         <ImageModal
