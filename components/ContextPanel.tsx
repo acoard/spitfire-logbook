@@ -114,11 +114,22 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
                     {/* Pilot's Notes (Handwritten style) */}
                     {selectedEntry.pilotNotes && (
                         <div className="relative transform rotate-1">
-                            <h4 className="font-typewriter text-xs font-bold uppercase text-stone-600 mb-2 flex items-center gap-2">
-                                <span className="w-2 h-2 bg-stone-800 rounded-full"></span>
-                                Pilot's Log
-                            </h4>
-                            <div className="font-handwriting text-xl text-blue-900 leading-snug bg-white/40 p-4 border border-stone-200 shadow-sm rounded-sm">
+                            <div className="flex items-end justify-between mb-2">
+                                <h4 className="font-typewriter text-xs font-bold uppercase text-stone-600 flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-stone-800 rounded-full"></span>
+                                    Pilot's Log 
+                                    <span className="normal-case text-stone-400 font-serif italic text-[11px] ml-1">- by R. Glen</span>
+                                </h4>
+                                <button 
+                                    onClick={() => setActiveTab('LOGBOOK')}
+                                    disabled={!logbookImageSrc}
+                                    className={`flex items-center gap-1.5 text-[10px] font-mono transition-all ${!logbookImageSrc ? 'opacity-0 cursor-default hidden' : 'text-stone-400 hover:text-stone-700 cursor-pointer hover:underline'}`}
+                                >
+                                    <BookOpen className="w-3 h-3" />
+                                    <span>View in Logbook</span>
+                                </button>
+                            </div>
+                            <div className="font-handwriting text-xl text-blue-900 leading-snug bg-[#fffdf5] p-5 border border-stone-200 shadow-md rounded-sm relative">
                                 "{selectedEntry.pilotNotes}"
                             </div>
                         </div>
@@ -272,7 +283,12 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
              <div className="mt-6 pt-4 border-t border-stone-300 flex justify-between items-end">
                 <div>
                     <span className="block font-typewriter text-[10px] text-stone-500 uppercase">Aircraft Type</span>
-                    <span className="font-typewriter text-sm font-bold">{selectedEntry.aircraftType}</span>
+                    <button 
+                        onClick={() => setActiveTab('AIRCRAFT')}
+                        className="font-typewriter text-sm font-bold text-stone-900 hover:text-amber-700 hover:underline decoration-amber-700/50 decoration-2 transition-all text-left"
+                    >
+                        {selectedEntry.aircraftType}
+                    </button>
                 </div>
                 <div>
                      <span className="block font-typewriter text-[10px] text-stone-500 uppercase text-right">Flight Duration</span>
