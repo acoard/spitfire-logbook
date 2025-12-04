@@ -49,7 +49,10 @@ describe('LogbookPanel', () => {
   describe('header rendering', () => {
     it('displays the RAF Flight Book title', () => {
       renderLogbookPanel();
-      expect(screen.getByText('RAF Flight Book')).toBeInTheDocument();
+      // Both mobile and desktop headers show the title
+      const titles = screen.getAllByText('RAF Flight Book');
+      expect(titles.length).toBeGreaterThanOrEqual(1);
+      expect(titles[0]).toBeInTheDocument();
     });
 
     it('displays the squadron name', () => {
@@ -221,10 +224,10 @@ describe('LogbookPanel', () => {
   });
 
   describe('historical notes indicator', () => {
-    it('shows "See Notes" indicator for entries with historical notes', () => {
+    it('shows "Notes" indicator for entries with historical notes', () => {
       renderLogbookPanel();
-
-      expect(screen.getByText('See Notes')).toBeInTheDocument();
+      // Text is "Notes" on mobile and "See Notes" was desktop - now just "Notes" on both
+      expect(screen.getByText('Notes')).toBeInTheDocument();
     });
 
     it('shows paperclip icon for entries with historical notes when not selected', () => {
