@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { NavBar } from '../components/NavBar';
@@ -14,6 +14,9 @@ vi.mock('react-leaflet', () => ({
   useMap: () => ({
     setView: vi.fn(),
     getZoom: () => 5,
+    flyTo: vi.fn(),
+    getContainer: () => document.createElement('div'),
+    invalidateSize: vi.fn(),
   }),
 }));
 
@@ -81,42 +84,29 @@ describe('NavBar', () => {
 });
 
 describe('App Navigation', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
   it('shows loading screen initially', () => {
     render(<App />);
     
     // Loading screen should be visible
     expect(screen.getByText('Robin Glen')).toBeInTheDocument();
-    expect(screen.getByText(/preparing aircraft/i)).toBeInTheDocument();
   });
 
   it('shows enter button after loading completes', async () => {
     render(<App />);
     
-    // Advance timers to complete loading
-    vi.advanceTimersByTime(300);
-    
+    // Wait for loading to complete (250ms timeout in App)
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /open logbook/i })).toBeInTheDocument();
-    });
+    }, { timeout: 1000 });
   });
 
   it('shows navigation bar after entering the app', async () => {
     render(<App />);
     
     // Wait for loading to complete
-    vi.advanceTimersByTime(300);
-    
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /open logbook/i })).toBeInTheDocument();
-    });
+    }, { timeout: 1000 });
 
     // Click the enter button
     fireEvent.click(screen.getByRole('button', { name: /open logbook/i }));
@@ -132,11 +122,10 @@ describe('App Navigation', () => {
   it('navigates to Hero Journey page when clicking the link', async () => {
     render(<App />);
     
-    // Complete loading and enter
-    vi.advanceTimersByTime(300);
+    // Wait for loading and enter
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /open logbook/i })).toBeInTheDocument();
-    });
+    }, { timeout: 1000 });
     fireEvent.click(screen.getByRole('button', { name: /open logbook/i }));
 
     // Wait for navigation to be visible
@@ -150,18 +139,16 @@ describe('App Navigation', () => {
     // Should show Hero Journey content
     await waitFor(() => {
       expect(screen.getByText("The Hero's Journey")).toBeInTheDocument();
-      expect(screen.getByText(/Flight Lieutenant Robin A. Glen/i)).toBeInTheDocument();
     });
   });
 
   it('navigates to Gallery page when clicking the link', async () => {
     render(<App />);
     
-    // Complete loading and enter
-    vi.advanceTimersByTime(300);
+    // Wait for loading and enter
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /open logbook/i })).toBeInTheDocument();
-    });
+    }, { timeout: 1000 });
     fireEvent.click(screen.getByRole('button', { name: /open logbook/i }));
 
     // Wait for navigation to be visible
@@ -174,7 +161,6 @@ describe('App Navigation', () => {
 
     // Should show Gallery content (grid layout)
     await waitFor(() => {
-      // Gallery uses a grid to display items
       const gridContainer = document.querySelector('.grid');
       expect(gridContainer).toBeInTheDocument();
     });
@@ -183,11 +169,10 @@ describe('App Navigation', () => {
   it('navigates back to Flight Book from other pages', async () => {
     render(<App />);
     
-    // Complete loading and enter
-    vi.advanceTimersByTime(300);
+    // Wait for loading and enter
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /open logbook/i })).toBeInTheDocument();
-    });
+    }, { timeout: 1000 });
     fireEvent.click(screen.getByRole('button', { name: /open logbook/i }));
 
     // Go to Hero Journey

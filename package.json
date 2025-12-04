@@ -7,6 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "transcribe": "node --env-file=.env logbook-transcription/transcribe.js",
     "review-transcription": "node --env-file=.env logbook-transcription/review-transcriptions.js"
   },

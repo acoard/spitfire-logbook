@@ -124,7 +124,8 @@ describe('LoadingScreen', () => {
       const onEnter = vi.fn();
       render(<LoadingScreen isLoaded={true} onEnter={onEnter} />);
 
-      expect(screen.getByText('Robin Glen, D-Day')).toBeInTheDocument();
+      // The signature includes "- " prefix
+      expect(screen.getByText(/Robin Glen, D-Day/)).toBeInTheDocument();
     });
   });
 });
