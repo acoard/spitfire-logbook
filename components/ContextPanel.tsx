@@ -61,7 +61,7 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
 
   // Base path for logbook images (served via vite-plugin-static-copy)
   const logbookImageSrc = selectedEntry.sourceDocument 
-    ? `/logbook-images/${selectedEntry.sourceDocument}` 
+    ? `/spitfire-logbook/logbook-images/${selectedEntry.sourceDocument}` 
     : null;
 
   return (
