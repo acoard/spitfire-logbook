@@ -158,44 +158,49 @@ interface MapTimelineScrubberProps {
 
 ## Features by Phase
 
-### Phase 1: MVP
+### Phase 1: MVP ✅ COMPLETE
 
 **Core Functionality:**
 - [x] Fixed bottom overlay positioning
 - [x] Display timeline from 1940-1946
 - [x] Render markers at correct positions
 - [x] Click marker → callback with coordinates
-- [x] Show current position indicator
+- [x] Show current position indicator (Spitfire silhouette)
 - [x] Display current date/title label
+- [x] Collapse/expand toggle to hide timeline
 
 **Styling:**
-- [x] Vintage brass/leather background
-- [x] Different marker sizes by significance
-- [x] Chapter color bands
+- [x] Vintage brass/leather background with texture overlay
+- [x] Different marker sizes by significance (milestone/major/minor)
+- [x] Chapter color bands (Training=yellow, Combat=red, Ferry=blue)
 - [x] Responsive (works on mobile)
+- [x] Year markers along timeline
 
-### Phase 2: Enhanced Interaction
+### Phase 2: Enhanced Interaction ✅ MOSTLY COMPLETE
 
 **Navigation:**
-- [ ] Drag scrubbing (click and drag to scrub through time)
-- [ ] Keyboard navigation (arrow keys)
-- [ ] Touch swipe on mobile
+- [x] Drag scrubbing (click and drag to scrub through time)
+- [x] Keyboard navigation (arrow keys, Home, End, Space)
+- [x] Prev/Next/First/Last navigation buttons
+- [x] Auto-play mode with Play/Pause button (Space key)
+- [ ] Touch swipe on mobile (future enhancement)
 
 **Visual Polish:**
-- [ ] Hover tooltips with moment details
-- [ ] Smooth animations on position change
-- [ ] Chapter transition effects
+- [x] Hover tooltips with moment details
+- [x] Smooth animations on position change
+- [x] Glow effects on selected/milestone markers
+- [ ] Chapter transition effects (future enhancement)
 
 **State Sync:**
-- [ ] Bi-directional sync with map markers
-- [ ] Highlight active marker on map
-- [ ] Pan/zoom map to marker location
+- [x] Bi-directional sync with map markers (via parent component)
+- [x] Highlight active marker on map (selected state)
+- [x] Pan/zoom map to marker location (via onEntrySelect callback)
 
-### Phase 3: Advanced Features
+### Phase 3: Advanced Features (Future)
 
 **Playback:**
-- [ ] Auto-play mode (animate through timeline)
-- [ ] Play/pause controls (vintage film reel style)
+- [x] Auto-play mode (animate through timeline) - 2 second intervals
+- [x] Play/pause controls (vintage styled)
 - [ ] Speed control: 1x, 2x, "reading pace"
 
 **Zoom:**
