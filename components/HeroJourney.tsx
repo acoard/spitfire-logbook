@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronUp, Plane, Target, Shield, Crown, Globe, Home, Award, MapPin, BookOpen } from 'lucide-react';
 import { LOCATIONS } from '../services/flightData';
+import { TypewriterText } from './TypewriterText';
 
 // Types for the Hero's Journey
 interface JourneyMoment {
@@ -536,24 +537,42 @@ const ChapterTab: React.FC<{
   chapter: JourneyChapter;
   isActive: boolean;
   onClick: () => void;
-}> = ({ chapter, isActive, onClick }) => (
-  <button
-    onClick={onClick}
-    className={`
-      flex items-center gap-1.5 sm:gap-2 px-2.5 py-2 sm:px-4 sm:py-2.5 
-      font-typewriter text-xs sm:text-sm whitespace-nowrap
-      border-t-2 border-l border-r rounded-t-sm
-      transition-all duration-200 min-w-0
-      ${isActive 
-        ? 'bg-[#f4f1ea] border-amber-900/30 text-amber-900 -mb-px z-10 shadow-sm' 
-        : 'bg-[#e8e4d9] border-amber-900/20 text-amber-800/60 hover:bg-[#ebe7dc] hover:text-amber-900/80'
-      }
-    `}
-  >
-    <span className={isActive ? 'text-amber-800' : 'text-amber-700/50'}>{chapter.icon}</span>
-    <span className="hidden sm:inline truncate">{chapter.title}</span>
-  </button>
-);
+}> = ({ chapter, isActive, onClick }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      title={chapter.title}
+      className={`
+        relative flex items-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 
+        font-typewriter text-xs sm:text-sm whitespace-nowrap
+        border-t-2 border-l border-r rounded-t-sm
+        transition-all duration-300 ease-out
+        ${isActive 
+          ? 'bg-[#f4f1ea] border-amber-900/30 text-amber-900 -mb-px z-10 shadow-sm px-3 sm:px-4' 
+          : 'bg-[#e8e4d9] border-amber-900/20 text-amber-800/60 hover:bg-[#ebe7dc] hover:text-amber-900/80'
+        }
+        ${!isActive && isHovered ? 'px-3 sm:px-4 z-20' : !isActive ? 'px-2.5 sm:px-4' : ''}
+      `}
+    >
+      <span className={isActive ? 'text-amber-800' : 'text-amber-700/50'}>{chapter.icon}</span>
+      
+      {/* Desktop: always show text */}
+      <span className="hidden sm:inline">{chapter.title}</span>
+      
+      {/* Mobile: show truncated text by default, full text on hover */}
+      <span className={`
+        sm:hidden transition-all duration-300 ease-out
+        ${isActive || isHovered ? '' : 'max-w-12 truncate'}
+      `}>
+        {chapter.title}
+      </span>
+    </button>
+  );
+};
 
 // Chapter Card Component
 const ChapterCard: React.FC<{
@@ -747,11 +766,21 @@ const MomentCard: React.FC<{
           {moment.description}
         </p>
         
-        {/* Quote - styled like handwritten note */}
+        {/* Quote - styled like handwritten note with typewriter effect */}
         {moment.quote && (
           <div className="relative my-3 sm:my-4 ml-2 sm:ml-4 pl-3 sm:pl-4 border-l-2 border-amber-700/30">
             <p className="font-handwriting text-sm sm:text-base text-amber-800 leading-relaxed italic">
-              "{moment.quote}"
+              "<TypewriterText 
+                text={moment.quote}
+                speed={35}
+                triggerOnView={true}
+                viewThreshold={0.8}
+                showCursor={true}
+                cursor="│"
+                cursorBlinkAfter={true}
+                cursorClassName="text-amber-600/70 font-normal"
+                variableSpeed={true}
+              />"
             </p>
             {moment.quoteSource && (
               <p className="font-typewriter text-[10px] sm:text-xs text-amber-700/70 mt-1">
