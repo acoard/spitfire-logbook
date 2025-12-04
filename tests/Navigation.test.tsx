@@ -28,9 +28,10 @@ describe('NavBar', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('FLIGHT BOOK & MAP')).toBeInTheDocument();
-    expect(screen.getByText("HERO'S JOURNEY")).toBeInTheDocument();
-    expect(screen.getByText('GALLERY')).toBeInTheDocument();
+    // Both mobile and desktop navs render links, so use getAllByText
+    expect(screen.getAllByText('FLIGHT BOOK & MAP').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("HERO'S JOURNEY").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('GALLERY').length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders navigation links as actual links', () => {
@@ -40,13 +41,14 @@ describe('NavBar', () => {
       </MemoryRouter>
     );
 
-    const flightBookLink = screen.getByText('FLIGHT BOOK & MAP');
-    const heroJourneyLink = screen.getByText("HERO'S JOURNEY");
-    const galleryLink = screen.getByText('GALLERY');
+    // Get all links and verify at least one of each has correct href
+    const flightBookLinks = screen.getAllByText('FLIGHT BOOK & MAP');
+    const heroJourneyLinks = screen.getAllByText("HERO'S JOURNEY");
+    const galleryLinks = screen.getAllByText('GALLERY');
 
-    expect(flightBookLink.closest('a')).toHaveAttribute('href', '/');
-    expect(heroJourneyLink.closest('a')).toHaveAttribute('href', '/journey');
-    expect(galleryLink.closest('a')).toHaveAttribute('href', '/gallery');
+    expect(flightBookLinks[0].closest('a')).toHaveAttribute('href', '/');
+    expect(heroJourneyLinks[0].closest('a')).toHaveAttribute('href', '/journey');
+    expect(galleryLinks[0].closest('a')).toHaveAttribute('href', '/gallery');
   });
 
   it('highlights the active link based on current route', () => {
@@ -56,8 +58,9 @@ describe('NavBar', () => {
       </MemoryRouter>
     );
 
-    const heroJourneyLink = screen.getByText("HERO'S JOURNEY");
-    expect(heroJourneyLink).toHaveClass('text-amber-500');
+    const heroJourneyLinks = screen.getAllByText("HERO'S JOURNEY");
+    // At least one link should have the active style
+    expect(heroJourneyLinks.some(link => link.className.includes('text-amber-500'))).toBe(true);
   });
 
   it('highlights Flight Book link when on home route', () => {
@@ -67,8 +70,8 @@ describe('NavBar', () => {
       </MemoryRouter>
     );
 
-    const flightBookLink = screen.getByText('FLIGHT BOOK & MAP');
-    expect(flightBookLink).toHaveClass('text-amber-500');
+    const flightBookLinks = screen.getAllByText('FLIGHT BOOK & MAP');
+    expect(flightBookLinks.some(link => link.className.includes('text-amber-500'))).toBe(true);
   });
 
   it('highlights Gallery link when on gallery route', () => {
@@ -78,8 +81,8 @@ describe('NavBar', () => {
       </MemoryRouter>
     );
 
-    const galleryLink = screen.getByText('GALLERY');
-    expect(galleryLink).toHaveClass('text-amber-500');
+    const galleryLinks = screen.getAllByText('GALLERY');
+    expect(galleryLinks.some(link => link.className.includes('text-amber-500'))).toBe(true);
   });
 });
 
@@ -111,11 +114,11 @@ describe('App Navigation', () => {
     // Click the enter button
     fireEvent.click(screen.getByRole('button', { name: /open logbook/i }));
     
-    // Navigation should now be visible
+    // Navigation should now be visible (both mobile and desktop versions)
     await waitFor(() => {
-      expect(screen.getByText('FLIGHT BOOK & MAP')).toBeInTheDocument();
-      expect(screen.getByText("HERO'S JOURNEY")).toBeInTheDocument();
-      expect(screen.getByText('GALLERY')).toBeInTheDocument();
+      expect(screen.getAllByText('FLIGHT BOOK & MAP').length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText("HERO'S JOURNEY").length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText('GALLERY').length).toBeGreaterThanOrEqual(1);
     });
   });
 
@@ -130,11 +133,11 @@ describe('App Navigation', () => {
 
     // Wait for navigation to be visible
     await waitFor(() => {
-      expect(screen.getByText("HERO'S JOURNEY")).toBeInTheDocument();
+      expect(screen.getAllByText("HERO'S JOURNEY").length).toBeGreaterThanOrEqual(1);
     });
 
-    // Click on Hero's Journey
-    fireEvent.click(screen.getByText("HERO'S JOURNEY"));
+    // Click on Hero's Journey (get the first one)
+    fireEvent.click(screen.getAllByText("HERO'S JOURNEY")[0]);
 
     // Should show Hero Journey content
     await waitFor(() => {
@@ -153,11 +156,11 @@ describe('App Navigation', () => {
 
     // Wait for navigation to be visible
     await waitFor(() => {
-      expect(screen.getByText('GALLERY')).toBeInTheDocument();
+      expect(screen.getAllByText('GALLERY').length).toBeGreaterThanOrEqual(1);
     });
 
-    // Click on Gallery
-    fireEvent.click(screen.getByText('GALLERY'));
+    // Click on Gallery (get the first one)
+    fireEvent.click(screen.getAllByText('GALLERY')[0]);
 
     // Should show Gallery content (grid layout)
     await waitFor(() => {
@@ -177,19 +180,19 @@ describe('App Navigation', () => {
 
     // Go to Hero Journey
     await waitFor(() => {
-      expect(screen.getByText("HERO'S JOURNEY")).toBeInTheDocument();
+      expect(screen.getAllByText("HERO'S JOURNEY").length).toBeGreaterThanOrEqual(1);
     });
-    fireEvent.click(screen.getByText("HERO'S JOURNEY"));
+    fireEvent.click(screen.getAllByText("HERO'S JOURNEY")[0]);
 
     // Then navigate back to Flight Book
     await waitFor(() => {
-      expect(screen.getByText('FLIGHT BOOK & MAP')).toBeInTheDocument();
+      expect(screen.getAllByText('FLIGHT BOOK & MAP').length).toBeGreaterThanOrEqual(1);
     });
-    fireEvent.click(screen.getByText('FLIGHT BOOK & MAP'));
+    fireEvent.click(screen.getAllByText('FLIGHT BOOK & MAP')[0]);
 
-    // Should be back on the main page with logbook
+    // Should be back on the main page with logbook (both mobile and desktop render the title)
     await waitFor(() => {
-      expect(screen.getByText('RAF Flight Book')).toBeInTheDocument();
+      expect(screen.getAllByText('RAF Flight Book').length).toBeGreaterThanOrEqual(1);
     });
   });
 });

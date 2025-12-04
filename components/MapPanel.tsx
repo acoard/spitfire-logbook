@@ -222,20 +222,23 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
 
       </MapContainer>
 
-      {/* Map Legend Overlay */}
-      <div className="absolute bottom-6 right-6 bg-[#f4f1ea] p-3 rounded-sm shadow-xl border-2 border-stone-400 text-xs font-serif z-[400] transform rotate-1">
-        <h4 className="font-bold mb-2 text-stone-800 border-b border-stone-300 pb-1">MAP KEY</h4>
-        <div className="flex items-center gap-2 mb-1.5">
-            <span className="w-3 h-3 rounded-full bg-yellow-500 border border-stone-600 shadow-sm"></span>
-            <span className="font-typewriter text-stone-700">TRAINING</span>
+      {/* Map Legend Overlay - responsive positioning */}
+      <div className="absolute bottom-2 right-2 md:bottom-6 md:right-6 bg-[#f4f1ea] p-1.5 md:p-3 rounded-sm shadow-xl border md:border-2 border-stone-400 text-[9px] md:text-xs font-serif z-[400] transform md:rotate-1">
+        <h4 className="font-bold mb-1 md:mb-2 text-stone-800 border-b border-stone-300 pb-0.5 md:pb-1 text-[8px] md:text-xs">KEY</h4>
+        <div className="flex items-center gap-1.5 md:gap-2 mb-1 md:mb-1.5">
+            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-yellow-500 border border-stone-600 shadow-sm flex-shrink-0"></span>
+            <span className="font-typewriter text-stone-700 hidden md:inline">TRAINING</span>
+            <span className="font-typewriter text-stone-700 md:hidden">TRN</span>
         </div>
-        <div className="flex items-center gap-2 mb-1.5">
-            <span className="w-3 h-3 rounded-full bg-red-600 border border-stone-600 shadow-sm"></span>
-            <span className="font-typewriter text-stone-700">COMBAT</span>
+        <div className="flex items-center gap-1.5 md:gap-2 mb-1 md:mb-1.5">
+            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-red-600 border border-stone-600 shadow-sm flex-shrink-0"></span>
+            <span className="font-typewriter text-stone-700 hidden md:inline">COMBAT</span>
+            <span className="font-typewriter text-stone-700 md:hidden">OPS</span>
         </div>
-        <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-blue-500 border border-stone-600 shadow-sm"></span>
-            <span className="font-typewriter text-stone-700">TRANSPORT</span>
+        <div className="flex items-center gap-1.5 md:gap-2">
+            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-blue-500 border border-stone-600 shadow-sm flex-shrink-0"></span>
+            <span className="font-typewriter text-stone-700 hidden md:inline">TRANSPORT</span>
+            <span className="font-typewriter text-stone-700 md:hidden">TRP</span>
         </div>
       </div>
     </div>
