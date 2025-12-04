@@ -112,6 +112,47 @@ const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry })
              {activeTab === 'MISSION' && (
                  <div className="mt-2 font-old-print text-stone-800 leading-relaxed text-sm animate-in fade-in duration-300 space-y-6">
                     
+                    {/* Historical Context */}
+                    {selectedEntry.historicalNote && (
+                        <div className="relative">
+                            <div className="bg-[#f8f5f0] p-4 shadow-sm border border-stone-300 relative">
+                                <div className="mb-2 border-b border-stone-300 pb-1 flex justify-between items-end">
+                                    <span className="font-typewriter text-[10px] uppercase tracking-widest text-stone-500">Historical Record</span>
+                                    <span className="font-typewriter text-[10px] text-stone-400">{selectedEntry.date}</span>
+                                </div>
+                                <p className="whitespace-pre-line font-typewriter text-sm text-stone-800 leading-relaxed">
+                                    {selectedEntry.historicalNote}
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Pilot's Notes (Handwritten style) */}
+                    {selectedEntry.pilotNotes && (
+                        <div className="relative transform rotate-1">
+                            <div className="flex items-end justify-between mb-2">
+                                <h4 className="font-typewriter text-xs font-bold uppercase text-stone-600 flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-stone-800 rounded-full"></span>
+                                    Pilot's Log 
+                                </h4>
+                                <button 
+                                    onClick={() => setActiveTab('LOGBOOK')}
+                                    disabled={!logbookImageSrc}
+                                    className={`flex items-center gap-1.5 text-[10px] font-mono transition-all ${!logbookImageSrc ? 'opacity-0 cursor-default hidden' : 'text-stone-400 hover:text-stone-700 cursor-pointer hover:underline'}`}
+                                >
+                                    <BookOpen className="w-3 h-3" />
+                                    <span>View in Logbook</span>
+                                </button>
+                            </div>
+                            <div className="font-handwriting text-xl text-blue-900 leading-snug bg-[#fffdf5] p-5 pb-8 border border-stone-200 shadow-md rounded-sm relative">
+                                "{selectedEntry.pilotNotes}"
+                                <div className="absolute bottom-2 right-3 text-stone-400 font-serif italic text-[11px]">
+                                    - by R. Glen
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {selectedEntry.customView === 'gradebook' ? (
                         <div className="mb-6">
                            <div className="flex justify-between items-end mb-2">
@@ -168,46 +209,8 @@ const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry })
                         </div>
                     ) : (
                     <>
-                    {/* Pilot's Notes (Handwritten style) */}
-                    {selectedEntry.pilotNotes && (
-                        <div className="relative transform rotate-1">
-                            <div className="flex items-end justify-between mb-2">
-                                <h4 className="font-typewriter text-xs font-bold uppercase text-stone-600 flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-stone-800 rounded-full"></span>
-                                    Pilot's Log 
-                                </h4>
-                                <button 
-                                    onClick={() => setActiveTab('LOGBOOK')}
-                                    disabled={!logbookImageSrc}
-                                    className={`flex items-center gap-1.5 text-[10px] font-mono transition-all ${!logbookImageSrc ? 'opacity-0 cursor-default hidden' : 'text-stone-400 hover:text-stone-700 cursor-pointer hover:underline'}`}
-                                >
-                                    <BookOpen className="w-3 h-3" />
-                                    <span>View in Logbook</span>
-                                </button>
-                            </div>
-                            <div className="font-handwriting text-xl text-blue-900 leading-snug bg-[#fffdf5] p-5 pb-8 border border-stone-200 shadow-md rounded-sm relative">
-                                "{selectedEntry.pilotNotes}"
-                                <div className="absolute bottom-2 right-3 text-stone-400 font-serif italic text-[11px]">
-                                    - by R. Glen
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Historical Context */}
-                    {selectedEntry.historicalNote ? (
-                        <div className="relative">
-                            <div className="bg-[#f8f5f0] p-4 shadow-sm border border-stone-300 relative">
-                                <div className="mb-2 border-b border-stone-300 pb-1 flex justify-between items-end">
-                                    <span className="font-typewriter text-[10px] uppercase tracking-widest text-stone-500">Historical Record</span>
-                                    <span className="font-typewriter text-[10px] text-stone-400">{selectedEntry.date}</span>
-                                </div>
-                                <p className="whitespace-pre-line font-typewriter text-sm text-stone-800 leading-relaxed">
-                                    {selectedEntry.historicalNote}
-                                </p>
-                            </div>
-                        </div>
-                    ) : !selectedEntry.pilotNotes && (
+                    
+                    {!selectedEntry.pilotNotes && !selectedEntry.historicalNote && (
                         <div className="text-stone-500 italic font-handwriting text-lg pl-4 border-l-4 border-stone-300 py-2">
                             "Routine flight operations. No special incident reports filed for this date."
                         </div>

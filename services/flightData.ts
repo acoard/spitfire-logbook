@@ -185,7 +185,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         destination: LOCATIONS.ASTON_DOWN,
         isSignificant: true,
         sourceDocument: '061.jpg',
-        customView: 'gradebook'
+        customView: 'gradebook',
+        historicalNote: 'Robin graduates to become a full pilot. The rating system was known for being honest, and average is not a euphemism for "bad".'
     },
 
     // Phase 2: Combat (313 Squadron) - Reconstructed from Logbooks 062-074
