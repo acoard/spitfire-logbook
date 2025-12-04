@@ -1,7 +1,7 @@
 import React from 'react';
 import LogbookPanel from './LogbookPanel';
 import ContextPanel from './ContextPanel';
-import MapPanel from './MapPanel';
+import MapViewToggle from './MapViewToggle';
 import { ResizableLayout } from './ResizableLayout';
 import { LogEntry, Phase } from '../types';
 
@@ -61,7 +61,7 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
         <ContextPanel selectedEntry={selectedEntry} />
       }
       mainContent={() => (
-        <MapPanel
+        <MapViewToggle
           entries={entries}
           selectedEntry={selectedEntry}
           onMarkerSelect={onMarkerSelect}

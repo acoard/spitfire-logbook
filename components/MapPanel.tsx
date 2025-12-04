@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import { LogEntry, AircraftCategory } from '../types';
+import FlightInfoPanel from './FlightInfoPanel';
 
 // Fix for default Leaflet icon not showing
 const createIcon = (color: string) => {
@@ -91,11 +92,13 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
       <MapContainer 
         center={centerPosition} 
         zoom={zoomLevel} 
-        // style={{ height: "100%", width: "100%", background: '#e5e5e5', filter: 'sepia(0.2) contrast(1.1)' }}
         style={{ height: "100%", width: "100%", background: '#e5e5e5', filter: 'sepia(0.1) contrast(1)' }}
-        // style={{ height: "100%", width: "100%", background: '#e5e5e5' }}
         scrollWheelZoom={true}
+        zoomControl={false}
       >
+        {/* Zoom controls positioned at bottom-left to avoid toggle overlap */}
+        <ZoomControl position="bottomleft" />
+        
         <TileLayer
           attribution='Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
@@ -222,8 +225,13 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
 
       </MapContainer>
 
+      {/* Flight Info Panel - using shared component, offset below the 2D/3D toggle */}
+      <div className="absolute top-20 sm:top-16 left-4 z-[100]">
+        <FlightInfoPanel selectedEntry={selectedEntry} variant="light" />
+      </div>
+
       {/* Map Legend Overlay */}
-      <div className="absolute bottom-6 right-6 bg-[#f4f1ea] p-3 rounded-sm shadow-xl border-2 border-stone-400 text-xs font-serif z-[400] transform rotate-1">
+      <div className="absolute bottom-6 right-6 bg-[#f4f1ea] p-3 rounded-sm shadow-xl border-2 border-stone-400 text-xs font-serif z-[50] transform rotate-1 hidden sm:block">
         <h4 className="font-bold mb-2 text-stone-800 border-b border-stone-300 pb-1">MAP KEY</h4>
         <div className="flex items-center gap-2 mb-1.5">
             <span className="w-3 h-3 rounded-full bg-yellow-500 border border-stone-600 shadow-sm"></span>
