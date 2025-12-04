@@ -98,10 +98,13 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
   const [isDraggingSide, setIsDraggingSide] = useState(false);
   const [isDraggingStack, setIsDraggingStack] = useState(false);
   
-  // Mobile section states
+  // Mobile section states (keeping for backwards compatibility but primarily using tab system)
   const [isMobileSidebarTopOpen, setIsMobileSidebarTopOpen] = useState(true);
   const [isMobileSidebarBottomOpen, setIsMobileSidebarBottomOpen] = useState(false);
   const [isMobileMainOpen, setIsMobileMainOpen] = useState(true);
+  
+  // Mobile tab state for cleaner tab-based interface
+  const [mobileActiveTab, setMobileActiveTab] = useState<'logbook' | 'details' | 'map'>('logbook');
   
   const [isLayoutMenuOpen, setIsLayoutMenuOpen] = useState(false);
 
@@ -129,12 +132,12 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
   const mobileSidebarTopId = 'mobile-sidebar-top-panel';
   const mobileMainId = 'mobile-main-panel';
 
-  // React to parent triggers for mobile
+  // React to parent triggers for mobile - switch to details tab when entry selected
   useEffect(() => {
-    if (expandSidebarBottomTrigger) {
-      setIsMobileSidebarBottomOpen(true);
+    if (expandSidebarBottomTrigger && !isDesktop) {
+      setMobileActiveTab('details');
     }
-  }, [expandSidebarBottomTrigger]);
+  }, [expandSidebarBottomTrigger, isDesktop]);
 
   // Click outside listener for layout menu
   useEffect(() => {
@@ -437,82 +440,97 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
   );
 
   const mobileLayout = (
-    <div className="flex flex-col gap-4 p-4 pb-6 overflow-y-auto">
-      {/* Sidebar Top (e.g. Logbook) */}
-      <section className="rounded-xl border-4 border-stone-900 shadow-2xl overflow-hidden bg-[#f4f1ea]">
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Mobile Tab Bar */}
+      <div className="flex bg-stone-900 border-b-2 border-stone-800 shrink-0">
         <button
           type="button"
-          aria-expanded={isMobileSidebarTopOpen}
-          aria-controls={mobileSidebarTopId}
-          onClick={() => setIsMobileSidebarTopOpen((prev) => !prev)}
-          className="w-full flex items-center justify-between px-4 py-3 bg-stone-900 text-stone-100 font-typewriter text-xs uppercase tracking-[0.4em]"
-        >
-          <span>{mobileConfig.sidebarTopTitle}</span>
-          {isMobileSidebarTopOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-        </button>
-        <div
-          id={mobileSidebarTopId}
-          className={`transition-all duration-500 ease-in-out overflow-hidden ${
-            isMobileSidebarTopOpen ? 'max-h-[80vh] opacity-100 pointer-events-auto' : 'max-h-0 opacity-0 pointer-events-none'
+          onClick={() => setMobileActiveTab('logbook')}
+          className={`flex-1 py-3 px-2 font-typewriter text-[10px] uppercase tracking-[0.15em] transition-colors relative ${
+            mobileActiveTab === 'logbook'
+              ? 'text-amber-500 bg-stone-800'
+              : 'text-stone-400 hover:text-stone-200'
           }`}
         >
-          <div className="h-[65vh]">
+          {mobileConfig.sidebarTopTitle}
+          {mobileActiveTab === 'logbook' && (
+            <div className="absolute bottom-0 left-2 right-2 h-0.5 bg-amber-500" />
+          )}
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileActiveTab('details')}
+          className={`flex-1 py-3 px-2 font-typewriter text-[10px] uppercase tracking-[0.15em] transition-colors relative ${
+            mobileActiveTab === 'details'
+              ? 'text-amber-500 bg-stone-800'
+              : 'text-stone-400 hover:text-stone-200'
+          }`}
+        >
+          {mobileConfig.sidebarBottomTitle}
+          {mobileActiveTab === 'details' && (
+            <div className="absolute bottom-0 left-2 right-2 h-0.5 bg-amber-500" />
+          )}
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileActiveTab('map')}
+          className={`flex-1 py-3 px-2 font-typewriter text-[10px] uppercase tracking-[0.15em] transition-colors relative ${
+            mobileActiveTab === 'map'
+              ? 'text-amber-500 bg-stone-800'
+              : 'text-stone-400 hover:text-stone-200'
+          }`}
+        >
+          {mobileConfig.mainTitle}
+          {mobileActiveTab === 'map' && (
+            <div className="absolute bottom-0 left-2 right-2 h-0.5 bg-amber-500" />
+          )}
+        </button>
+      </div>
+
+      {/* Mobile Tab Content */}
+      <div className="flex-1 overflow-hidden relative">
+        {/* Logbook Tab */}
+        <div
+          className={`absolute inset-0 transition-opacity duration-200 ${
+            mobileActiveTab === 'logbook'
+              ? 'opacity-100 pointer-events-auto z-10'
+              : 'opacity-0 pointer-events-none z-0'
+          }`}
+        >
+          <div className="h-full bg-[#f4f1ea]">
             {sidebarTop}
           </div>
         </div>
-      </section>
 
-      {/* Sidebar Bottom (e.g. Context/Details) */}
-      <section className="rounded-xl border-4 border-stone-900 shadow-xl overflow-hidden bg-[#f4f1ea]">
-        <button
-          type="button"
-          aria-expanded={isMobileSidebarBottomOpen}
-          aria-controls={mobileSidebarBottomId}
-          onClick={() => setIsMobileSidebarBottomOpen((prev) => !prev)}
-          className="w-full flex items-center justify-between px-4 py-3 bg-stone-900 text-stone-100 font-typewriter text-xs uppercase tracking-[0.4em]"
-        >
-          <span>{mobileConfig.sidebarBottomTitle}</span>
-          {isMobileSidebarBottomOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-        </button>
+        {/* Details Tab */}
         <div
-          id={mobileSidebarBottomId}
-          className={`transition-all duration-500 ease-in-out overflow-hidden ${
-            isMobileSidebarBottomOpen ? 'max-h-[70vh] opacity-100 pointer-events-auto' : 'max-h-0 opacity-0 pointer-events-none'
+          className={`absolute inset-0 transition-opacity duration-200 ${
+            mobileActiveTab === 'details'
+              ? 'opacity-100 pointer-events-auto z-10'
+              : 'opacity-0 pointer-events-none z-0'
           }`}
         >
-          <div className="h-[65vh]">
+          <div className="h-full bg-[#f4f1ea]">
             {sidebarBottom}
           </div>
         </div>
-      </section>
 
-      {/* Main Content (e.g. Map) */}
-      <section className="rounded-xl border-4 border-stone-900 shadow-2xl overflow-hidden bg-stone-800">
-        <button
-          type="button"
-          aria-expanded={isMobileMainOpen}
-          aria-controls={mobileMainId}
-          onClick={() => setIsMobileMainOpen((prev) => !prev)}
-          className="w-full flex items-center justify-between px-4 py-3 bg-stone-900 text-stone-100 font-typewriter text-xs uppercase tracking-[0.4em]"
-        >
-          <span>{mobileConfig.mainTitle}</span>
-          {isMobileMainOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-        </button>
+        {/* Map Tab */}
         <div
-          id={mobileMainId}
-          className={`transition-all duration-500 ease-in-out overflow-hidden ${
-            isMobileMainOpen ? 'max-h-[50vh] opacity-100 pointer-events-auto' : 'max-h-0 opacity-0 pointer-events-none'
+          className={`absolute inset-0 transition-opacity duration-200 ${
+            mobileActiveTab === 'map'
+              ? 'opacity-100 pointer-events-auto z-10'
+              : 'opacity-0 pointer-events-none z-0'
           }`}
         >
-          <div className="relative h-[320px]">
-            {/* Pass 1 as signal for mobile since width isn't dynamic in the same way, or just trigger resize */}
-            {mainContent(isMobileMainOpen ? 1 : 0)}
-            <div className="absolute top-3 left-3 bg-black/60 text-white text-[10px] font-typewriter uppercase tracking-[0.4em] px-3 py-1 rounded-full shadow">
-              Drag to Explore
+          <div className="h-full bg-stone-800 relative">
+            {mainContent(mobileActiveTab === 'map' ? 1 : 0)}
+            <div className="absolute top-3 left-3 bg-black/70 text-white text-[9px] font-typewriter uppercase tracking-[0.3em] px-2.5 py-1 rounded-full shadow-lg backdrop-blur-sm">
+              Pinch & Drag
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 
