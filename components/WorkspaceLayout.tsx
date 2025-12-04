@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LogbookPanel from './LogbookPanel';
 import ContextPanel from './ContextPanel';
 import MapViewToggle from './MapViewToggle';
+import MapTimelineScrubber from './MapTimelineScrubber';
 import { ResizableLayout } from './ResizableLayout';
 import { LogEntry, Phase } from '../types';
 
@@ -36,6 +37,7 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
   customMapCenter,
   customMapZoom
 }) => {
+  const [isTimelineCollapsed, setIsTimelineCollapsed] = useState(false);
   
   return (
     <ResizableLayout
@@ -61,14 +63,23 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
         <ContextPanel selectedEntry={selectedEntry} />
       }
       mainContent={() => (
-        <MapViewToggle
-          entries={entries}
-          selectedEntry={selectedEntry}
-          onMarkerSelect={onMarkerSelect}
-          shouldCenter={shouldCenterMap}
-          customCenter={customMapCenter}
-          customZoom={customMapZoom}
-        />
+        <div className="relative h-full w-full">
+          <MapViewToggle
+            entries={entries}
+            selectedEntry={selectedEntry}
+            onMarkerSelect={onMarkerSelect}
+            shouldCenter={shouldCenterMap}
+            customCenter={customMapCenter}
+            customZoom={customMapZoom}
+          />
+          <MapTimelineScrubber
+            entries={entries}
+            selectedEntryId={selectedId}
+            onEntrySelect={onLogbookSelect}
+            collapsed={isTimelineCollapsed}
+            onToggleCollapse={() => setIsTimelineCollapsed(!isTimelineCollapsed)}
+          />
+        </div>
       )}
     />
   );

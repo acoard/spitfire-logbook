@@ -252,3 +252,49 @@
   pointer-events: none;
 }
 
+/* Timeline Scrubber Animations */
+@keyframes timeline-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 0 8px rgba(251, 191, 36, 0);
+  }
+}
+
+.timeline-playing {
+  animation: timeline-pulse 2s ease-in-out infinite;
+}
+
+/* Timeline marker hover transition */
+.timeline-marker-transition {
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .timeline-playing {
+    animation: none;
+  }
+  
+  .timeline-marker-transition {
+    transition: none;
+  }
+}
+
+/* Timeline track brass styling */
+.timeline-track-brass {
+  background: linear-gradient(
+    to bottom,
+    #78350f 0%,
+    #92400e 15%,
+    #b45309 50%,
+    #92400e 85%,
+    #78350f 100%
+  );
+  box-shadow: 
+    inset 0 1px 2px rgba(0,0,0,0.3),
+    inset 0 -1px 2px rgba(255,255,255,0.1),
+    0 2px 4px rgba(0,0,0,0.2);
+}
+
