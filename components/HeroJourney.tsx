@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronUp, Plane, Target, Shield, Crown, Globe, Home, Award, Zap, MapPin, Calendar, Clock, AlertTriangle, BookOpen } from 'lucide-react';
+import { ChevronDown, ChevronUp, Plane, Target, Shield, Crown, Globe, Home, Award, MapPin, BookOpen } from 'lucide-react';
 import { LOCATIONS } from '../services/flightData';
 
 // Types for the Hero's Journey
@@ -15,8 +15,8 @@ interface JourneyMoment {
   significance: 'major' | 'minor' | 'milestone';
   type: 'training' | 'combat' | 'personal' | 'honor' | 'adventure';
   location?: string;
-  coordinates?: { lat: number; lng: number }; // For map linking
-  logbookEntryId?: string; // For deep linking to logbook
+  coordinates?: { lat: number; lng: number };
+  logbookEntryId?: string;
   stats?: {
     label: string;
     value: string;
@@ -28,10 +28,10 @@ interface JourneyChapter {
   title: string;
   subtitle: string;
   icon: React.ReactNode;
-  color: string;
   dateRange: string;
   summary: string;
   moments: JourneyMoment[];
+  stampText?: string;
 }
 
 // The complete Hero's Journey data
@@ -40,10 +40,10 @@ const HERO_JOURNEY: JourneyChapter[] = [
     id: 'training',
     title: 'The Training',
     subtitle: 'Forging a Fighter Pilot',
-    icon: <Award className="w-6 h-6" />,
-    color: 'amber',
+    icon: <Award className="w-5 h-5" />,
     dateRange: '1940 - May 1944',
     summary: 'Robin Glen earned his pilot wings and waited 30 months before finally joining an operational squadron—a long period of preparation that would prove invaluable.',
+    stampText: 'QUALIFIED',
     moments: [
       {
         id: 'training-1',
@@ -93,10 +93,10 @@ const HERO_JOURNEY: JourneyChapter[] = [
     id: 'dday',
     title: 'Trial by Fire',
     subtitle: 'D-Day and the Normandy Campaign',
-    icon: <Target className="w-6 h-6" />,
-    color: 'red',
+    icon: <Target className="w-5 h-5" />,
     dateRange: 'May 30 - June 1944',
     summary: 'After 30 months of waiting, Robin\'s first operational mission came at the most dramatic moment possible—providing air cover for the D-Day invasion.',
+    stampText: 'OPERATIONAL',
     moments: [
       {
         id: 'dday-1',
@@ -173,10 +173,10 @@ const HERO_JOURNEY: JourneyChapter[] = [
     id: 'combat',
     title: 'The Long Fight',
     subtitle: 'From V-1 Sites to the Heart of Germany',
-    icon: <Shield className="w-6 h-6" />,
-    color: 'orange',
+    icon: <Shield className="w-5 h-5" />,
     dateRange: 'June 1944 - May 1945',
     summary: 'Robin flew dive bombing missions against V-1 launch sites, endured nights under shellfire in France, and escorted thousand-bomber raids deep into Germany.',
+    stampText: 'COMBAT',
     moments: [
       {
         id: 'combat-1',
@@ -293,10 +293,10 @@ const HERO_JOURNEY: JourneyChapter[] = [
     id: 'honor',
     title: 'Royal Recognition',
     subtitle: 'End of the European War',
-    icon: <Crown className="w-6 h-6" />,
-    color: 'yellow',
+    icon: <Crown className="w-5 h-5" />,
     dateRange: 'May - June 1945',
     summary: 'As the war in Europe ended, 313 Squadron received the supreme honor of escorting the King and Queen—though they nearly ran out of fuel doing it.',
+    stampText: 'DISTINGUISHED',
     moments: [
       {
         id: 'honor-1',
@@ -318,7 +318,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         significance: 'minor',
         type: 'honor',
         location: 'Guernsey, Channel Islands',
-        coordinates: { lat: 49.45, lng: -2.53 }, // St Peter Port
+        coordinates: { lat: 49.45, lng: -2.53 },
       },
       {
         id: 'honor-3',
@@ -352,10 +352,10 @@ const HERO_JOURNEY: JourneyChapter[] = [
     id: 'india',
     title: 'The Eastern Adventure',
     subtitle: 'Ferrying Spitfires Across India',
-    icon: <Globe className="w-6 h-6" />,
-    color: 'emerald',
+    icon: <Globe className="w-5 h-5" />,
     dateRange: 'July 1945 - March 1946',
     summary: 'Robin ferried Spitfires across the vast expanse of India, Burma, and Thailand—reconnecting with family along the way and experiencing one memorable monsoon landing disaster.',
+    stampText: 'FAR EAST',
     moments: [
       {
         id: 'india-1',
@@ -456,10 +456,10 @@ const HERO_JOURNEY: JourneyChapter[] = [
     id: 'homecoming',
     title: 'The Return',
     subtitle: 'Six Years Complete',
-    icon: <Home className="w-6 h-6" />,
-    color: 'sky',
+    icon: <Home className="w-5 h-5" />,
     dateRange: 'March 1946',
     summary: 'After more than six years of service, Robin Glen said goodbye to the RAF and sailed home to England on the M.V. Durham Castle.',
+    stampText: 'DEMOBBED',
     moments: [
       {
         id: 'home-1',
@@ -504,19 +504,6 @@ const HERO_JOURNEY: JourneyChapter[] = [
   },
 ];
 
-// Utility function to get color classes
-const getColorClasses = (color: string) => {
-  const colors: Record<string, { bg: string; border: string; text: string; glow: string; bgLight: string }> = {
-    amber: { bg: 'bg-amber-500', border: 'border-amber-500', text: 'text-amber-500', glow: 'shadow-amber-500/30', bgLight: 'bg-amber-500/10' },
-    red: { bg: 'bg-red-500', border: 'border-red-500', text: 'text-red-500', glow: 'shadow-red-500/30', bgLight: 'bg-red-500/10' },
-    orange: { bg: 'bg-orange-500', border: 'border-orange-500', text: 'text-orange-500', glow: 'shadow-orange-500/30', bgLight: 'bg-orange-500/10' },
-    yellow: { bg: 'bg-yellow-500', border: 'border-yellow-500', text: 'text-yellow-500', glow: 'shadow-yellow-500/30', bgLight: 'bg-yellow-500/10' },
-    emerald: { bg: 'bg-emerald-500', border: 'border-emerald-500', text: 'text-emerald-500', glow: 'shadow-emerald-500/30', bgLight: 'bg-emerald-500/10' },
-    sky: { bg: 'bg-sky-500', border: 'border-sky-500', text: 'text-sky-500', glow: 'shadow-sky-500/30', bgLight: 'bg-sky-500/10' },
-  };
-  return colors[color] || colors.amber;
-};
-
 // Icon for moment type
 const getMomentIcon = (type: JourneyMoment['type']) => {
   switch (type) {
@@ -529,77 +516,124 @@ const getMomentIcon = (type: JourneyMoment['type']) => {
   }
 };
 
+// Vintage Stamp Component
+const OfficialStamp: React.FC<{ text: string; rotate?: number }> = ({ text, rotate = -12 }) => (
+  <div 
+    className="absolute -right-2 -top-2 sm:right-4 sm:top-4 pointer-events-none select-none"
+    style={{ transform: `rotate(${rotate}deg)` }}
+  >
+    <div className="border-4 border-red-800/60 rounded px-2 py-1 sm:px-3 sm:py-1">
+      <span className="font-typewriter text-red-800/60 text-[10px] sm:text-xs font-bold tracking-widest">
+        {text}
+      </span>
+    </div>
+  </div>
+);
+
+// Chapter Tab Component for the top navigation
+const ChapterTab: React.FC<{
+  chapter: JourneyChapter;
+  isActive: boolean;
+  onClick: () => void;
+}> = ({ chapter, isActive, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`
+      flex items-center gap-1.5 sm:gap-2 px-2.5 py-2 sm:px-4 sm:py-2.5 
+      font-typewriter text-xs sm:text-sm whitespace-nowrap
+      border-t-2 border-l border-r rounded-t-sm
+      transition-all duration-200 min-w-0
+      ${isActive 
+        ? 'bg-[#f4f1ea] border-amber-900/30 text-amber-900 -mb-px z-10 shadow-sm' 
+        : 'bg-[#e8e4d9] border-amber-900/20 text-amber-800/60 hover:bg-[#ebe7dc] hover:text-amber-900/80'
+      }
+    `}
+  >
+    <span className={isActive ? 'text-amber-800' : 'text-amber-700/50'}>{chapter.icon}</span>
+    <span className="hidden sm:inline truncate">{chapter.title}</span>
+  </button>
+);
+
 // Chapter Card Component
 const ChapterCard: React.FC<{
   chapter: JourneyChapter;
   isExpanded: boolean;
   onToggle: () => void;
-  isActive: boolean;
-}> = ({ chapter, isExpanded, onToggle, isActive }) => {
-  const colors = getColorClasses(chapter.color);
+}> = ({ chapter, isExpanded, onToggle }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   
   return (
-    <div 
-      className={`relative transition-all duration-500 ${isActive ? 'scale-100' : 'scale-98 opacity-90'}`}
-    >
-      {/* Chapter Header */}
-      <button
-        onClick={onToggle}
-        className={`w-full text-left p-6 rounded-xl border-2 transition-all duration-300 ${
-          isExpanded 
-            ? `${colors.border} ${colors.bgLight} shadow-lg ${colors.glow}` 
-            : 'border-stone-700 bg-stone-800/50 hover:border-stone-600 hover:bg-stone-800'
-        }`}
-      >
-        <div className="flex items-start gap-4">
-          {/* Icon */}
-          <div className={`p-3 rounded-lg ${isExpanded ? colors.bg : 'bg-stone-700'} transition-colors duration-300`}>
-            <span className={isExpanded ? 'text-stone-900' : 'text-stone-300'}>
-              {chapter.icon}
-            </span>
-          </div>
-          
-          {/* Content */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3 mb-1">
-              <h2 className={`text-xl font-bold ${isExpanded ? colors.text : 'text-stone-200'} transition-colors duration-300`}>
-                {chapter.title}
-              </h2>
-              <span className="text-xs text-stone-500 font-mono">{chapter.dateRange}</span>
-            </div>
-            <p className="text-stone-400 text-sm mb-2">{chapter.subtitle}</p>
-            <p className="text-stone-500 text-sm line-clamp-2">{chapter.summary}</p>
-          </div>
-          
-          {/* Expand Icon */}
-          <div className={`p-2 rounded-full ${isExpanded ? colors.bgLight : 'bg-stone-700/50'} transition-all duration-300`}>
-            {isExpanded ? (
-              <ChevronUp className={`w-5 h-5 ${colors.text}`} />
-            ) : (
-              <ChevronDown className="w-5 h-5 text-stone-400" />
-            )}
-          </div>
-        </div>
-      </button>
+    <div className="relative">
+      {/* Paper texture background */}
+      <div className="absolute inset-0 bg-[#f4f1ea] rounded-sm shadow-md" />
       
-      {/* Expanded Content */}
-      <div 
-        className={`overflow-hidden transition-all duration-500 ease-in-out ${
-          isExpanded ? 'max-h-[5000px] opacity-100' : 'max-h-0 opacity-0'
-        }`}
-      >
-        <div ref={contentRef} className="pt-4 pl-8">
-          {/* Timeline */}
-          <div className="relative border-l-2 border-stone-700 pl-8 space-y-6">
-            {chapter.moments.map((moment, idx) => (
-              <MomentCard 
-                key={moment.id} 
-                moment={moment} 
-                color={chapter.color}
-                isLast={idx === chapter.moments.length - 1}
-              />
-            ))}
+      {/* Aged paper edge effect */}
+      <div className="absolute inset-0 rounded-sm shadow-inner pointer-events-none" 
+           style={{ boxShadow: 'inset 0 0 30px rgba(139, 119, 101, 0.15)' }} />
+      
+      {/* Official Stamp */}
+      {chapter.stampText && <OfficialStamp text={chapter.stampText} rotate={-8 + Math.random() * 6} />}
+      
+      {/* Content */}
+      <div className="relative">
+        {/* Chapter Header */}
+        <button
+          onClick={onToggle}
+          className="w-full text-left p-4 sm:p-6 rounded-sm transition-colors hover:bg-amber-50/30 active:bg-amber-100/30"
+        >
+          <div className="flex items-start gap-3 sm:gap-4 pr-16 sm:pr-20">
+            {/* Icon with circle border */}
+            <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-amber-900/40 bg-amber-50 flex items-center justify-center">
+              <span className="text-amber-900">{chapter.icon}</span>
+            </div>
+            
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3 mb-1">
+                <h2 className="font-old-print text-xl sm:text-2xl font-bold text-amber-950 leading-tight">
+                  {chapter.title}
+                </h2>
+                <span className="font-typewriter text-xs text-amber-700/70">{chapter.dateRange}</span>
+              </div>
+              <p className="font-old-print text-sm sm:text-base text-amber-900/80 italic mb-2">{chapter.subtitle}</p>
+              <p className="font-typewriter text-xs sm:text-sm text-amber-800/70 leading-relaxed line-clamp-2 sm:line-clamp-none">
+                {chapter.summary}
+              </p>
+            </div>
+            
+            {/* Expand Icon */}
+            <div className="absolute right-4 top-4 sm:right-6 sm:top-6 w-8 h-8 rounded-full border border-amber-900/30 bg-amber-50 flex items-center justify-center">
+              {isExpanded ? (
+                <ChevronUp className="w-4 h-4 text-amber-900" />
+              ) : (
+                <ChevronDown className="w-4 h-4 text-amber-800/60" />
+              )}
+            </div>
+          </div>
+        </button>
+        
+        {/* Divider line when expanded */}
+        {isExpanded && (
+          <div className="mx-4 sm:mx-6 border-t border-dashed border-amber-900/20" />
+        )}
+        
+        {/* Expanded Content */}
+        <div 
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            isExpanded ? 'max-h-[8000px] opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <div ref={contentRef} className="p-4 sm:p-6 pt-4">
+            {/* Timeline */}
+            <div className="relative ml-2 sm:ml-4 border-l-2 border-amber-900/20 pl-4 sm:pl-8 space-y-4 sm:space-y-6">
+              {chapter.moments.map((moment, idx) => (
+                <MomentCard 
+                  key={moment.id} 
+                  moment={moment} 
+                  isLast={idx === chapter.moments.length - 1}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -610,10 +644,8 @@ const ChapterCard: React.FC<{
 // Moment Card Component
 const MomentCard: React.FC<{
   moment: JourneyMoment;
-  color: string;
   isLast: boolean;
-}> = ({ moment, color, isLast }) => {
-  const colors = getColorClasses(color);
+}> = ({ moment, isLast }) => {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
   
@@ -631,6 +663,10 @@ const MomentCard: React.FC<{
     }
   };
   
+  // Significance styling
+  const isMilestone = moment.significance === 'milestone';
+  const isMajor = moment.significance === 'major';
+  
   return (
     <div 
       className="relative"
@@ -638,212 +674,222 @@ const MomentCard: React.FC<{
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Timeline Dot */}
-      <div className={`absolute -left-8 top-0 transform -translate-x-1/2 transition-all duration-300 ${
-        moment.significance === 'milestone' 
-          ? `w-5 h-5 ${colors.bg} shadow-lg ${colors.glow}` 
-          : moment.significance === 'major'
-            ? `w-4 h-4 ${colors.bg} opacity-80`
-            : 'w-3 h-3 bg-stone-600'
-      } rounded-full border-4 border-stone-900`} />
+      <div className={`
+        absolute -left-4 sm:-left-8 top-1 transform -translate-x-1/2 
+        border-2 sm:border-[3px] border-[#f4f1ea] rounded-full
+        ${isMilestone 
+          ? 'w-4 h-4 sm:w-5 sm:h-5 bg-red-800' 
+          : isMajor
+            ? 'w-3 h-3 sm:w-4 sm:h-4 bg-amber-700'
+            : 'w-2.5 h-2.5 sm:w-3 sm:h-3 bg-amber-600/60'
+        }
+      `} />
       
-      {/* Content Card */}
-      <div className={`p-5 rounded-lg border transition-all duration-300 ${
-        isHovered 
-          ? `border-stone-600 bg-stone-800 shadow-lg` 
-          : 'border-stone-800 bg-stone-850'
-      } ${moment.significance === 'milestone' ? `${colors.bgLight} ${colors.border}` : ''}`}>
+      {/* Content Card - looks like a logbook entry */}
+      <div className={`
+        relative p-3 sm:p-4 rounded-sm transition-all duration-200
+        ${isMilestone 
+          ? 'bg-amber-100/50 border border-amber-900/20' 
+          : isHovered 
+            ? 'bg-amber-50/50' 
+            : ''
+        }
+      `}>
+        {/* Red "important" marker for milestones */}
+        {isMilestone && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-800/70 rounded-l-sm" />
+        )}
+        
         {/* Header */}
-        <div className="flex items-start justify-between gap-4 mb-3">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className={`${colors.text} opacity-80`}>{getMomentIcon(moment.type)}</span>
-              <span className="text-xs font-mono text-stone-500">{moment.date}</span>
-              {moment.significance === 'milestone' && (
-                <span className={`text-xs px-2 py-0.5 rounded-full ${colors.bg} text-stone-900 font-semibold`}>
-                  MILESTONE
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2 mb-1">
+              <span className="text-amber-800/70">{getMomentIcon(moment.type)}</span>
+              <span className="font-typewriter text-[10px] sm:text-xs text-amber-700/80 bg-amber-100/50 px-1.5 py-0.5 rounded">
+                {moment.date}
+              </span>
+              {isMilestone && (
+                <span className="font-typewriter text-[9px] sm:text-[10px] px-1.5 py-0.5 bg-red-800/80 text-amber-50 rounded tracking-wider">
+                  KEY MOMENT
                 </span>
               )}
             </div>
-            <h3 className="text-lg font-semibold text-stone-200">{moment.title}</h3>
+            <h3 className="font-old-print text-base sm:text-lg font-semibold text-amber-950 leading-tight">
+              {moment.title}
+            </h3>
             {moment.subtitle && (
-              <p className="text-sm text-stone-400">{moment.subtitle}</p>
+              <p className="font-old-print text-xs sm:text-sm text-amber-800/70 italic">{moment.subtitle}</p>
             )}
           </div>
           {moment.location && (
             <button 
-                onClick={handleLocationClick}
-                disabled={!moment.coordinates}
-                className={`flex items-center gap-1 text-xs shrink-0 transition-colors ${
-                    moment.coordinates 
-                        ? 'text-stone-400 hover:text-amber-500 cursor-pointer' 
-                        : 'text-stone-500 cursor-default'
-                }`}
+              onClick={handleLocationClick}
+              disabled={!moment.coordinates}
+              className={`
+                flex items-center gap-1 font-typewriter text-[10px] sm:text-xs shrink-0 
+                px-2 py-1 rounded transition-colors
+                ${moment.coordinates 
+                  ? 'text-amber-800/70 hover:text-amber-900 hover:bg-amber-100/50 active:bg-amber-200/50 cursor-pointer' 
+                  : 'text-amber-700/50 cursor-default'
+                }
+              `}
             >
               <MapPin className="w-3 h-3" />
-              {moment.location}
+              <span className="max-w-24 sm:max-w-none truncate">{moment.location}</span>
             </button>
           )}
         </div>
         
         {/* Description */}
-        <p className="text-stone-300 text-sm leading-relaxed mb-3">
+        <p className="font-typewriter text-xs sm:text-sm text-amber-900/80 leading-relaxed mb-3">
           {moment.description}
         </p>
         
-        {/* Quote */}
+        {/* Quote - styled like handwritten note */}
         {moment.quote && (
-          <blockquote className={`border-l-2 ${colors.border} pl-4 my-4 italic text-stone-400`}>
-            "{moment.quote}"
+          <div className="relative my-3 sm:my-4 ml-2 sm:ml-4 pl-3 sm:pl-4 border-l-2 border-amber-700/30">
+            <p className="font-handwriting text-sm sm:text-base text-amber-800 leading-relaxed italic">
+              "{moment.quote}"
+            </p>
             {moment.quoteSource && (
-              <cite className="block text-xs text-stone-500 mt-1 not-italic">— {moment.quoteSource}</cite>
+              <p className="font-typewriter text-[10px] sm:text-xs text-amber-700/70 mt-1">
+                — {moment.quoteSource}
+              </p>
             )}
-          </blockquote>
+          </div>
         )}
         
-        {/* Actions & Stats */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mt-4 pt-3 border-t border-stone-700/50">
-            {moment.stats && moment.stats.length > 0 ? (
-                <div className="flex flex-wrap gap-4">
-                    {moment.stats.map((stat, idx) => (
-                    <div key={idx} className="flex items-center gap-2">
-                        <span className="text-xs text-stone-500">{stat.label}:</span>
-                        <span className={`text-sm font-semibold ${colors.text}`}>{stat.value}</span>
-                    </div>
-                    ))}
+        {/* Stats & Actions Row */}
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-3 pt-3 border-t border-dashed border-amber-900/15">
+          {/* Stats */}
+          {moment.stats && moment.stats.length > 0 ? (
+            <div className="flex flex-wrap gap-x-4 gap-y-1">
+              {moment.stats.map((stat, idx) => (
+                <div key={idx} className="flex items-baseline gap-1.5">
+                  <span className="font-typewriter text-[10px] sm:text-xs text-amber-700/70">{stat.label}:</span>
+                  <span className="font-typewriter text-xs sm:text-sm font-bold text-amber-900">{stat.value}</span>
                 </div>
-            ) : <div></div>}
+              ))}
+            </div>
+          ) : <div />}
 
-            {/* View in Logbook Button */}
-            {moment.logbookEntryId && (
-                <button
-                    onClick={handleLogbookClick}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono uppercase tracking-wider transition-all
-                        ${isHovered 
-                            ? 'bg-stone-700 text-stone-200 hover:bg-stone-600' 
-                            : 'bg-stone-800 text-stone-400'}`}
-                >
-                    <BookOpen className="w-3 h-3" />
-                    <span>View in Logbook</span>
-                </button>
-            )}
+          {/* View in Logbook Button */}
+          {moment.logbookEntryId && (
+            <button
+              onClick={handleLogbookClick}
+              className={`
+                flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-sm 
+                font-typewriter text-[10px] sm:text-xs tracking-wider
+                border border-amber-900/30 transition-all
+                ${isHovered 
+                  ? 'bg-amber-900/10 text-amber-900 border-amber-900/40' 
+                  : 'bg-amber-50 text-amber-800/80'
+                }
+                hover:bg-amber-900 hover:text-amber-50 hover:border-amber-900
+                active:scale-95
+              `}
+            >
+              <BookOpen className="w-3 h-3" />
+              <span>VIEW ENTRY</span>
+            </button>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-// Progress indicator showing chapters
-const ProgressIndicator: React.FC<{
-  chapters: JourneyChapter[];
-  activeIndex: number;
-  onSelect: (index: number) => void;
-}> = ({ chapters, activeIndex, onSelect }) => {
-  return (
-    <div className="sticky top-0 z-10 bg-stone-900/95 backdrop-blur-sm border-b border-stone-800 py-3 px-4 mb-6">
-      <div className="flex items-center justify-center gap-2 overflow-x-auto">
-        {chapters.map((chapter, idx) => {
-          const colors = getColorClasses(chapter.color);
-          const isActive = idx === activeIndex;
-          const isPast = idx < activeIndex;
-          
-          return (
-            <button
-              key={chapter.id}
-              onClick={() => onSelect(idx)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 shrink-0 ${
-                isActive 
-                  ? `${colors.bgLight} ${colors.border} border` 
-                  : isPast
-                    ? 'bg-stone-800 border border-stone-700'
-                    : 'bg-stone-800/50 border border-stone-800 hover:border-stone-700'
-              }`}
-            >
-              <span className={isActive ? colors.text : isPast ? 'text-stone-400' : 'text-stone-500'}>
-                {chapter.icon}
-              </span>
-              <span className={`text-sm font-medium hidden sm:block ${
-                isActive ? colors.text : isPast ? 'text-stone-400' : 'text-stone-500'
-              }`}>
-                {chapter.title}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
-// Hero Section
+// Hero Section - Styled like a logbook cover
 const HeroSection: React.FC = () => {
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-stone-800 via-stone-900 to-stone-950 border border-stone-700 mb-8">
-      {/* Decorative elements */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-red-500 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2" />
-      </div>
+    <div className="relative mb-6 sm:mb-8">
+      {/* Leather-like cover background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-amber-950 via-amber-900 to-stone-900 rounded-sm shadow-xl" />
       
-      <div className="relative p-8 md:p-12">
-        <div className="flex flex-col md:flex-row items-center gap-8">
+      {/* Worn leather texture overlay */}
+      <div className="absolute inset-0 opacity-20 rounded-sm"
+           style={{ 
+             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+           }} />
+      
+      {/* Gold embossed border effect */}
+      <div className="absolute inset-3 sm:inset-4 border border-amber-600/30 rounded-sm pointer-events-none" />
+      <div className="absolute inset-4 sm:inset-5 border border-amber-600/20 rounded-sm pointer-events-none" />
+      
+      {/* Content */}
+      <div className="relative p-5 sm:p-8 md:p-10">
+        <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
           {/* Left: Text Content */}
           <div className="flex-1 text-center md:text-left">
-            <div className="inline-flex items-center gap-2 text-amber-500/80 text-sm font-mono mb-4">
-              <Plane className="w-4 h-4" />
-              <span>1940 - 1946</span>
+            {/* RAF Wings decoration */}
+            <div className="flex items-center justify-center md:justify-start gap-2 mb-4">
+              <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-amber-600/50" />
+              <Plane className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500/80" />
+              <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-amber-600/50" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-stone-100 mb-4">
+            
+            <p className="font-typewriter text-amber-500/70 text-[10px] sm:text-xs tracking-[0.2em] mb-2">
+              ROYAL AIR FORCE · 1940-1946
+            </p>
+            
+            <h1 className="font-old-print text-3xl sm:text-4xl md:text-5xl font-bold text-amber-100 mb-3 leading-tight">
               The Hero's Journey
             </h1>
-            <p className="text-xl text-amber-500 font-medium mb-4">
+            
+            <p className="font-old-print text-lg sm:text-xl md:text-2xl text-amber-400 italic mb-4">
               Flight Lieutenant Robin A. Glen
             </p>
-            <p className="text-stone-400 text-lg leading-relaxed max-w-xl">
+            
+            <p className="font-typewriter text-xs sm:text-sm text-amber-200/70 leading-relaxed max-w-xl mx-auto md:mx-0">
               From the training fields of Scotland to the beaches of Normandy, from bomber escorts over 
               Germany to ferrying Spitfires across India—this is the remarkable story of one pilot's 
               six years of service in the Royal Air Force.
             </p>
             
-            {/* Quick Stats */}
-            <div className="flex flex-wrap justify-center md:justify-start gap-6 mt-8">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-amber-500">6+</div>
-                <div className="text-xs text-stone-500 uppercase tracking-wide">Years of Service</div>
+            {/* Quick Stats - styled like official records */}
+            <div className="flex flex-wrap justify-center md:justify-start gap-4 sm:gap-6 mt-6 sm:mt-8">
+              <div className="text-center px-3 py-2 border border-amber-600/30 rounded-sm bg-amber-950/30">
+                <div className="font-old-print text-2xl sm:text-3xl font-bold text-amber-400">6+</div>
+                <div className="font-typewriter text-[9px] sm:text-[10px] text-amber-500/70 tracking-wider">YEARS</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-red-500">51+</div>
-                <div className="text-xs text-stone-500 uppercase tracking-wide">Combat Missions</div>
+              <div className="text-center px-3 py-2 border border-amber-600/30 rounded-sm bg-amber-950/30">
+                <div className="font-old-print text-2xl sm:text-3xl font-bold text-red-400">51+</div>
+                <div className="font-typewriter text-[9px] sm:text-[10px] text-amber-500/70 tracking-wider">MISSIONS</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-emerald-500">697+</div>
-                <div className="text-xs text-stone-500 uppercase tracking-wide">Flying Hours</div>
+              <div className="text-center px-3 py-2 border border-amber-600/30 rounded-sm bg-amber-950/30">
+                <div className="font-old-print text-2xl sm:text-3xl font-bold text-amber-400">697+</div>
+                <div className="font-typewriter text-[9px] sm:text-[10px] text-amber-500/70 tracking-wider">HOURS</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-sky-500">3</div>
-                <div className="text-xs text-stone-500 uppercase tracking-wide">Continents</div>
+              <div className="text-center px-3 py-2 border border-amber-600/30 rounded-sm bg-amber-950/30">
+                <div className="font-old-print text-2xl sm:text-3xl font-bold text-amber-400">3</div>
+                <div className="font-typewriter text-[9px] sm:text-[10px] text-amber-500/70 tracking-wider">CONTINENTS</div>
               </div>
             </div>
           </div>
           
-          {/* Right: Squadron Badge or Image placeholder */}
+          {/* Right: Squadron Badge */}
           <div className="shrink-0">
-            <div className="relative w-48 h-48 md:w-56 md:h-56">
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-red-500/20 rounded-full blur-2xl" />
-              <div className="relative w-full h-full rounded-full border-2 border-stone-700 bg-stone-800/80 flex items-center justify-center overflow-hidden">
+            <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48">
+              {/* Subtle glow */}
+              <div className="absolute inset-0 bg-amber-500/10 rounded-full blur-xl" />
+              {/* Badge frame */}
+              <div className="relative w-full h-full rounded-full border-4 border-amber-700/40 bg-amber-950/50 flex items-center justify-center overflow-hidden shadow-lg">
                 <img 
                   src="./robin-insignia.png" 
                   alt="313 Squadron Insignia" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover opacity-90"
                   onError={(e) => {
-                    // Fallback if image doesn't load
                     e.currentTarget.style.display = 'none';
-                    e.currentTarget.parentElement!.innerHTML = `
-                      <div class="text-center p-4">
-                        <div class="text-6xl font-bold text-amber-500 mb-2">313</div>
-                        <div class="text-sm text-stone-400 uppercase tracking-wider">Squadron</div>
-                        <div class="text-xs text-stone-500 mt-1">Czech Wing</div>
-                      </div>
-                    `;
+                    const parent = e.currentTarget.parentElement;
+                    if (parent) {
+                      parent.innerHTML = `
+                        <div class="text-center p-4">
+                          <div class="font-old-print text-4xl sm:text-5xl font-bold text-amber-500 mb-1">313</div>
+                          <div class="font-typewriter text-[10px] text-amber-400/80 tracking-widest">SQUADRON</div>
+                          <div class="font-typewriter text-[8px] text-amber-500/60 mt-1">CZECH WING</div>
+                        </div>
+                      `;
+                    }
                   }}
                 />
               </div>
@@ -858,7 +904,7 @@ const HeroSection: React.FC = () => {
 // Main Component
 export const HeroJourney: React.FC = () => {
   const [expandedChapter, setExpandedChapter] = useState<string | null>('dday');
-  const [activeIndex, setActiveIndex] = useState(1); // Start with D-Day chapter
+  const [activeIndex, setActiveIndex] = useState(1);
   
   const handleChapterToggle = (chapterId: string) => {
     setExpandedChapter(prev => prev === chapterId ? null : chapterId);
@@ -879,38 +925,73 @@ export const HeroJourney: React.FC = () => {
   };
   
   return (
-    <div className="flex-1 overflow-y-auto bg-stone-900">
-      <div className="max-w-4xl mx-auto p-6 md:p-8">
-        {/* Hero Section */}
-        <HeroSection />
-        
-        {/* Progress Indicator */}
-        <ProgressIndicator 
-          chapters={HERO_JOURNEY} 
-          activeIndex={activeIndex}
-          onSelect={handleProgressSelect}
-        />
-        
-        {/* Chapters */}
-        <div className="space-y-4">
-          {HERO_JOURNEY.map((chapter, idx) => (
-            <div key={chapter.id} id={`chapter-${chapter.id}`}>
-              <ChapterCard
-                chapter={chapter}
-                isExpanded={expandedChapter === chapter.id}
-                onToggle={() => handleChapterToggle(chapter.id)}
-                isActive={idx === activeIndex}
-              />
+    <div className="flex-1 overflow-y-auto bg-[#d4cfc4]">
+      {/* Aged paper texture for the whole background */}
+      <div 
+        className="min-h-full"
+        style={{
+          backgroundImage: `
+            radial-gradient(ellipse at 20% 20%, rgba(139, 119, 101, 0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 80%, rgba(139, 119, 101, 0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 50%, rgba(244, 241, 234, 0.5) 0%, transparent 100%)
+          `
+        }}
+      >
+        <div className="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
+          {/* Hero Section */}
+          <HeroSection />
+          
+          {/* Chapter Tabs - like index tabs on a binder */}
+          <div className="sticky top-0 z-10 bg-[#d4cfc4]/95 backdrop-blur-sm pb-2 -mx-4 px-4 sm:-mx-6 sm:px-6">
+            <div className="flex items-end gap-1 overflow-x-auto pb-px scrollbar-hide">
+              {HERO_JOURNEY.map((chapter, idx) => (
+                <ChapterTab
+                  key={chapter.id}
+                  chapter={chapter}
+                  isActive={idx === activeIndex}
+                  onClick={() => handleProgressSelect(idx)}
+                />
+              ))}
             </div>
-          ))}
-        </div>
-        
-        {/* Footer */}
-        <div className="mt-12 p-6 rounded-xl bg-stone-800/50 border border-stone-700 text-center">
-          <p className="text-stone-400 text-sm italic">
-            "After over 6 years in RAF... Travelled to Bombay by train and back home by sea—on the M.V. 'Durham Castle'"
-          </p>
-          <p className="text-stone-500 text-xs mt-2">— Robin Glen's final logbook entry, March 1946</p>
+            {/* Tab bar bottom border */}
+            <div className="h-px bg-amber-900/20" />
+          </div>
+          
+          {/* Chapters - like pages in a logbook */}
+          <div className="space-y-4 sm:space-y-6 mt-4 sm:mt-6">
+            {HERO_JOURNEY.map((chapter, idx) => (
+              <div key={chapter.id} id={`chapter-${chapter.id}`}>
+                <ChapterCard
+                  chapter={chapter}
+                  isExpanded={expandedChapter === chapter.id}
+                  onToggle={() => handleChapterToggle(chapter.id)}
+                />
+              </div>
+            ))}
+          </div>
+          
+          {/* Footer - like the last page of a logbook */}
+          <div className="mt-8 sm:mt-12 p-4 sm:p-6 bg-[#f4f1ea] rounded-sm border border-amber-900/10 shadow-sm relative overflow-hidden">
+            {/* Coffee stain effect */}
+            <div className="absolute -right-8 -bottom-8 w-24 h-24 rounded-full bg-amber-800/5 blur-sm" />
+            <div className="absolute -right-6 -bottom-6 w-20 h-20 rounded-full border border-amber-800/10" />
+            
+            <p className="font-handwriting text-base sm:text-lg text-amber-800 text-center italic relative z-10">
+              "After over 6 years in RAF... Travelled to Bombay by train and back home by sea—on the M.V. 'Durham Castle'"
+            </p>
+            <p className="font-typewriter text-[10px] sm:text-xs text-amber-700/60 text-center mt-2 relative z-10">
+              — Robin Glen's final logbook entry, March 1946
+            </p>
+            
+            {/* Official stamp look */}
+            <div className="flex justify-center mt-4">
+              <div className="border-2 border-amber-800/30 rounded px-3 py-1 transform -rotate-2">
+                <span className="font-typewriter text-[10px] sm:text-xs text-amber-800/50 tracking-widest">
+                  SERVICE COMPLETE
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

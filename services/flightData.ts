@@ -39,6 +39,7 @@ export const LOCATIONS = {
   HELIGOLAND: { lat: 54.180, lng: 7.890, name: "Heligoland" },
   PETIT_BROGEL: { lat: 51.166, lng: 5.466, name: "Petit Brogel (B.90)" },
   PARIS: { lat: 48.856, lng: 2.352, name: "Paris" },
+  BRUSSELS: { lat: 50.846, lng: 4.352, name: "Brussels" },
 
   // Asian Theater (Ferry)
   KARACHI: { lat: 24.860, lng: 67.001, name: "Karachi (Drigh Road)" },
@@ -546,6 +547,24 @@ export const FLIGHT_LOG: LogEntry[] = [
         destination: LOCATIONS.BRADWELL_BAY,
         isSignificant: false,
         sourceDocument: '068.jpg'
+    },
+    // December 1944 - The Lucky Two
+    {
+        id: 'c-069-1',
+        date: '1944-12-08',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire IX',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'Radio Relay (Brussels)',
+        time: '2:30',
+        remarks: 'One of only two to make it back to England.',
+        origin: LOCATIONS.NORTH_WEALD,
+        target: LOCATIONS.BRUSSELS,
+        destination: LOCATIONS.BRADWELL_BAY,
+        isSignificant: true,
+        historicalNote: "Tasked with relaying radio messages from the Wing Commander at 15,000 feet over Brussels. Of the 37 Spitfires in the wing, only two made it back across the sea to England due to deteriorating weather.",
+        sourceDocument: '069.jpg',
+        pilotNotes: "Of the 37 Spitfires in our wing, I was one of only two who made it across the sea back to England. I made it to Bradwell Bay."
     },
     // March 1945 - Base: BRADWELL BAY
     {
