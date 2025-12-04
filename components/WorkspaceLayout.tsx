@@ -71,6 +71,7 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
             shouldCenter={shouldCenterMap}
             customCenter={customMapCenter}
             customZoom={customMapZoom}
+            isTimelineCollapsed={isTimelineCollapsed}
           />
           <MapTimelineScrubber
             entries={entries}

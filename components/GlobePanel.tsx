@@ -631,6 +631,7 @@ interface GlobePanelProps {
   selectedEntry: LogEntry | null;
   onMarkerSelect: (entry: LogEntry) => void;
   shouldCenter: boolean;
+  isTimelineCollapsed?: boolean;
 }
 
 const isValidCoord = (val: any): boolean => {
@@ -699,7 +700,7 @@ const clusterMarkers = (entries: LogEntry[], clusterRadius: number): MarkerClust
   return clusters;
 };
 
-const GlobePanel: React.FC<GlobePanelProps> = ({ entries, selectedEntry, onMarkerSelect, shouldCenter }) => {
+const GlobePanel: React.FC<GlobePanelProps> = ({ entries, selectedEntry, onMarkerSelect, shouldCenter, isTimelineCollapsed = false }) => {
   const GLOBE_RADIUS = 1;
   const [zoomLevel, setZoomLevel] = useState(2.5);
   
@@ -875,10 +876,12 @@ const GlobePanel: React.FC<GlobePanelProps> = ({ entries, selectedEntry, onMarke
         </div>
       </div>
       
-      {/* Flight Info Panel - using shared component, offset below title plaque */}
-      <div className="absolute top-20 sm:top-24 left-4 sm:left-6 z-[100]">
-        <FlightInfoPanel selectedEntry={selectedEntry} variant="dark" />
-      </div>
+      {/* Flight Info Panel - using shared component, positioned above timeline on mobile */}
+      <FlightInfoPanel 
+        selectedEntry={selectedEntry} 
+        variant="dark" 
+        isTimelineCollapsed={isTimelineCollapsed}
+      />
       
       {/* Legend */}
       <div className="absolute bottom-6 right-6 bg-stone-900/90 p-3 rounded-lg border border-amber-700/40 text-xs font-typewriter z-20 shadow-xl hidden sm:block">

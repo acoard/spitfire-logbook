@@ -21,6 +21,7 @@ interface MapPanelProps {
   shouldCenter: boolean;
   customCenter?: [number, number];
   customZoom?: number;
+  isTimelineCollapsed?: boolean;
 }
 
 // Robust coordinate validation
@@ -57,7 +58,7 @@ const MapController: React.FC<{ center: [number, number]; zoom: number; shouldCe
   return null;
 };
 
-const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, onMarkerSelect, shouldCenter, customCenter, customZoom }) => {
+const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, onMarkerSelect, shouldCenter, customCenter, customZoom, isTimelineCollapsed = false }) => {
   
   // Calculate map center based on selection with validation
   // Default to English Channel/Europe view
@@ -96,8 +97,8 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
         scrollWheelZoom={true}
         zoomControl={false}
       >
-        {/* Zoom controls positioned at bottom-left to avoid toggle overlap */}
-        <ZoomControl position="bottomleft" />
+        {/* Zoom controls positioned at top-right */}
+        <ZoomControl position="topright" />
         
         <TileLayer
           attribution='Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
@@ -225,13 +226,15 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
 
       </MapContainer>
 
-      {/* Flight Info Panel - responsive and always visible */}
-      <div className="absolute left-2 right-2 sm:left-4 sm:right-auto top-20 sm:top-16 z-[200] max-w-xs sm:max-w-none">
-        <FlightInfoPanel selectedEntry={selectedEntry} variant="light" />
-      </div>
+      {/* Flight Info Panel - responsive, positioned above timeline */}
+      <FlightInfoPanel 
+        selectedEntry={selectedEntry} 
+        variant="light" 
+        isTimelineCollapsed={isTimelineCollapsed}
+      />
 
-      {/* Map Legend Overlay - responsive positioning and sizing */}
-      <div className="absolute bottom-2 right-2 md:bottom-6 md:right-6 bg-[#f4f1ea] p-1.5 md:p-3 rounded-sm shadow-xl border md:border-2 border-stone-400 text-[9px] md:text-xs font-serif z-[400] transform md:rotate-1 block">
+      {/* Map Legend Overlay - top right, below zoom controls */}
+      <div className="absolute top-16 right-2 sm:top-20 sm:right-4 bg-[#f4f1ea] p-1.5 md:p-3 rounded-sm shadow-xl border md:border-2 border-stone-400 text-[9px] md:text-xs font-serif z-[100] transform md:rotate-1 block">
         <h4 className="font-bold mb-1 md:mb-2 text-stone-800 border-b border-stone-300 pb-0.5 md:pb-1 text-[8px] md:text-xs">
           <span className="hidden md:inline">MAP KEY</span>
           <span className="md:hidden">KEY</span>

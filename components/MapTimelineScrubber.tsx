@@ -463,13 +463,25 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
       <button
         onClick={onToggleCollapse}
         className={`
-          absolute bottom-4 left-1/2 -translate-x-1/2 z-[500]
+          absolute z-[500]
           bg-amber-950/90 hover:bg-amber-900/95 text-amber-200
-          px-4 py-2 rounded-t-lg shadow-lg
-          font-typewriter text-xs tracking-wider
-          border border-amber-800/50 border-b-0
-          transition-all duration-300 hover:translate-y-[-2px]
+          shadow-lg font-typewriter text-xs tracking-wider
+          border border-amber-800/50
+          transition-all duration-300
           flex items-center gap-2
+          
+          /* Mobile: full width bar at bottom */
+          bottom-0 left-0 right-0
+          px-4 py-2.5
+          justify-center
+          rounded-t-lg border-b-0
+          
+          /* Desktop/tablet: centered pill, higher to avoid Leaflet attribution */
+          sm:bottom-10 sm:left-1/2 sm:-translate-x-1/2 sm:right-auto
+          sm:px-4 sm:py-2
+          sm:rounded-lg sm:border-b
+          sm:hover:translate-y-[-2px]
+          
           ${className}
         `}
         aria-label="Show Timeline"

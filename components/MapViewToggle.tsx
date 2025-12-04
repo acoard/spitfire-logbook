@@ -15,6 +15,7 @@ interface MapViewToggleProps {
   shouldCenter: boolean;
   customCenter?: [number, number];
   customZoom?: number;
+  isTimelineCollapsed?: boolean;
 }
 
 // Loading component for the 3D globe
@@ -54,7 +55,8 @@ const MapViewToggle: React.FC<MapViewToggleProps> = ({
   onMarkerSelect,
   shouldCenter,
   customCenter,
-  customZoom
+  customZoom,
+  isTimelineCollapsed = false
 }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('map');
   const [hasLoadedGlobe, setHasLoadedGlobe] = useState(false);
@@ -140,6 +142,7 @@ const MapViewToggle: React.FC<MapViewToggleProps> = ({
             shouldCenter={shouldCenter}
             customCenter={customCenter}
             customZoom={customZoom}
+            isTimelineCollapsed={isTimelineCollapsed}
           />
         </div>
 
@@ -156,6 +159,7 @@ const MapViewToggle: React.FC<MapViewToggleProps> = ({
                 selectedEntry={selectedEntry}
                 onMarkerSelect={onMarkerSelect}
                 shouldCenter={shouldCenter}
+                isTimelineCollapsed={isTimelineCollapsed}
               />
             </Suspense>
           </div>
