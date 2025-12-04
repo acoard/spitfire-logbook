@@ -18,6 +18,18 @@ export const NavBar: React.FC = () => {
           FLIGHT BOOK & MAP
         </NavLink>
         <NavLink
+          to="/journey"
+          className={({ isActive }) =>
+            `text-sm font-medium tracking-wide transition-colors duration-200 ${
+              isActive
+                ? "text-amber-500 border-b-2 border-amber-500 pb-0.5"
+                : "text-stone-400 hover:text-stone-200"
+            }`
+          }
+        >
+          HERO'S JOURNEY
+        </NavLink>
+        <NavLink
           to="/gallery"
           className={({ isActive }) =>
             `text-sm font-medium tracking-wide transition-colors duration-200 ${
