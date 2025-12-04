@@ -56,13 +56,12 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
       sidebarBottom={
         <ContextPanel selectedEntry={selectedEntry} />
       }
-      mainContent={(resizeSignal) => (
+      mainContent={() => (
         <MapPanel
           entries={entries}
           selectedEntry={selectedEntry}
           onMarkerSelect={onMarkerSelect}
           shouldCenter={shouldCenterMap}
-          resizeSignal={resizeSignal}
         />
       )}
     />

@@ -11,7 +11,7 @@ interface ContextPanelProps {
 }
 type Tab = 'MISSION' | 'AIRCRAFT' | 'LOGBOOK';
 
-const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
+const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry }) => {
   const [activeTab, setActiveTab] = useState<Tab>('MISSION');
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
@@ -308,6 +308,6 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
         />
     </div>
   );
-};
+});
 
 export default ContextPanel;

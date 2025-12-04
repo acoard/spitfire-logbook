@@ -18,7 +18,6 @@ interface MapPanelProps {
   selectedEntry: LogEntry | null;
   onMarkerSelect: (entry: LogEntry) => void;
   shouldCenter: boolean;
-  resizeSignal?: number;
 }
 
 // Robust coordinate validation
@@ -27,7 +26,7 @@ const isValidCoord = (val: any): boolean => {
 };
 
 // Component to handle map movement and responsive resizing
-const MapController: React.FC<{ center: [number, number]; zoom: number; shouldCenter: boolean; resizeSignal: number }> = ({ center, zoom, shouldCenter, resizeSignal }) => {
+const MapController: React.FC<{ center: [number, number]; zoom: number; shouldCenter: boolean }> = ({ center, zoom, shouldCenter }) => {
   const map = useMap();
   useEffect(() => {
     if (shouldCenter && isValidCoord(center[0]) && isValidCoord(center[1])) {
@@ -40,12 +39,22 @@ const MapController: React.FC<{ center: [number, number]; zoom: number; shouldCe
   }, [center, zoom, map, shouldCenter]);
 
   useEffect(() => {
-    map.invalidateSize();
-  }, [map, resizeSignal]);
+    if (!map) return;
+    
+    const container = map.getContainer();
+    const observer = new ResizeObserver(() => {
+      map.invalidateSize();
+    });
+    
+    observer.observe(container);
+    return () => {
+      observer.disconnect();
+    };
+  }, [map]);
   return null;
 };
 
-const MapPanel: React.FC<MapPanelProps> = ({ entries, selectedEntry, onMarkerSelect, shouldCenter, resizeSignal = 0 }) => {
+const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, onMarkerSelect, shouldCenter }) => {
   
   // Calculate map center based on selection with validation
   // Default to English Channel/Europe view
@@ -90,7 +99,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ entries, selectedEntry, onMarkerSel
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
         />
         
-        <MapController center={centerPosition} zoom={zoomLevel} shouldCenter={shouldCenter} resizeSignal={resizeSignal} />
+        <MapController center={centerPosition} zoom={zoomLevel} shouldCenter={shouldCenter} />
 
         {/* Render Routes (Polylines) first so markers sit on top */}
         {validEntries.map((entry) => {
@@ -229,6 +238,6 @@ const MapPanel: React.FC<MapPanelProps> = ({ entries, selectedEntry, onMarkerSel
       </div>
     </div>
   );
-};
+});
 
 export default MapPanel;

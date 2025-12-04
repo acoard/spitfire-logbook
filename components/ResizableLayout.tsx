@@ -92,7 +92,7 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
   expandSidebarBottomTrigger
 }) => {
   const isDesktop = useMediaQuery('(min-width: 768px)');
-  const [sidePanelWidth, setSidePanelWidth] = useState(layoutPresets.balanced.side ?? 0);
+  const [sidePanelWidth, setSidePanelWidth] = useState(layoutPresets.balanced.side ?? 560);
   const [logbookHeightRatio, setLogbookHeightRatio] = useState(layoutPresets.balanced.ratio);
   const [activePreset, setActivePreset] = useState<LayoutPreset>('balanced');
   const [isDraggingSide, setIsDraggingSide] = useState(false);
@@ -109,15 +109,20 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
   const layoutShellRef = useRef<HTMLDivElement>(null);
   const layoutMenuRef = useRef<HTMLDivElement>(null);
   const layoutMenuButtonRef = useRef<HTMLButtonElement>(null);
+  
+  // Refs to track values without re-rendering during drag
   const horizontalDragData = useRef({
     startX: 0,
-    initialWidth: layoutPresets.balanced.side ?? 0,
-    maxWidth: MAX_SIDE
+    initialWidth: layoutPresets.balanced.side ?? 560,
+    maxWidth: MAX_SIDE,
+    currentWidth: layoutPresets.balanced.side ?? 560
   });
+  
   const verticalDragData = useRef({
     startY: 0,
     initialRatio: layoutPresets.balanced.ratio,
-    containerHeight: 1
+    containerHeight: 1,
+    currentRatio: layoutPresets.balanced.ratio
   });
 
   const mobileSidebarBottomId = 'mobile-sidebar-bottom-panel';
@@ -161,11 +166,14 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
   useEffect(() => {
     if (isDraggingSide || isDraggingStack) {
       document.body.style.cursor = isDraggingSide ? 'col-resize' : 'row-resize';
+      document.body.style.userSelect = 'none'; // Prevent text selection
     } else {
       document.body.style.cursor = '';
+      document.body.style.userSelect = '';
     }
     return () => {
       document.body.style.cursor = '';
+      document.body.style.userSelect = '';
     };
   }, [isDraggingSide, isDraggingStack]);
 
@@ -181,12 +189,23 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
   useEffect(() => {
     if (!isDraggingSide) return;
     const handleMouseMove = (event: MouseEvent) => {
+      // Use requestAnimationFrame for smoother updates if needed, but direct DOM update is usually fast enough
       const delta = event.clientX - horizontalDragData.current.startX;
       const maxWidth = Math.max(MIN_SIDE, horizontalDragData.current.maxWidth);
       const newWidth = clamp(horizontalDragData.current.initialWidth + delta, MIN_SIDE, maxWidth);
-      setSidePanelWidth(newWidth);
+      
+      horizontalDragData.current.currentWidth = newWidth;
+      
+      // Update CSS variable directly
+      if (layoutShellRef.current) {
+        layoutShellRef.current.style.setProperty('--side-width', `${newWidth}px`);
+      }
     };
-    const handleMouseUp = () => setIsDraggingSide(false);
+    const handleMouseUp = () => {
+      setIsDraggingSide(false);
+      // Commit the final width to state
+      setSidePanelWidth(horizontalDragData.current.currentWidth);
+    };
 
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
@@ -203,9 +222,19 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
       const delta = event.clientY - verticalDragData.current.startY;
       const deltaRatio = delta / verticalDragData.current.containerHeight;
       const nextRatio = clamp(verticalDragData.current.initialRatio + deltaRatio, MIN_RATIO, MAX_RATIO);
-      setLogbookHeightRatio(nextRatio);
+      
+      verticalDragData.current.currentRatio = nextRatio;
+
+      // Update CSS variable directly
+      if (layoutShellRef.current) {
+        layoutShellRef.current.style.setProperty('--top-ratio', `${nextRatio}`);
+      }
     };
-    const handleMouseUp = () => setIsDraggingStack(false);
+    const handleMouseUp = () => {
+      setIsDraggingStack(false);
+      // Commit the final ratio to state
+      setLogbookHeightRatio(verticalDragData.current.currentRatio);
+    };
 
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
@@ -219,7 +248,8 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const handleResize = () => {
-      setSidePanelWidth((prev) => clamp(prev, MIN_SIDE, getMaxSideWidth()));
+      const max = getMaxSideWidth();
+      setSidePanelWidth((prev) => clamp(prev, MIN_SIDE, max));
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -235,7 +265,9 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
       typeof config.sideFraction === 'number'
         ? config.sideFraction * maxWidth
         : clamp(config.side ?? maxWidth, MIN_SIDE, maxWidth);
+    
     setSidePanelWidth(targetWidth);
+    
     if (config.ratio !== undefined) {
       setLogbookHeightRatio(config.ratio);
     }
@@ -257,7 +289,8 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
     horizontalDragData.current = {
       startX: event.clientX,
       initialWidth: sidePanelWidth,
-      maxWidth
+      maxWidth,
+      currentWidth: sidePanelWidth
     };
     setIsDraggingSide(true);
   };
@@ -269,7 +302,8 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
     verticalDragData.current = {
       startY: event.clientY,
       initialRatio: logbookHeightRatio,
-      containerHeight: bounds.height || 1
+      containerHeight: bounds.height || 1,
+      currentRatio: logbookHeightRatio
     };
     setActivePreset('custom');
     setIsLayoutMenuOpen(false);
@@ -277,20 +311,28 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
   };
 
   const desktopLayout = (
-    <div ref={layoutShellRef} className="flex flex-1 overflow-hidden bg-stone-900/30">
+    <div 
+      ref={layoutShellRef} 
+      className="flex flex-1 overflow-hidden bg-stone-900/30"
+      style={{
+        '--side-width': `${sidePanelWidth}px`,
+        '--top-ratio': `${logbookHeightRatio}`
+      } as React.CSSProperties}
+    >
       <div
         ref={leftPanelRef}
-        className="flex flex-col h-full bg-[#f4f1ea] shadow-[10px_0_30px_rgba(0,0,0,0.25)] border-r-8 border-stone-900 transition-[width] duration-300 ease-out"
+        className="flex flex-col h-full bg-[#f4f1ea] shadow-[10px_0_30px_rgba(0,0,0,0.25)] border-r-8 border-stone-900 ease-out"
         style={{
-          width: `${sidePanelWidth}px`,
+          width: 'var(--side-width)',
           minWidth: 0,
-          flexBasis: `${sidePanelWidth}px`
+          flexBasis: 'var(--side-width)',
+          transition: isDraggingSide ? 'none' : 'width 300ms'
         }}
       >
         <div
           className="relative overflow-hidden flex-shrink-0"
           style={{
-            flexBasis: `${logbookHeightRatio * 100}%`,
+            flexBasis: 'calc(var(--top-ratio) * 100%)',
             minHeight: '240px',
             transition: isDraggingStack ? 'none' : 'flex-basis 250ms ease'
           }}
@@ -318,7 +360,7 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
         <div
           className="relative overflow-hidden flex-shrink-0 flex-1"
           style={{
-            flexBasis: `${(1 - logbookHeightRatio) * 100}%`,
+            flexBasis: 'calc((1 - var(--top-ratio)) * 100%)',
             minHeight: '200px',
             transition: isDraggingStack ? 'none' : 'flex-basis 250ms ease'
           }}
@@ -388,6 +430,7 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
       </div>
 
       <div className="flex-1 min-w-0 relative bg-stone-800 border-l-8 border-stone-900 shadow-inner transition-all duration-300 ease-out">
+        {/* We no longer need to pass the width, but we keep the prop for compatibility/initial load if needed */}
         {mainContent(sidePanelWidth)}
       </div>
     </div>
@@ -479,4 +522,3 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
     </div>
   );
 };
-

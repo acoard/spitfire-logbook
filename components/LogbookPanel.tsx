@@ -13,7 +13,7 @@ interface LogbookPanelProps {
   setShowSignificantOnly: (show: boolean) => void;
 }
 
-const LogbookPanel: React.FC<LogbookPanelProps> = ({
+const LogbookPanel: React.FC<LogbookPanelProps> = React.memo(({
   entries,
   selectedId,
   onSelect,
@@ -187,6 +187,6 @@ const LogbookPanel: React.FC<LogbookPanelProps> = ({
       </div>
     </div>
   );
-};
+});
 
 export default LogbookPanel;
