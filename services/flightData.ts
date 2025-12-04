@@ -172,6 +172,21 @@ export const FLIGHT_LOG: LogEntry[] = [
         isSignificant: false,
         sourceDocument: '060.jpg'
     },
+    {
+        id: '4',
+        date: '1944-05-26',
+        phase: Phase.TRAINING,
+        aircraftType: 'Spitfire I',
+        aircraftCategory: AircraftCategory.TRAINING,
+        duty: 'Flight Assessment - 414',
+        time: '0:00',
+        remarks: 'Robin earns his wings',
+        origin: LOCATIONS.ASTON_DOWN,
+        destination: LOCATIONS.ASTON_DOWN,
+        isSignificant: true,
+        sourceDocument: '061.jpg',
+        customView: 'gradebook'
+    },
 
     // Phase 2: Combat (313 Squadron) - Reconstructed from Logbooks 062-074
     // June 1944 - Base: APPLEDRAM

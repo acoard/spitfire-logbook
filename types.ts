@@ -43,4 +43,5 @@ export interface LogEntry {
   missionBrief?: MissionBrief;
   sourceDocument?: string; // Filename of the original logbook page (e.g. "062.jpg")
   pilotNotes?: string; // Full transcribed text from the pilot's notes
+  customView?: string; // Identifier for custom rendering (e.g. 'gradebook')
 }

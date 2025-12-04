@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { LogEntry } from '../types';
 import { AIRCRAFT_SPECS } from '../services/flightData';
-import { FolderOpen, Plane, FileText, ChevronLeft, ChevronRight, BookOpen, Maximize2 } from 'lucide-react';
+import { FolderOpen, Plane, FileText, ChevronLeft, ChevronRight, BookOpen, Maximize2, ExternalLink } from 'lucide-react';
 import ImageModal from './ImageModal';
 import StickyNote from './StickyNote';
 
@@ -112,6 +112,62 @@ const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry })
              {activeTab === 'MISSION' && (
                  <div className="mt-2 font-old-print text-stone-800 leading-relaxed text-sm animate-in fade-in duration-300 space-y-6">
                     
+                    {selectedEntry.customView === 'gradebook' ? (
+                        <div className="mb-6">
+                           <div className="flex justify-between items-end mb-2">
+                              <h4 className="font-typewriter text-sm font-bold uppercase text-stone-700">Summary of Flying & Assessments</h4>
+                              <span className="font-mono text-xs text-stone-500">Form 414A (May 26, 1944)</span>
+                           </div>
+                           
+                           <table className="w-full text-sm font-old-print border-collapse border border-stone-400 bg-white">
+                              <thead className="bg-stone-200 font-typewriter text-xs uppercase text-stone-600">
+                                 <tr>
+                                    <th className="border border-stone-400 p-2 text-left">Ability Category</th>
+                                    <th className="border border-stone-400 p-2 text-left">Assessment</th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 <tr>
+                                    <td className="border border-stone-400 p-2 font-bold text-stone-800">As a Pilot</td>
+                                    <td className="border border-stone-400 p-2 font-handwriting text-lg text-blue-900">Good Average</td>
+                                 </tr>
+                                 <tr>
+                                    <td className="border border-stone-400 p-2 font-bold text-stone-800">As Pilot-Navigator</td>
+                                    <td className="border border-stone-400 p-2 text-stone-400 italic">N/A</td>
+                                 </tr>
+                                 <tr>
+                                    <td className="border border-stone-400 p-2 font-bold text-stone-800">In Bombing</td>
+                                    <td className="border border-stone-400 p-2 font-handwriting text-lg text-blue-900">Average</td>
+                                 </tr>
+                                 <tr>
+                                    <td className="border border-stone-400 p-2 font-bold text-stone-800">As Air Gunner</td>
+                                    <td className="border border-stone-400 p-2 font-handwriting text-lg text-blue-900">Average</td>
+                                 </tr>
+                                 <tr>
+                                    <td className="border border-stone-400 p-2 font-bold text-stone-800">Rocket Propelled Bombs</td>
+                                    <td className="border border-stone-400 p-2 font-handwriting text-lg text-blue-900">Above Average</td>
+                                 </tr>
+                                 <tr>
+                                    <td className="border border-stone-400 p-2 font-bold text-stone-800">Areas Needing Improvement</td>
+                                    <td className="border border-stone-400 p-2 font-handwriting text-lg text-blue-900">None</td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                           <button 
+                             onClick={() => setFullscreenImage(`${import.meta.env.BASE_URL}report-card.png`)}
+                             className="mt-3 text-xs flex items-center gap-1 text-amber-700 hover:text-amber-900 font-bold font-typewriter uppercase tracking-wider transition-colors"
+                           >
+                             <ExternalLink className="w-3 h-3" /> View Original Report Card
+                           </button>
+                           <p className="mt-2 font-mono text-xs text-stone-500 italic">
+                              "Any points in flying or airmanship which should be watched" — [BLANK]
+                           </p>
+                           <p className="mt-4 font-mono text-[10px] text-stone-400 border-t border-stone-200 pt-2 leading-tight">
+                              * Historical Context: In RAF evaluations of this period, "Average" and "Good Average" denoted a fully proficient, reliable pilot trusted with operational duties. "Above Average" was rare, typically reserved for exceptional test-pilot level handling.
+                           </p>
+                        </div>
+                    ) : (
+                    <>
                     {/* Pilot's Notes (Handwritten style) */}
                     {selectedEntry.pilotNotes && (
                         <div className="relative transform rotate-1">
@@ -217,6 +273,8 @@ const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry })
                             )}
                          </div>
                     )}
+                  </>
+                )}
                  </div>
              )}
 
