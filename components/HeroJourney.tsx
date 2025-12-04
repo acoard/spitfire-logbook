@@ -261,6 +261,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         type: 'combat',
         location: 'Brussels / Bradwell Bay',
         coordinates: LOCATIONS.BRADWELL_BAY,
+        logbookEntryId: 'c-069-1',
       },
       {
         id: 'combat-7',
@@ -687,12 +688,13 @@ const MomentCard: React.FC<{
       
       {/* Content Card - looks like a logbook entry */}
       <div className={`
-        relative p-3 sm:p-4 rounded-sm transition-all duration-200
+        relative p-3 sm:p-4 rounded-sm transition-all duration-200 
+        border shadow-sm
         ${isMilestone 
-          ? 'bg-amber-100/50 border border-amber-900/20' 
+          ? 'bg-amber-100/80 border-amber-800/30 shadow-amber-900/10' 
           : isHovered 
-            ? 'bg-amber-50/50' 
-            : ''
+            ? 'bg-white border-amber-700/40 shadow-md shadow-amber-900/10 -translate-y-0.5' 
+            : 'bg-[#faf8f4] border-amber-800/20'
         }
       `}>
         {/* Red "important" marker for milestones */}
