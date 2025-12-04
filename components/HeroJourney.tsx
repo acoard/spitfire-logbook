@@ -651,6 +651,7 @@ const ChapterCard: React.FC<{
                   key={moment.id} 
                   moment={moment} 
                   isLast={idx === chapter.moments.length - 1}
+                  index={idx}
                 />
               ))}
             </div>
@@ -665,7 +666,8 @@ const ChapterCard: React.FC<{
 const MomentCard: React.FC<{
   moment: JourneyMoment;
   isLast: boolean;
-}> = ({ moment, isLast }) => {
+  index?: number; // Position in list for staggered animations
+}> = ({ moment, isLast, index = 0 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
   
@@ -772,9 +774,10 @@ const MomentCard: React.FC<{
             <p className="font-handwriting text-sm sm:text-base text-amber-800 leading-relaxed italic">
               "<TypewriterText 
                 text={moment.quote}
-                speed={35}
+                speed={30}
+                startDelay={index * 150} // Stagger based on position
                 triggerOnView={true}
-                viewThreshold={0.8}
+                viewThreshold={0.95} // Only start when almost fully visible
                 showCursor={true}
                 cursor="│"
                 cursorBlinkAfter={true}
@@ -973,16 +976,23 @@ export const HeroJourney: React.FC = () => {
           <HeroSection />
           
           {/* Chapter Tabs - like index tabs on a binder */}
-          <div className="sticky top-0 z-10 bg-[#d4cfc4]/95 backdrop-blur-sm pb-2 -mx-4 px-4 sm:-mx-6 sm:px-6">
-            <div className="flex items-end gap-1 overflow-x-auto pb-px scrollbar-hide">
-              {HERO_JOURNEY.map((chapter, idx) => (
-                <ChapterTab
-                  key={chapter.id}
-                  chapter={chapter}
-                  isActive={idx === activeIndex}
-                  onClick={() => handleProgressSelect(idx)}
-                />
-              ))}
+          <div className="sticky top-0 z-10 bg-[#d4cfc4]/95 backdrop-blur-sm pb-1 -mx-4 px-4 sm:-mx-6 sm:px-6">
+            {/* Scroll container with vintage scrollbar */}
+            <div className="relative">
+              <div className="flex items-end gap-1 overflow-x-auto pb-3 vintage-scrollbar">
+                {HERO_JOURNEY.map((chapter, idx) => (
+                  <ChapterTab
+                    key={chapter.id}
+                    chapter={chapter}
+                    isActive={idx === activeIndex}
+                    onClick={() => handleProgressSelect(idx)}
+                  />
+                ))}
+                {/* Spacer to ensure last tab isn't cut off */}
+                <div className="shrink-0 w-4" aria-hidden="true" />
+              </div>
+              {/* Fade hints showing more content */}
+              <div className="absolute right-0 top-0 bottom-3 w-8 bg-gradient-to-l from-[#d4cfc4] to-transparent pointer-events-none sm:hidden" />
             </div>
             {/* Tab bar bottom border */}
             <div className="h-px bg-amber-900/20" />

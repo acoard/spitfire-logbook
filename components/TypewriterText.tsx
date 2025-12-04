@@ -143,8 +143,24 @@ export const TypewriterText: React.FC<TypewriterTextProps> = ({
     setDisplayedText('');
   };
 
+  // Click to instantly complete the animation
+  const handleClick = () => {
+    if (isTyping) {
+      setDisplayedText(text);
+      indexRef.current = text.length;
+      setIsTyping(false);
+      setIsComplete(true);
+      onComplete?.();
+    }
+  };
+
   return (
-    <span ref={containerRef} className={`inline ${className}`}>
+    <span 
+      ref={containerRef} 
+      className={`inline ${className} ${isTyping ? 'cursor-pointer' : ''}`}
+      onClick={handleClick}
+      title={isTyping ? 'Click to skip animation' : undefined}
+    >
       {displayedText}
       {showCursor && (isTyping || (cursorBlinkAfter && isComplete)) && (
         <span 
