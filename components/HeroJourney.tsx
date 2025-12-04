@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronUp, Plane, Target, Shield, Crown, Globe, Home, Award, MapPin, BookOpen } from 'lucide-react';
 import { LOCATIONS } from '../services/flightData';
@@ -935,10 +935,92 @@ const HeroSection: React.FC = () => {
   );
 };
 
+// Storage key for persisting state
+const STORAGE_KEY = 'heroJourney_state';
+
+interface PersistedState {
+  expandedChapter: string | null;
+  activeIndex: number;
+  scrollPosition: number;
+}
+
+const saveState = (state: PersistedState) => {
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    // sessionStorage might be unavailable
+  }
+};
+
+const loadState = (): PersistedState | null => {
+  try {
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (e) {
+    // sessionStorage might be unavailable
+  }
+  return null;
+};
+
 // Main Component
 export const HeroJourney: React.FC = () => {
-  const [expandedChapter, setExpandedChapter] = useState<string | null>('dday');
-  const [activeIndex, setActiveIndex] = useState(1);
+  // Load initial state from storage or use defaults (only on first render)
+  const [expandedChapter, setExpandedChapter] = useState<string | null>(() => {
+    const saved = loadState();
+    return saved?.expandedChapter ?? 'dday';
+  });
+  const [activeIndex, setActiveIndex] = useState(() => {
+    const saved = loadState();
+    return saved?.activeIndex ?? 1;
+  });
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const hasRestoredScroll = useRef(false);
+  
+  // Restore scroll position on mount
+  useEffect(() => {
+    const saved = loadState();
+    if (saved?.scrollPosition && scrollContainerRef.current && !hasRestoredScroll.current) {
+      // Small delay to ensure content is rendered
+      requestAnimationFrame(() => {
+        if (scrollContainerRef.current) {
+          scrollContainerRef.current.scrollTop = saved.scrollPosition;
+          hasRestoredScroll.current = true;
+        }
+      });
+    }
+  }, []);
+  
+  // Save state when expanded chapter or active index changes
+  useEffect(() => {
+    const scrollPosition = scrollContainerRef.current?.scrollTop ?? 0;
+    saveState({ expandedChapter, activeIndex, scrollPosition });
+  }, [expandedChapter, activeIndex]);
+  
+  // Save scroll position on scroll (debounced)
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    
+    let scrollTimeout: NodeJS.Timeout;
+    const handleScroll = () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        saveState({
+          expandedChapter,
+          activeIndex,
+          scrollPosition: container.scrollTop
+        });
+      }, 150); // Debounce 150ms
+    };
+    
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, [expandedChapter, activeIndex]);
   
   const handleChapterToggle = (chapterId: string) => {
     setExpandedChapter(prev => prev === chapterId ? null : chapterId);
@@ -959,7 +1041,7 @@ export const HeroJourney: React.FC = () => {
   };
   
   return (
-    <div className="flex-1 overflow-y-auto bg-[#d4cfc4]">
+    <div ref={scrollContainerRef} className="flex-1 overflow-y-auto bg-[#d4cfc4]">
       {/* Aged paper texture for the whole background */}
       <div 
         className="min-h-full"
