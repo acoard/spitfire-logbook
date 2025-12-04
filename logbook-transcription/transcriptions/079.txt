@@ -4,10 +4,10 @@
 September - October 1945
 
 # AIRPORT
-None
+R.A.F. Station DRIGH Road
 
 # SQUADRON
-None
+202 SP Ferry Flt RAF
 
 # TOTALS PREVIOUS
 - Day Dual: 94.55
@@ -28,9 +28,7 @@ None
 | " | 9 | Stirling | NH901 | self | Allahabad - Delhi | 2.00 |
 | " | 12 | Spitfire | NH905 | self | Delhi - Karachi | 3.00 |
 | " | 13 | " | " | self | Karachi - Jodhpur | 1.35 |
-| " | 14 | Dakota | " | self | Jodhpur - Jodhpur | 0.15 |
-| " | 15 | " | " | self | Jodhpur - Allahabad | 2.15 |
-| " | 16 | Ensign | " | self | Allahabad - Delhi | 2.00 |
+
 
 # TOTALS MONTH
 - Day Pilot: 20.85
@@ -56,16 +54,4 @@ None
 None
 
 # HUMAN COMMENTS
-- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: Several entries have inconsistencies between the aircraft type and the column where time is logged (e.g., Dakota in Single-Engine Day Pilot column). These have been transcribed exactly as written.
-- TO REVIEWER: Some multi-engine duties and times listed on the right side of the page do not have corresponding dates or aircraft types on the left. These have been included in the NOTES section.
-- TO REVIEWER: The time "6-20" for September is a total listed under the "Dual" column (1) with a note, not an individual flight entry, so "None" is entered for Sept 23's flight time.
-- TO REVIEWER: The "TOTALS PREVIOUS" section is incomplete, missing "Multi-Engine Day 1st Pilot" (10.30) and "Passenger" (10.30) entries from the "Totals Brought Forward" line in the logbook.
-- TO REVIEWER: For the September 23 entry (Stirling), the "No." column is transcribed as '"' (implying NA846), but the logbook image shows this field as blank for the Stirling.
-- TO REVIEWER: For the September 23 entry (Stirling), the "Time" is transcribed as 'None', but the logbook image shows a passenger time of '4.50' in the Passenger column (Col 11) for this entry, which is a substantive omission.
-- TO REVIEWER: For the October 14 entry (Dakota), the "No." column is transcribed as '"' (implying NH905), but the logbook image shows this field as blank for the Dakota.
-- TO REVIEWER: For the October 14 entry (Dakota), the "Time" is transcribed as '0.15' (from Single-Engine Day Pilot Col 2), but the correct time for a Multi-Engine Day 1st Pilot for this flight (Col 6) is '2.00'. This is a substantive error in selecting the appropriate pilot time for the aircraft type.
-- TO REVIEWER: For the October 15 entry (Dakota), the "No." column is transcribed as '"' (implying NH905), but the logbook image shows this field as blank for the Dakota.
-- TO REVIEWER: For the October 15 entry (Dakota), the "Time" is transcribed as '2.15' (from Single-Engine Day Pilot Col 2), but the correct time for a Multi-Engine Day 1st Pilot for this flight (Col 6) is '3.30'. This is a substantive error in selecting the appropriate pilot time for the aircraft type.
-- TO REVIEWER: For the October 16 entry (Ensign), the "No." column is transcribed as '"' (implying NH905), but the logbook image shows this field as blank for the Ensign.
-- TO REVIEWER: The "TOTALS MONTH" section in the transcription is a consolidated "Day Pilot: 20.85". This misrepresents the logbook's structured monthly totals, which show separate totals for "Single-Engine Day Dual" (6.20), "Multi-Engine Day 1st Pilot" (4.30), and "Passenger" (4.30) for September, and "Single-Engine Day Pilot" (10.50), "Multi-Engine Day 1st Pilot" (17.50), and "Passenger" (20.50) for October. This is a substantive structural and data representation error.
+- Partially Reviewed 3/12/2025. Manually deleted passenger entries cause who cares.

@@ -4,52 +4,65 @@
 July 1945
 
 # AIRPORT
-Karachi
+R.A.F. Station DRIGH Road
 
 # SQUADRON
-None
+202 SP Ferry Flt RAF
 
 # TOTALS PREVIOUS
 - Day Dual: None
-- Day Pilot: 95.30
+- Day Pilot: None
 - Night Dual: None
 - Night Pilot: None
 
 # LOGBOOK ENTRIES
+
+NOTE: THE BELOW ARE *PASSENGER* FLIGHTS. ONLY THE VERY BOTTOM, LYSANDER FLIGHT, WAS PILOTED BY ROBIN.
+
 | Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
 |---|---|---|---|---|---|---|
-| July | 11 | Dakota | RN 234 | self | M.R.C.A. 2 Flys over London Karachi | 5.45 |
-| July | 12 | " | " | " | Convoy Patrol (Suez) | 3.00 |
-| July | 13 | " | " | " | M.R.C.A. | 6.00 |
-| July | 19 | Ensign | " | " | Troop Carrying | 4.00 |
-| July | 22 | Dakota | " | " | M.R.C.A. | 6.00 |
-| July | 25 | Lysander | FLS | " | Air Test | 4.35 |
-| July | 26 | " | " | " | Convoy Patrol | 2.30 |
-| July | 28 | Ensign | " | " | Base flying | 2.00 |
-| July | 30 | Lysander | TM P- | " | Convoy Patrol | 5.00 |
+| July | 11 | Dakota | KN 234 |  | Lyneham, England - Elmas, Sardinia | 5.45 |
+| " | " | " | " |  | Elmas, Sardinia - Castel Benito, N. Africa | 3.00 |
+| " | 12 | " | " |  | Cairo West, Egypt - Habbaniya, Iraq | 6.00 |
+| " | 13 | " | " |  | Habbaniya, Iraq - Sharjah, Persian Gulf | 4.00 |
+| " | " | " | " |  | Sharjah, Persian Gulf - Mauripur, Karachi | 6.00 |
+| " | " | " | " |  | Mauripur, Karachi - Jodhpur | 4.35 |
+| " | 19 | Cucigu | " |  | Jodhpur - Palam, Delhi | 2.30 |
+| " | " | " | " |  | Palam, Delhi - Jodhpur | 2.00 |
+| " | 22 | Dakota | " |  | Jodhpur - Mauripur, Karachi | 2.00 |
+| " | " | " | " |  | DRIGH Rd Karachi - Allahabad | 2.30 |
+| " | 25 | Liberator VIII | 611 F/Lr |  | Allahabad - Saibani | 5.45 |
+| " | 26 | " | " |  | Calcutta - Gualior | 2.35 |
+| " | 28 | Empire Flying Boat | " |  | Gualior - Karachi | 5.00 |
+| " | " | " | " |  | None | 4.55 |
+| " | 30 | Lysander | T.954 | self | None | 0.15 |
 
 # TOTALS MONTH
-- Day Pilot: 43.00
-- Night Pilot: 0.00
+- Day Pilot: 0.15
+- Night Pilot: None
 
 # GRAND TOTAL
-602 Hrs. 95 Mins.
+602.25
 
 # NOTES
-- Top of "Duty" column: in the next 9 months or a private diary
-- Remarks column (July 11th): 30 hour ferry - over 3 days London - Karachi
-- Remarks column (July 12th): 1 min. 60 over 500 feet & [illegible] and this official form for flying work in Karachi
-- Remarks column (mid-page): For all my Service in India DANGH ROAD - about 6 miles from Karachi
-- Remarks column (mid-page below previous note): Only 1/2 work often arrived in India to track down Uncle Frank in Calcutta
-- Remarks column (July 28th): I was based at R.A.F. Stn. Karachi
+- Right side of page next to July 11th entries: 30 hours flying - over 3 days London - Karachi. I mailed over 500 postcards and their official Ryn Log Book running in parallel.
+- Right side of page next to July 22nd entries: For all my service in India I was based at R.A.F. Station DRIGH Road - about 6 miles out of Karachi.
+- Right side of page next to July 25th-26th entries: Only 2½ weeks after arriving in India got to track down Uncle Frank in Calcutta.
 
 # PHOTOS
 None
 
 # OTHER
-None
+- Totals Brought Forward (Passenger): 22-50
+- Totals Carried Forward (Single-Engine Day Pilot): 48-15
+- Totals Carried Forward (Multi-Engine Day 2nd Pilot): 8-40
+- Totals Carried Forward (Passenger): 71-05
 
 # HUMAN COMMENTS
-- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: The transcription of "GRAND TOTAL" as "602 Hrs. 95 Mins." directly follows the instruction "Do NOT modify what's written". However, the instruction "Use decimal points instead of dashes when transcribing (e.g. 1.15 not 1:15 or 1-15)" might imply conversion to a decimal hour format even from "Hrs. Mins.". Please clarify which interpretation is preferred.
-- TO REVIEWER: The note for July 12th contains "1 min. 60". It's transcribed as written, but if it is actually a duration, it would be unconventional.
+- Reviewed 3/12/2025, missing a little but these are just passenger layover flights.
+- TO REVIEWER: The 'Time' column in the logbook entries table includes values from the 'PASSENGER' column for most entries, and 'DAY PILOT' for the last entry, as these were the only time values recorded per flight.
+- TO REVIEWER: The "TOTALS PREVIOUS" section is marked "None" for all categories as the "Totals Brought Forward" in the original logbook only showed a value in the 'PASSENGER' column, which is not part of Day/Night Dual/Pilot. This passenger total is noted in "OTHER".
+- TO REVIEWER: The "TOTALS MONTH" reflects only the Day Pilot time (0.15) and no Night Pilot time, consistent with the specific time columns for the month's entries.
+- TO REVIEWER: Several duty descriptions for the first block of entries (Dakota flights) are incorrect or shifted due to the date error and apparent misinterpretation of the multi-leg journey.
+- TO REVIEWER: One entry for July 19 (Cucigu, Mauripur, Karachi - Jodhpur) is missing from the transcription. The transcription begins with "Jodhpur - Palam, Delhi" for the first Cucigu flight on July 19, omitting the preceding leg.
+--------------------------------

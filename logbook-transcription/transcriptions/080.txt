@@ -1,13 +1,13 @@
 # FILENAME: 080.jpg
 
 # DATE
-October 1945
+October-November 1945
 
 # AIRPORT
-None
+R.A.F. Station DRIGH Road
 
 # SQUADRON
-90 Squadron
+202 SP Ferry Flt RAF
 
 # TOTALS PREVIOUS
 - Day Dual: 0.00
@@ -16,6 +16,9 @@ None
 - Night Pilot: 0.00
 
 # LOGBOOK ENTRIES
+
+* Note: All Dakota and Sunderland trips are as a passenger! Spitfire trips are as pilot as normal.
+
 | Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
 |---|---|---|---|---|---|---|
 | Oct. | 28 | Spitfire XIV | SM893 | Self | Karachi - Jodhpur | 1.40 |
@@ -47,7 +50,7 @@ None
 
 # NOTES
 - Right page, next to Oct 31 line: Visited with Frank again.
-- Right page, next to Nov 6, 8, 11 lines: The special focuser [illegible] ferry Command aircraft in Calcutta (Park St) - just [illegible] only 2 blocks from Frank's apartment.
+- Right page, next to Nov 6, 8, 11 lines: The special free mess for Army Command air crew in Calcutta (Park St) - just off Chowringhee - was only 2 blocks from Frank's apartment.
 - Right page, next to Nov 16 line: Kohat + about 50 miles from the Khyber Pass.
 - Right page, next to Nov 26 line: By now Frank was getting used to flying his nephew!
 - Summary for October block: UNIT 90 Sq. SP.
@@ -61,10 +64,4 @@ None
 - Summary for October block: SIGNATURE R.A. Glen
 
 # HUMAN COMMENTS
-- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: The "Date" section for the page is listed as "October 1945" as it's the first month, but the logbook entries span both October and November 1945.
-- TO REVIEWER: The "TOTALS MONTH" is calculated as the sum of all flight entries on this page (for both October and November).
-- TO REVIEWER: There is a "Summary for October" block with pilot totals (13.25 single-engine, 14.30 multi-engine) that do not match the sum of the *visible* October entries on this page (5.40 single-engine, 0.00 multi-engine). This indicates either partial October entries on this page or different accounting.
-- TO REVIEWER: The "Totals Brought Forward" Day Pilot (649.50) + "TOTALS MONTH" Day Pilot (42.55) = 692.05, which does not match the "GRAND TOTAL" (664.55). The "GRAND TOTAL" appears to be an overall cumulative total, not a simple sum of the current page's activity added to the previous page's totals.
-- TO REVIEWER: The "Totals Carried Forward" for Single Engine Day Pilot (549.45) correctly reflects the "Totals Brought Forward" (529.00) plus the single-engine day pilot time from this page's entries (20.45). However, there is no explicit Multi-Engine Day Pilot "Totals Carried Forward" at the bottom of the page; instead, there's a "Passenger" total of 148.00.
---------------------------------
+- Reviewed 3/12/2025

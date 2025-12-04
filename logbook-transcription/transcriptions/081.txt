@@ -4,10 +4,11 @@
 December 1945
 
 # AIRPORT
-None
+R.A.F. Station DRIGH Road
 
 # SQUADRON
-202 SP
+202 SP Ferry Flt RAF
+
 
 # TOTALS PREVIOUS
 - Day Dual: None
@@ -16,6 +17,9 @@ None
 - Night Pilot: None
 
 # LOGBOOK ENTRIES
+
+* Note: All Dakota, Expeditor, and Sunderland trips are as a passenger! Spitfire trips are as pilot as normal.
+
 | Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
 |---|---|---|---|---|---|---|
 | December | 1 | Spitfire XIV | 856 | self | Calcutta - Myas | 15.05 |
@@ -37,9 +41,9 @@ None
 673 Hrs 40 Mins
 
 # NOTES
-- Top left, under Duty column (November Summary): Summary for November, Unit 202 SP, Date 30/11/45, Signature Q.A. Glen. Aircraft Types. F/LT O.C. Ferry Flight.
+- Top left, under Duty column (November Summary): Summary for November, Unit 202 SP, Date 30/11/45, Signature R.A. Glen. Aircraft Types. F/LT O.C. Ferry Flight.
 - Right of November Summary (time 15-05): R.A. Glen F/LT O.C. Ferry Flight.
-- Remarks column next to December 5th, 7th, and 16th entries (Passenger times 2.15, 4.30, 8.30): Developed engine trouble (!) in Calcutta - so took the train to Ranchi for Christmas. (Who could ask for anything more) (And when I got back to base why I had stayed with my parents for an extra week!)
+- Remarks column next to December 5th, 7th, and 16th entries (Passenger times 2.15, 4.30, 8.30): Developed engine trouble (!) in Calcutta - so took the train to Ranchi for Christmas. (Who could ask for anything more) (And when I got back to base on New Years Eve they asked why I hadn't stayed with my family for an extra week! )
 - Bottom left, under Duty column (December Summary): Summary for December, Unit 202 SP, Date 31/12/45, Signature Q.A. Glen. Aircraft Types. F/LT O.C. Ferry Flight.
 - Right of December Summary (time 8-45): R.A. Glen F/LT O.C. Ferry Flight.
 
@@ -52,6 +56,7 @@ None
 - Totals Carried Forward - Passenger: 169.00
 
 # HUMAN COMMENTS
+- Reviewed 3/12/2025
 - This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
 - TO REVIEWER: The page contains summaries for two months (November and December) and individual flight entries for December. The "DATE" field reflects the month of primary entries.
 - TO REVIEWER: The "TOTALS PREVIOUS" section only includes "Day Pilot" as it's the only one of the template categories with a value from "Totals Brought Forward". Other "Totals Brought Forward" values (e.g., Passenger time) are noted in "OTHER".

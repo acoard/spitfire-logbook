@@ -17,22 +17,32 @@ None
 - Night Pilot: None
 
 # LOGBOOK ENTRIES
+
+This is a PRACTICE Logbook.
+
+### North Weald
+
 | Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
-|---|---|---|---|---|---|---|
-| Oct | 15 | Link Trainer | None | self | G.I.F. WEALD. | 1.00 |
-| " | 20 | " | " | " | G.I.F. WEALD. | 1.00 |
-| " | 26 | " | " | " | B.A.S. WEALD. | 1.00 |
-| Nov | 9 | " | " | " | B.A.S. WEALD. | 1.00 |
-| " | 13 | " | " | " | Nav. correct G.I.F. course | 1.00 |
-| " | 28 | " | " | " | G.I.F. Julius C. Quedra T.L. | 1.00 |
-| Dec | 5 | " | " | " | G.I.F. WEALD. | 1.00 |
-| " | 6 | " | " | " | G.I.F. WEALD. | 1.00 |
-| " | 11 | " | " | " | Nav BRADWELL BAY. | 1.00 |
-| Jan | 5 | " | " | " | G.I.F. WEALD. | 1.00 |
-| " | 15 | " | " | " | Q.G.4. WEALD. | 1.00 |
-| " | 19 | " | " | " | G.I.F. WEALD. | 1.00 |
-| Feb | 14 | " | " | " | Q.B.H. WEALD. | 1.00 |
-| " | 17 | " | " | " | B.A.S. WEALD. | 1.00 |
+ | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
+| Oct. | 15 |  |  |  | GIF (General Instrument Flying) | 1-00 |
+| Oct. | 20 |  |  |  | GIF (General Instrument Flying) | 1-00 |
+| Oct. | 26 |  |  |  | BAS (Beam Approach System) | 1-00 |
+| Nov. | 9 |  |  |  | BAS (Beam Approach System) | 1-00 |
+| Nov. | 13 |  |  |  | NAV (Navigation) | 1-00 |
+| Nov. | 28 |  |  |  | GIF (General Instrument Flying) | 1-00 |
+| Dec. | 5 |  |  |  | GIF (General Instrument Flying) | 1-00 |
+| Dec. | 6 |  |  |  | GIF (General Instrument Flying) | 1-00 |
+| Dec. | 11 |  |  |  | NAV (Navigation) | 1-00 |
+
+### Bradwell Bay
+
+| Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
+ | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
+| Jan. | 5 |  |  |  | GIF (General Instrument Flying) | 1-00 |
+| Jan. | 15 |  |  |  | QGH (Controlled Descent through Cloud) | 1-00 |
+| Jan. | 19 |  |  |  | GIF (General Instrument Flying) | 1-00 |
+| Feb. | 14 |  |  |  | QGH (Controlled Descent through Cloud) | 1-00 |
+| Feb. | 17 |  |  |  | BAS (Beam Approach System) | 1-00 |
 
 # TOTALS MONTH
 - Day Pilot: None
@@ -62,11 +72,4 @@ None
 None
 
 # HUMAN COMMENTS
-- This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: The "YEAR '44" header for the Link Trainer Practices section appears to apply to all entries on that page, even though the months Jan and Feb chronologically follow Dec, implying they are from 1945. The overall page DATE reflects this chronological assumption (October 1944 - February 1945).
-- TO REVIEWER: "Aircraft Type" has been set to "Link Trainer" and "No." to "None" for all entries, as the page is specifically for "RECORD OF LINK TRAINER PRACTICES" and these columns are blank in the source log.
-- TO REVIEWER: "Pilot" has been set to "self" for all entries as per instructions for such logs when no specific pilot is noted.
-- TO REVIEWER: The "Duty" column combines content from two sub-columns under "PRACTICE" in the original log, including "WEALD." where present, as it appears to be a location/type of practice.
-
-- TO REVIEWER: The transcription of the label "Totals Carried" under the "NOTES" section is missing the word "Forward". The image clearly shows "Totals Carried Forward".
---------------------------------
+- Reviewed 3/12/2025

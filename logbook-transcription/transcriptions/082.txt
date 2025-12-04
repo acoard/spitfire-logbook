@@ -4,10 +4,10 @@
 January 1946
 
 # AIRPORT
-None
+R.A.F. Station DRIGH Road
 
 # SQUADRON
-202 Squadron
+202 SP Ferry Flt RAF
 
 # TOTALS PREVIOUS
 - Day Dual: 0
@@ -16,6 +16,9 @@ None
 - Night Pilot: 0
 
 # LOGBOOK ENTRIES
+
+* Note: All Dakota, Expeditor, and Sunderland trips are as a passenger! Spitfire trips are as pilot as normal.
+
 | Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
 |---|---|---|---|---|---|---|
 | January | 2 | Spitfire XIV | SM925 | Self | Acceptance Test | .30 |
@@ -58,6 +61,7 @@ None
 - Bottom of table, Totals Carried Forward (Passenger): 182.35
 
 # HUMAN COMMENTS
+- Reviewed 3/12/2025
 - This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
 - TO REVIEWER: The "Time" column in the LOGBOOK ENTRIES uses the time from either the "Single-Engine Day Pilot" column or the "Passenger" column, depending on which one contained a value for that flight. This was done to fit the single "Time" column in the template.
 - TO REVIEWER: The transcription contains the following substantive inaccuracies or missing entries:

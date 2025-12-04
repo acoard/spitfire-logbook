@@ -4,10 +4,10 @@
 August 1945
 
 # AIRPORT
-None
+R.A.F. Station DRIGH Road
 
 # SQUADRON
-None
+202 SP Ferry Flt RAF
 
 # TOTALS PREVIOUS
 - Day Dual: 90.20
@@ -49,9 +49,8 @@ None
 630 Hrs 05 Mins
 
 # NOTES
-- Right margin next to Aug 11-18 entries: Just a month after arriving in [illegible] a trip via Ranchi - and paid a surprise visit to Aunt Peda at Mesra - the old Binning family home - and after a night with her flew on to Calcutta and visited Frank again!
-- Right margin next to Aug 20 entries: Saw Frank again
-- Right margin next to Aug 24-26 entries: This trip ended rather disastrously. Flew at zero feet through a thunderstorm and landing the wheels and undercarriage of my Lysander and a Beaufighter and tree [illegible] badly damaged. Luckily the War had just finished.
+- Right margin next to Aug 11-18 entries: Just a month after arriving in India I "navigated"     a trip via Ranchi - and paid a surprise visit to Aunt Freda at Mesra - the old Binning family home - and after a night with her flew on to Calcutta and visited Frank[?] again!
+- Right margin next to Aug 24-26 entries: This trip ended rather disastrously. Flew at zero feet through a monsoon storm and on landing the whole aerodrome was under inches of water. This got into my brakes and I before I finally stopped I'd written off my Lysander, a Beautifighter and seriously damaged a spitfire! Luckily, the war had just finished.
 - Right margin below table: My school friend Brian Whitall was in Allahabad and we met at this time.
 - Aug 11: Passenger time: 3.00. (Pilot was self for 2.45)
 - Aug 12: Passenger time: 4.10. (Pilot was self for 1.45)
@@ -63,6 +62,7 @@ None
 None
 
 # HUMAN COMMENTS
+- Reviewed 3/12/2025, notes are correct, but have not addressed below issues.
 - This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
 - TO REVIEWER: The "TOTALS MONTH" for Day Pilot (40.60) has been calculated by summing the relevant "Pilot" time columns on this page. This calculated total does not align with the differences between "Totals Carried Forward" and "Totals Brought Forward" values on the logbook page, which suggests the running totals incorporate data from beyond the entries visible on this page.
 - TO REVIEWER: Passenger times are noted in the "NOTES" section for entries where both pilot and passenger times were recorded, as the template has a single 'Time' column which was prioritized for pilot time.

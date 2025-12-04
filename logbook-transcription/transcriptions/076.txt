@@ -4,10 +4,10 @@
 July 1945
 
 # AIRPORT
-None
+R.A.F. Station DRIGH Road
 
 # SQUADRON
-202 Squadron
+202 SP Ferry Flt RAF
 
 # TOTALS PREVIOUS
 - Day Dual: 0.00
@@ -46,6 +46,8 @@ None
 - Bottom left of page: GRAND TOTAL [Cols (1) to (10)] ........Hrs ........Mins
 
 # HUMAN COMMENTS
+- Reviewed 3/12/2025
+- Basically a filler page, no flight hours, nothing much.
 - This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
 - TO REVIEWER: The numerical entries 0.15, 8.40, and 48.15 are on a line explicitly marked as "SUMMARY FOR July 1945". They are treated as monthly totals for Day Pilot and Passenger categories.
 - TO REVIEWER: The "Aircraft Type", "Pilot", and "2nd Pilot" (here "202 S.P.") values are associated with this summary line and are therefore included in the 'NOTES' section rather than 'LOGBOOK ENTRIES'.

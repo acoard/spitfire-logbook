@@ -4,10 +4,10 @@
 August 1945
 
 # AIRPORT
-None
+R.A.F. Station DRIGH Road
 
 # SQUADRON
-208 Squadron
+202 SP Ferry Flt RAF
 
 # TOTALS PREVIOUS
 - Day Dual: None
@@ -41,6 +41,7 @@ None
 - Bottom right of page: F/Lt. S.K. Haytor. O.C. Ferry Flt. 208 S.P.
 
 # HUMAN COMMENTS
+- Reviewed 3/12/2025
 - This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
 - TO REVIEWER: The 'Pilot' column in the logbook entries table is blank in the original image, but per instructions, it is transcribed as "self" and ditto marks.
 - TO REVIEWER: The 'Time' for the logbook entries is taken from the 'PASSENGER' column (col 11) in the original image, as the pilot columns for multi-engine aircraft (cols 5, 6, 7, 8, 9, 10) are empty for these flights.
