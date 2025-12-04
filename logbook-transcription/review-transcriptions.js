@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { FILES_DIR, OUTPUT_DIR, getFilesToProcess } from "./transcribe.js";
+import { FILES_DIR, OUTPUT_DIR, getFilesToProcess } from "./shared.js";
 
 /**
  * Logbook Transcription Review Script
@@ -18,7 +18,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
  * Reviews a single logbook transcription using Gemini API.
  * @param {string} fileName - The name of the image file (e.g., "063.jpg")
  */
-async function reviewTranscription(fileName) {
+export async function reviewTranscription(fileName) {
   try {
     const imagePath = path.join(FILES_DIR, fileName);
     const txtFileName = fileName.replace(/\.[^/.]+$/, ".txt");

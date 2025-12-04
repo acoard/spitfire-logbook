@@ -18,42 +18,41 @@ Bradwell Bay
 # LOGBOOK ENTRIES
 | Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
 |---|---|---|---|---|---|---|
-| June | 4 | Spitfire IX | O | self | Formation. Escort King & Queen from Gruy to Warmwell & back. To Wallisham | 1.50 |
-| " | 7 | " | W | " | Fighter Affiliation | 3.05 |
-| " | 7 | " | " | " | " | .50 |
-| " | 18 | " | " | " | From Wattisham | 1.00 |
+| June | 4 | Spitfire IX | O | self | Formation | 1.50 |
+| " | 7 | " | W | " | Escort King & Queen from Jersey to Warmwell to Poole | 3.05 |
+| " | " | " | " | " | To Wattisham | .50 |
+| " | " | " | " | " | Fighter Affiliation | .30 |
+| " | " | " | " | " | " | 1.10 |
+| " | " | " | " | " | From Wattisham | 1.00 |
 | " | 18 | " | " | " | " | .30 |
 
 # TOTALS MONTH
 - Day Pilot: 8.55
-- Night Pilot: None
+- Night Pilot: 1.40
 
 # GRAND TOTAL
 593.30
 
 # NOTES
-- Next to June 4th entry in "Remarks" column: A good Honour for- but no all is fine.
-- Under log entries, before "Totals Brought Forward" (June 4th): The Squadron to escort their Majesties to Cowes from out of Goo.
-- Under the above note: And then a WAAF-rom mo from Biggin Hill to ask if I'd be interested in ferrying Spits all over in the Far East. Ferrying for pilots I didn't have to be asked twice.
-- Far right, in Pilot column (13) under "INSTR/CLOUD FLYING": ?
+- Right side of page next to June 4 & 7 entries: A great honour for the Squadron to escort Their Majesties - but we all just about ran out of gas!
+- Right side of page, below previous note: And then a W.A.A.F. from no less Biggin Hill to ask if I'd be interested in ferrying Spitfires in to the Far East. Ferrying Spitfires! I didn't have to be asked twice.
+- Right side of page, below previous note: A couple of weeks leave - a few days in Morecombe (Transit Camp) - and then I was on my way.
+- Bottom left page below log entries: GRAND TOTAL [Cols. (1) to (10)] 593 Hrs. 30 Mins.
+- Bottom left summary for 313 Sqdn 1944-45 (Aircraft Types): Spitfire 216.35, Tiger Moth 1.00, Auster .10
+- Bottom left summary for 313 Sqdn 1944-45 (Operational total): 133.05
 
 # PHOTOS
 None
 
 # OTHER
-- Left side, under "SUMMARY FOR June per 1945": Signature of L. L. Duncan F/L Q.C. B. Flt.
-- Left side, under "SUMMARY FOR 313 Sqdn 1944-45":
-    - TYPES: Spitfire (Day 216.35, Night 1.00), Tiger Moth (Day 1.00), Auster (Day .10)
-    - OPERATIONAL: 133.05
+- Middle left page: F.A. Louchard F/Lt O.C. B. Flight.
+- Middle right page, below F.A. Louchard: S/LDR O.C. 313 Sqdn.
+- Bottom left, Summary for June (part) 1945: Signature R.A. Glen, Date 19.6.45
+- Bottom left, Summary for 313 Sqdn 1944-45: Signature R.A. Glen, Date 19.6.45
 
 # HUMAN COMMENTS
+- Reviewed 3/12/2025
+- Escorted King and queen, make sure to include that!
 - This document has not been reviewed by a human yet. Update this section after reviewing the transcription.
-- TO REVIEWER: The time format for the grand total was "593 .... Hrs. 30 .... Mins.", which has been transcribed as "593.30" following the instruction to assume dashes are periods and not convert 7-30 to 7.5.
-- TO REVIEWER: The "Duty" for June 4th combines "Formation" with its description, as the description details the flight's purpose.
-- TO REVIEWER: Several notes were extracted from the "Remarks" column and areas below the log entries.
-- TO REVIEWER: The Duty description for the June 4th entry has a transcription error: "Wallisham" should be "Wattisham".
-- TO REVIEWER: The "No." column for the June 18th entries (both flights) is blank in the logbook image, but the transcription implies "W" by using a ditto mark. This is a substantive inaccuracy.
-- TO REVIEWER: In the note "Under log entries, before 'Totals Brought Forward'", the transcription states "The Squadron to escort their Majesties...". The handwritten text appears to be "the Squadron to escort Her Majesties...", so "Her" was transcribed as "their". While "their" makes contextual sense with King & Queen, it is not what is visually written.
-- TO REVIEWER: In the "OTHER" section, under "SUMMARY FOR June per 1945", the line "S/LDR Q.C. 313 Sqdn" (below the signature) is missing.
-- TO REVIEWER: In the "OTHER" section, under "SUMMARY FOR 313 Sqdn 1944-45", the specific UNIT ("313 Sqdn") and DATE ("19. 6. 45") entries are missing.
-- TO REVIEWER: In the "OTHER" section, under "SUMMARY FOR 313 Sqdn 1944-45", the additional signature/initials "Q.C. B. Flt." below the date is missing.
+- TO REVIEWER: The time "1-40" for Night Pilot in "TOTALS MONTH" is taken from the summary block for June, in the "Night" column next to the Day total of "8-55".
+- TO REVIEWER: The "TOTALS PREVIOUS" section only includes the "Day Pilot" value as it was the only explicit "Totals Brought Forward" entry for a specific flight type (single engine aircraft) in the main log table. Other categories were not present.

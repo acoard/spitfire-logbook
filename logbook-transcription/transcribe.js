@@ -2,6 +2,8 @@ import { GoogleGenAI } from "@google/genai";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { FILES_DIR, OUTPUT_DIR, getFilesToProcess } from "./shared.js";
+import { reviewTranscription } from "./review-transcriptions.js";
 
 /**
  * Logbook Transcription Script
@@ -23,8 +25,6 @@ import { fileURLToPath } from "node:url";
  */
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-export const FILES_DIR = path.join("logbook-transcription", "files");
-export const OUTPUT_DIR = path.join("logbook-transcription", "transcriptions");
 
 /**
  * Transcribes a single logbook image file using Gemini API.
@@ -128,47 +128,6 @@ COMMON TRANSCRIPTION ERRORS:
   }
 }
 
-/**
- * Filters the list of files based on command line arguments.
- * @param {string[]} allFiles - List of all available files.
- * @param {string[]} args - Command line arguments.
- * @returns {string[]} List of files to process.
- */
-export function getFilesToProcess(allFiles, args) {
-  if (args.length === 0) {
-    return allFiles;
-  }
-
-  const arg = args[0];
-
-  if (arg.includes('..')) {
-    // Handle range: 63..66
-    const [start, end] = arg.split('..').map(Number);
-    
-    if (!isNaN(start) && !isNaN(end)) {
-      return allFiles.filter(file => {
-        const match = file.match(/^(\d+)/);
-        if (match) {
-          const num = parseInt(match[1], 10);
-          return num >= start && num <= end;
-        }
-        return false;
-      });
-    }
-  } else {
-    // Handle single file: 63
-    const num = parseInt(arg, 10);
-    if (!isNaN(num)) {
-      return allFiles.filter(file => {
-        const match = file.match(/^(\d+)/);
-        return match && parseInt(match[1], 10) === num;
-      });
-    }
-  }
-  
-  return [];
-}
-
 async function run() {
   const args = process.argv.slice(2);
   
@@ -202,6 +161,10 @@ async function run() {
         
         await fs.writeFile(outputPath, transcription);
         console.log(`Saved transcription to ${outputPath}`);
+
+        // Run review immediately after transcription
+        console.log(`Running review for ${fileName}...`);
+        await reviewTranscription(fileName);
       }
     }
 
