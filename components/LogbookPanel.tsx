@@ -9,6 +9,8 @@ interface LogbookPanelProps {
   filterPhase: Phase | 'ALL';
   setFilterPhase: (phase: Phase | 'ALL') => void;
   onOpenProfile: () => void;
+  showSignificantOnly: boolean;
+  setShowSignificantOnly: (show: boolean) => void;
 }
 
 const LogbookPanel: React.FC<LogbookPanelProps> = ({
@@ -17,11 +19,12 @@ const LogbookPanel: React.FC<LogbookPanelProps> = ({
   onSelect,
   filterPhase,
   setFilterPhase,
-  onOpenProfile
+  onOpenProfile,
+  showSignificantOnly,
+  setShowSignificantOnly
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const selectedRef = useRef<HTMLTableRowElement>(null);
-  const [showSignificantOnly, setShowSignificantOnly] = useState(false);
 
   // Auto-scroll to selected item
   useEffect(() => {
@@ -29,11 +32,6 @@ const LogbookPanel: React.FC<LogbookPanelProps> = ({
       selectedRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [selectedId]);
-
-  // Apply "Significant Only" filter locally if checked
-  const displayEntries = showSignificantOnly 
-    ? entries.filter(e => e.isSignificant || e.historicalNote)
-    : entries;
 
   return (
     <div className="flex flex-col h-full bg-[#f4f1ea] border-r-4 border-stone-800 shadow-2xl z-10 font-old-print relative">
@@ -113,14 +111,14 @@ const LogbookPanel: React.FC<LogbookPanelProps> = ({
                 </tr>
             </thead>
             <tbody className="divide-y divide-stone-400/50">
-                {displayEntries.length === 0 ? (
+                {entries.length === 0 ? (
                     <tr>
                         <td colSpan={4} className="p-8 text-center font-handwriting text-xl text-stone-500">
                             {showSignificantOnly ? "No significant events in this phase." : "No entries recorded for this period."}
                         </td>
                     </tr>
                 ) : (
-                    displayEntries.map((entry) => {
+                    entries.map((entry) => {
                     const isSelected = selectedId === entry.id;
                     const isDDay = entry.date === '1944-06-06';
                     const hasNote = !!entry.historicalNote;

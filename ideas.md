@@ -1,0 +1,3 @@
+- Add videos, embed youtube. Sort of like an interactive museum exhibit.
+  - https://www.youtube.com/watch?v=442cfr9TP6k < Movie clip of Spitfire pilots strafing germans on D-Day, b&w
+  - https://www.youtube.com/watch?v=FJCGxmfsgEo < review but looks potentially good

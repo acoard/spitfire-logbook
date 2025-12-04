@@ -84,6 +84,8 @@ interface WorkspaceLayoutProps {
   onMarkerSelect: (entry: LogEntry) => void;
   shouldCenterMap: boolean;
   onOpenProfile: () => void;
+  showSignificantOnly: boolean;
+  setShowSignificantOnly: (show: boolean) => void;
 }
 
 const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
@@ -95,7 +97,9 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
   onLogbookSelect,
   onMarkerSelect,
   shouldCenterMap,
-  onOpenProfile
+  onOpenProfile,
+  showSignificantOnly,
+  setShowSignificantOnly
 }) => {
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const [sidePanelWidth, setSidePanelWidth] = useState(layoutPresets.balanced.side ?? 0);
@@ -299,6 +303,8 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
             filterPhase={filterPhase}
             setFilterPhase={setFilterPhase}
             onOpenProfile={onOpenProfile}
+            showSignificantOnly={showSignificantOnly}
+            setShowSignificantOnly={setShowSignificantOnly}
           />
         </div>
 
@@ -430,6 +436,8 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
               filterPhase={filterPhase}
               setFilterPhase={setFilterPhase}
               onOpenProfile={onOpenProfile}
+              showSignificantOnly={showSignificantOnly}
+              setShowSignificantOnly={setShowSignificantOnly}
             />
           </div>
         </div>
