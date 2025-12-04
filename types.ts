@@ -36,6 +36,8 @@ export interface LogEntry {
   remarks: string;
   origin: Coordinate;
   destination?: Coordinate; // Optional, some flights are local/patrols
+  target?: Coordinate; // Optional, for mission objectives distinct from destination
+  targetIsApproximate?: boolean; // Flag if target location is estimated
   isSignificant: boolean; // For special highlighting
   historicalNote?: string; // Enhanced static historical context
   missionBrief?: MissionBrief;

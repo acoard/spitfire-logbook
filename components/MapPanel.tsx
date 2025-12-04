@@ -94,21 +94,28 @@ const MapPanel: React.FC<MapPanelProps> = ({ entries, selectedEntry, onMarkerSel
 
         {/* Render Routes (Polylines) first so markers sit on top */}
         {validEntries.map((entry) => {
-             // Only draw line if there is a distinct destination and coordinates are valid
-             if (
-                entry.destination && 
-                isValidCoord(entry.destination.lat) && 
-                isValidCoord(entry.destination.lng) &&
-                (entry.origin.lat !== entry.destination.lat || entry.origin.lng !== entry.destination.lng)
-             ) {
-                const isActive = selectedEntry?.id === entry.id;
+             const isActive = selectedEntry?.id === entry.id;
+             const pathPoints: [number, number][] = [[entry.origin.lat, entry.origin.lng]];
+             
+             // Add target point if it exists
+             if (entry.target && isValidCoord(entry.target.lat) && isValidCoord(entry.target.lng)) {
+                 pathPoints.push([entry.target.lat, entry.target.lng]);
+             }
+
+             // Add destination point if it exists and differs from last point
+             if (entry.destination && isValidCoord(entry.destination.lat) && isValidCoord(entry.destination.lng)) {
+                 const lastPoint = pathPoints[pathPoints.length - 1];
+                 if (lastPoint[0] !== entry.destination.lat || lastPoint[1] !== entry.destination.lng) {
+                     pathPoints.push([entry.destination.lat, entry.destination.lng]);
+                 }
+             }
+
+             // Only draw if we have more than 1 point (i.e. a line)
+             if (pathPoints.length > 1) {
                 return (
                     <Polyline 
                         key={`line-${entry.id}`}
-                        positions={[
-                            [entry.origin.lat, entry.origin.lng],
-                            [entry.destination.lat, entry.destination.lng]
-                        ]}
+                        positions={pathPoints}
                         pathOptions={{ 
                             color: getColor(entry.aircraftCategory),
                             weight: isActive ? 4 : 2,
@@ -124,32 +131,60 @@ const MapPanel: React.FC<MapPanelProps> = ({ entries, selectedEntry, onMarkerSel
         {/* Render Markers */}
         {validEntries.map((entry) => {
           return (
-            <Marker
-              key={`marker-${entry.id}`}
-              position={[entry.origin.lat, entry.origin.lng]}
-              icon={createIcon(getColor(entry.aircraftCategory))}
-              opacity={selectedEntry?.id === entry.id || selectedEntry === null ? 1 : 0.6}
-              zIndexOffset={selectedEntry?.id === entry.id ? 1000 : 0}
-              eventHandlers={{
-                  click: () => {
-                      onMarkerSelect(entry);
-                  }
-              }}
-            >
-              <Popup className="font-serif">
-                <div className="p-1 min-w-[150px]">
-                  <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">{entry.origin.name}</h3>
-                  <div className="text-xs text-stone-600 space-y-1">
-                    <p><span className="font-semibold">Date:</span> {entry.date}</p>
-                    <p><span className="font-semibold">Aircraft:</span> {entry.aircraftType}</p>
-                    <p><span className="font-semibold">Duty:</span> {entry.duty}</p>
-                    {entry.isSignificant && (
-                         <p className="text-red-700 font-bold mt-1 bg-red-50 p-1 border border-red-100 text-center uppercase text-[10px]">High Priority Event</p>
-                    )}
-                  </div>
-                </div>
-              </Popup>
-            </Marker>
+            <React.Fragment key={`group-${entry.id}`}>
+                {/* Origin Marker */}
+                <Marker
+                  key={`marker-${entry.id}`}
+                  position={[entry.origin.lat, entry.origin.lng]}
+                  icon={createIcon(getColor(entry.aircraftCategory))}
+                  opacity={selectedEntry?.id === entry.id || selectedEntry === null ? 1 : 0.6}
+                  zIndexOffset={selectedEntry?.id === entry.id ? 1000 : 0}
+                  eventHandlers={{
+                      click: () => {
+                          onMarkerSelect(entry);
+                      }
+                  }}
+                >
+                  <Popup className="font-serif">
+                    <div className="p-1 min-w-[150px]">
+                      <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">{entry.origin.name}</h3>
+                      <div className="text-xs text-stone-600 space-y-1">
+                        <p><span className="font-semibold">Date:</span> {entry.date}</p>
+                        <p><span className="font-semibold">Aircraft:</span> {entry.aircraftType}</p>
+                        <p><span className="font-semibold">Duty:</span> {entry.duty}</p>
+                        {entry.isSignificant && (
+                             <p className="text-red-700 font-bold mt-1 bg-red-50 p-1 border border-red-100 text-center uppercase text-[10px]">High Priority Event</p>
+                        )}
+                      </div>
+                    </div>
+                  </Popup>
+                </Marker>
+
+                {/* Target Marker (only for selected entry or significant ones to avoid clutter?) 
+                    Decided: Show for all valid targets to visualize the missions. */}
+                {entry.target && isValidCoord(entry.target.lat) && isValidCoord(entry.target.lng) && (
+                    <Marker
+                        key={`target-${entry.id}`}
+                        position={[entry.target.lat, entry.target.lng]}
+                        // Use a distinct color (black/dark grey) for targets
+                        icon={createIcon('#1c1917')} 
+                        opacity={selectedEntry?.id === entry.id ? 1 : 0.5}
+                        zIndexOffset={selectedEntry?.id === entry.id ? 1000 : 0}
+                        eventHandlers={{
+                            click: () => { onMarkerSelect(entry); }
+                        }}
+                    >
+                        <Popup className="font-serif">
+                            <div className="p-1">
+                                <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">
+                                    {entry.target.name} {entry.targetIsApproximate && "(Approx)"}
+                                </h3>
+                                <p className="text-xs font-semibold text-red-800">Mission Target</p>
+                            </div>
+                        </Popup>
+                    </Marker>
+                )}
+            </React.Fragment>
           );
         })}
         
