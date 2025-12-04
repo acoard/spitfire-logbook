@@ -180,7 +180,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         aircraftCategory: AircraftCategory.FIGHTER,
         duty: 'Convoy PATROL',
         time: '2:00',
-        remarks: 'Convoy Patrol. Night flying component.',
+        remarks: "Robin's first ever mission with his wings",
+        historicalNote: 'This "Convoy" was in Part-the Invasion Fleet.',
         origin: LOCATIONS.APPLEDRAM,
         destination: LOCATIONS.APPLEDRAM,
         isSignificant: false
