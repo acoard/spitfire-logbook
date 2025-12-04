@@ -41,4 +41,6 @@ export interface LogEntry {
   isSignificant: boolean; // For special highlighting
   historicalNote?: string; // Enhanced static historical context
   missionBrief?: MissionBrief;
+  sourceDocument?: string; // Filename of the original logbook page (e.g. "062.jpg")
+  pilotNotes?: string; // Full transcribed text from the pilot's notes
 }

@@ -141,7 +141,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         remarks: 'Local area orientation.',
         origin: LOCATIONS.KIRTON,
         destination: LOCATIONS.KIRTON,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '058.jpg'
     },
     {
         id: '2',
@@ -154,7 +155,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         remarks: 'Formation practice at altitude.',
         origin: LOCATIONS.ASTON_DOWN,
         destination: LOCATIONS.ASTON_DOWN,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '059.jpg'
     },
     {
         id: '3',
@@ -167,7 +169,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         remarks: 'Navigation exercise.',
         origin: LOCATIONS.ASTON_DOWN,
         destination: LOCATIONS.KIRTON,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '060.jpg'
     },
 
     // Phase 2: Combat (313 Squadron) - Reconstructed from Logbooks 062-074
@@ -184,7 +187,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         historicalNote: 'This "Convoy" was in Part-the Invasion Fleet.',
         origin: LOCATIONS.APPLEDRAM,
         destination: LOCATIONS.APPLEDRAM,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '062.jpg',
+        pilotNotes: 'This "Convoy" was in Part-the Invasion Fleet.'
     },
     {
         id: 'c-062-2',
@@ -199,7 +204,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.NORMANDY_BEACH,
         destination: LOCATIONS.APPLEDRAM,
         isSignificant: true,
-        historicalNote: "Day before D-Day. '30 mths elapsed from the time I got my pilots wings... what could be a more dramatic way of starting on ops than to fly daily over the tiny beach head'"
+        historicalNote: "Day before D-Day. '30 mths elapsed from the time I got my pilots wings... what could be a more dramatic way of starting on ops than to fly daily over the tiny beach head'",
+        sourceDocument: '062.jpg',
+        pilotNotes: '30 mths elapsed from the time I got my pilots "wings" to getting to a squadron - and what could be a more dramatic way of starting on ops\' than to fly daily over the tiny beach head where the Allies struggled to get ashore and open up the second front.'
     },
     {
         id: 'c-062-3',
@@ -215,6 +222,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         destination: LOCATIONS.APPLEDRAM,
         isSignificant: true,
         historicalNote: "D-Day: Operation Overlord. 313 Squadron provided air cover. 'We were told... the outcome of the war required the armies to get safely ashore at all costs'",
+        sourceDocument: '062.jpg',
+        pilotNotes: 'Normandy provided the Beach Head for the invasion on D Day.\n\nAt our very detailed and comprehensive "briefing" on the morning before the invasion - we were told that the outcome of the war required the armies to get safely ashore at all costs - and (as far as the 2nd Tactical Air Force was concerned) there were enough pilots and aircraft - in close reserve for all squadrons to suffer 90% casualties on the first day - and they\'d be fully up to strength and operational pilots and planes on Day 2.',
         missionBrief: {
             slides: [
                 {
@@ -240,7 +249,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.APPLEDRAM,
         target: LOCATIONS.NORMANDY_BEACH,
         destination: LOCATIONS.APPLEDRAM,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '062.jpg'
     },
     {
         id: 'c-062-5',
@@ -256,7 +266,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         targetIsApproximate: true,
         destination: LOCATIONS.APPLEDRAM,
         isSignificant: true,
-        historicalNote: "'Noball' mission attacking V-1 'Doodle bug' sites. Spitfire Mk IX carried 500lb bombs for these precision attacks."
+        historicalNote: "'Noball' mission attacking V-1 'Doodle bug' sites. Spitfire Mk IX carried 500lb bombs for these precision attacks.",
+        sourceDocument: '062.jpg',
+        pilotNotes: 'Attack on V.1 Rocket launching site - with 500 lb bomb. (Spitfire Mk IX was capable of carrying a 1000 lb bomb)\n\n* Also known as "Doodle bug"'
     },
     // Move to Tangmere / Ops continue
     {
@@ -271,7 +283,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.TANGMERE,
         target: LOCATIONS.NORMANDY_BEACH,
         destination: LOCATIONS.TANGMERE,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '063.jpg'
     },
     {
         id: 'c-063-2',
@@ -287,6 +300,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         destination: LOCATIONS.TANGMERE,
         isSignificant: true,
         historicalNote: "Close call with Anti-Aircraft fire. 'The first of 2 nights just behind the Front Line - under shellfire... Got shot up'.",
+        sourceDocument: '063.jpg',
+        pilotNotes: 'The first of 2 nights just behind the Front Line - under self/fire.\n\nGot shot up - my plane\'s tailplane sustaining Ack Ack damage.',
         missionBrief: {
             slides: [
                 {
@@ -313,6 +328,7 @@ export const FLIGHT_LOG: LogEntry[] = [
         destination: LOCATIONS.B10_PLUMETOT,
         isSignificant: true,
         historicalNote: "Moved to B.10 Plumetot, just behind the front line. Living under shellfire.",
+        sourceDocument: '063.jpg',
         missionBrief: {
             slides: [
                 {
@@ -335,7 +351,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.CAEN, // Front line area
         targetIsApproximate: true,
         destination: LOCATIONS.B10_PLUMETOT,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '063.jpg'
     },
     {
         id: 'c-063-5',
@@ -349,7 +366,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.B10_PLUMETOT,
         destination: LOCATIONS.LYMPNE,
         isSignificant: true,
-        historicalNote: "Returning from the forward operating base."
+        historicalNote: "Returning from the forward operating base.",
+        sourceDocument: '063.jpg',
+        pilotNotes: 'Back to B.10./ALG. - it was after we landed back from France - that we had some P.R. photographs taken of our plane around the C.O.\'s plane. (See Photos in "Memoribilia Album")'
     },
     // July 1944 - Base: LYMPNE
     {
@@ -365,7 +384,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.CAEN,
         destination: LOCATIONS.LYMPNE,
         isSignificant: true,
-        historicalNote: "Supporting massive daylight raids on Caen. 'The pattern bombing was devastating. So was the ack ack.'"
+        historicalNote: "Supporting massive daylight raids on Caen. 'The pattern bombing was devastating. So was the ack ack.'",
+        sourceDocument: '064.jpg',
+        pilotNotes: 'The V.1 A.A.F (German show) 700-800 per hour daylight-raids on Caen. The pattern bombing was devastating. So was the ack ack.'
     },
     {
         id: 'c-064-2',
@@ -381,7 +402,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         targetIsApproximate: true,
         destination: LOCATIONS.LYMPNE,
         isSignificant: true,
-        historicalNote: "'We flew into occupied France at about 15,000ft and flew low level sweep... I wiped out the crew of an A.A. post scrambling to train their guns on the landing planes.'"
+        historicalNote: "'We flew into occupied France at about 15,000ft and flew low level sweep... I wiped out the crew of an A.A. post scrambling to train their guns on the landing planes.'",
+        sourceDocument: '064.jpg',
+        pilotNotes: 'Just one flight (low level sweep in N. France) We flew well into occupied France at about 15.000ft and flew low level sweep in open formation. At one point we swept across a airfield and I wiped out the crew of an A.A. port scrambling to train landing planes.'
     },
     // August - September 1944: SKEABRAE (Orkneys) - mostly patrols
     {
@@ -395,7 +418,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         remarks: 'Training/Patrol with flying boats.',
         origin: LOCATIONS.SKEABRAE,
         destination: LOCATIONS.SKEABRAE,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '065.jpg'
     },
      // October 1944 - Moves to NORTH WEALD
     {
@@ -410,7 +434,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.NORTH_WEALD,
         target: LOCATIONS.DUISBURG,
         destination: LOCATIONS.NORTH_WEALD,
-        isSignificant: true
+        isSignificant: true,
+        sourceDocument: '067.jpg',
+        pilotNotes: 'At this time the Squadron had moved from the Orkneys to R.A.F. Station North Weald - north east of London.\n\nWhen the squadron left the Orkneys for N. Weald one Spitfire was u/s - and I was left behind to follow on in the Auster. The C.O. at Skeabrea and our Squadron were at Lossiemouth - and I recall the particular sight as our Squadron took off & circled for the last time. 10 tons of twisted metal tissues - the R.A.F\'s best "dump" came fluttering down - Two or three days later I flew the long way from the South of Britain to rejoin the Squadron - I can\'t think we had not recorded operations here - since it was not operational. Some pilots did not record operational flights - so that they could stay longer in the Squadron!\n\nWith vivid recollections of embarkation & a drive back, at Huthra when going to coming back from Bardufoss - I knew the Target area more often. And I recall the C/O\'s voice on R/T. clear & loud that was a prior experience was particularly spectacular.'
     },
     {
         id: 'c-067-2',
@@ -424,7 +450,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.NORTH_WEALD,
         target: LOCATIONS.FLUSHING,
         destination: LOCATIONS.NORTH_WEALD,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '067.jpg'
     },
     // November 1944 - Heavy Bomber Escorts
     {
@@ -439,7 +466,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.NORTH_WEALD,
         target: LOCATIONS.HOMBERG,
         destination: LOCATIONS.NORTH_WEALD,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '068.jpg',
+        pilotNotes: 'North Weald - a peacetime airfield (Regular RAF Station) was just a low, decent underground (Tube) journey from The flat at 27, Upper Addiso Gdns - off Holland Pk Road. It was here I got my Commission. The Airn Ack Ack. Recruiting officer was a strikingly attractive blonde - I remember, too well. North Weald was definitely my favourite RAF Station.'
     },
     {
         id: 'c-068-2',
@@ -453,7 +482,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.NORTH_WEALD,
         target: LOCATIONS.MUNSTER,
         destination: LOCATIONS.NORTH_WEALD,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '068.jpg'
     },
     {
         id: 'c-068-3',
@@ -467,7 +497,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.NORTH_WEALD,
         target: LOCATIONS.HAMBURG,
         destination: LOCATIONS.MANSTON, // Diverted? "To Manston" usually implies landing there
-        isSignificant: true
+        isSignificant: true,
+        sourceDocument: '068.jpg'
     },
     {
         id: 'c-068-4',
@@ -481,7 +512,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.NORTH_WEALD, // Inferred start
         destination: LOCATIONS.MANSTON,
         isSignificant: true,
-        historicalNote: "1000 Bomber Raid. 'Gloomy but a clear day... What devastation.' 'Even the clouds were red – and fires were raging underneath'."
+        historicalNote: "1000 Bomber Raid. 'Gloomy but a clear day... What devastation.' 'Even the clouds were red – and fires were raging underneath'.",
+        sourceDocument: '068.jpg',
+        pilotNotes: 'Gloomy but a clear day was a 1000 Bomber Raid. What devastation.\n\nThese Bomber Escort trips took place in all weather. This day was cloudless the covering flights had a fantastic view of power bombing by ± 1000 bombers But sometimes we never saw the target – God knew where it was by the ack ack aimed at the bombers. I need a comment in a fellow pilot\'s log book. Even the clouds were red – and fires were raging underneath.....'
     },
     {
         id: 'c-068-5',
@@ -495,7 +528,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.BRADWELL_BAY,
         target: LOCATIONS.BOTTROP,
         destination: LOCATIONS.BRADWELL_BAY,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '068.jpg'
     },
     // March 1945 - Base: BRADWELL BAY
     {
@@ -510,7 +544,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.BRADWELL_BAY,
         target: LOCATIONS.KAMEN,
         destination: LOCATIONS.BRADWELL_BAY,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '071.jpg'
     },
     {
         id: 'c-071-2',
@@ -524,7 +559,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.BRADWELL_BAY,
         target: LOCATIONS.COLOGNE,
         destination: LOCATIONS.BRADWELL_BAY,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '071.jpg'
     },
     {
         id: 'c-071-3',
@@ -538,7 +574,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.BRADWELL_BAY,
         target: LOCATIONS.GELSENKIRCHEN,
         destination: LOCATIONS.BRADWELL_BAY,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '071.jpg'
     },
     {
         id: 'c-071-4',
@@ -552,7 +589,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.MANSTON,
         target: LOCATIONS.OSNABRUCK,
         destination: LOCATIONS.MANSTON,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '071.jpg'
     },
     // April 1945
     {
@@ -568,7 +606,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.HELIGOLAND,
         destination: LOCATIONS.PETIT_BROGEL,
         isSignificant: true,
-        historicalNote: "Attack on Heligoland fortress."
+        historicalNote: "Attack on Heligoland fortress.",
+        sourceDocument: '072.jpg',
+        pilotNotes: 'With the war in Europe obviously about to end I volunteered for the Far East. Incredibly my application was turned down as I had not given any reason. I then wrote that while there were many tens of thousand British and allied prisoners of war still in Japanese hands I would consider it a disgrace to stay in England.'
     },
     {
         id: 'c-072-2',
@@ -583,7 +623,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.HELIGOLAND,
         destination: LOCATIONS.PETIT_BROGEL,
         isSignificant: true,
-        historicalNote: "'What a spectacle! Heligoland is a tiny island Fortress in North Sea - and to see it receive everything Bomber Command could dump on it.'"
+        historicalNote: "'What a spectacle! Heligoland is a tiny island Fortress in North Sea - and to see it receive everything Bomber Command could dump on it.'",
+        sourceDocument: '072.jpg',
+        pilotNotes: 'What a spectacle! Heligoland is a tiny island Fortress in North Sea - and to see it receive everything Bomber Command could dump on it.'
     },
     // June 1945 - Victory & Escort
     {
@@ -599,7 +641,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.WARMWELL,
         destination: LOCATIONS.POOLE,
         isSignificant: true,
-        historicalNote: "Royal Escort. 'A great honour for the Squadron to escort Their Majesties - but we all just about ran out of gas!'"
+        historicalNote: "Royal Escort. 'A great honour for the Squadron to escort Their Majesties - but we all just about ran out of gas!'",
+        sourceDocument: '074.jpg',
+        pilotNotes: 'A great honour for the Squadron to escort Their Majesties - but we all just about ran out of gas!\n\nAnd then a W.A.A.F. from no less Biggin Hill to ask if I\'d be interested in ferrying Spitfires in to the Far East. Ferrying Spitfires! I didn\'t have to be asked twice.\n\nA couple of weeks leave - a few days in Morecombe (Transit Camp) - and then I was on my way.'
     },
 
     // Phase 3: Post-War Ferry (SEAC)
@@ -615,7 +659,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.KARACHI,
         destination: LOCATIONS.JODHPUR,
         isSignificant: true,
-        historicalNote: "Beginning a long series of ferry flights across the Indian subcontinent."
+        historicalNote: "Beginning a long series of ferry flights across the Indian subcontinent.",
+        sourceDocument: '080.jpg',
+        pilotNotes: 'Visited with Frank again.\n\nThe special free mess for Army Command air crew in Calcutta (Park St) - just off Chowringhee - was only 2 blocks from Frank\'s apartment.'
     },
     {
         id: 'f-080-2',
@@ -628,7 +674,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         remarks: 'Visited with Frank.',
         origin: LOCATIONS.ALLAHABAD,
         destination: LOCATIONS.CALCUTTA,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '080.jpg'
     },
     {
         id: 'f-080-3',
@@ -641,7 +688,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         remarks: 'Moving east into Burma.',
         origin: LOCATIONS.CALCUTTA,
         destination: LOCATIONS.AKYAB,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '080.jpg'
     },
     {
         id: 'f-080-4',
@@ -655,7 +703,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.RANGOON,
         destination: LOCATIONS.BANGKOK,
         isSignificant: true,
-        historicalNote: "Delivering Spitfires as far east as Bangkok."
+        historicalNote: "Delivering Spitfires as far east as Bangkok.",
+        sourceDocument: '080.jpg'
     },
     {
         id: 'f-080-5',
@@ -668,7 +717,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         remarks: 'Another delivery run.',
         origin: LOCATIONS.KARACHI,
         destination: LOCATIONS.JODHPUR,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '080.jpg'
     },
     {
         id: 'f-080-6',
@@ -682,7 +732,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.LAHORE,
         destination: LOCATIONS.KOHAT,
         isSignificant: true,
-        historicalNote: "Kohat is about 50 miles from the Khyber Pass on the North West Frontier."
+        historicalNote: "Kohat is about 50 miles from the Khyber Pass on the North West Frontier.",
+        sourceDocument: '080.jpg',
+        pilotNotes: 'Kohat + about 50 miles from the Khyber Pass.\n\nBy now Frank was getting used to flying his nephew!'
     },
     {
         id: 'f-082-1',
@@ -695,7 +747,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         remarks: 'Karachi -> Jodhpur -> Nagpur.',
         origin: LOCATIONS.KARACHI,
         destination: LOCATIONS.NAGPUR,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '082.jpg',
+        pilotNotes: 'Bris. Willcock was stationed at Nagpur'
     },
     {
         id: 'f-082-2',
@@ -708,7 +762,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         remarks: 'Nagpur -> Hakimpet -> Yellahanka.',
         origin: LOCATIONS.NAGPUR,
         destination: LOCATIONS.YELLAHANKA,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '082.jpg'
     },
     {
         id: 'f-082-3',
@@ -721,7 +776,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         remarks: 'Ferry flight.',
         origin: LOCATIONS.KARACHI,
         destination: LOCATIONS.BARODA,
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '082.jpg'
     },
     {
         id: 'f-083-1',
@@ -735,7 +791,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.KARACHI,
         destination: LOCATIONS.RANCHI,
         isSignificant: true,
-        historicalNote: "Delivering a Spitfire to Ranchi. 'Stayed on with F.P.O. at Ranchi for 10 Days. What a life.'"
+        historicalNote: "Delivering a Spitfire to Ranchi. 'Stayed on with F.P.O. at Ranchi for 10 Days. What a life.'",
+        sourceDocument: '083.jpg',
+        pilotNotes: 'Had to deliver a Spitfire to Ranchi - of all places + so stayed on with F.P.O. at Ranchi for 10 Days. What a life.\n\nAfter F/Lt Pederson (a ferry pilot) married in Allahabad Dennis Yeardly flew me to Ranch this time (another [illegible]) - and it was my pleasure to show him Mera[?] - and stay on with Frank for another week! Said goodbye to Frank. This was my last visit - as my "demob" ticket was coming up. Travelled to Bombay by train and back home by sea - on the M.V. "Durham Castle" - after over 6 years in RAF. DC ferry flight -'
     },
     {
         id: 'f-083-2',
@@ -748,6 +806,7 @@ export const FLIGHT_LOG: LogEntry[] = [
         remarks: 'Final ferry flights.',
         origin: LOCATIONS.KARACHI,
         destination: LOCATIONS.JODHPUR, // Intermediate
-        isSignificant: false
+        isSignificant: false,
+        sourceDocument: '083.jpg'
     }
 ];

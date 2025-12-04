@@ -2,14 +2,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { LogEntry } from '../types';
 import { AIRCRAFT_SPECS } from '../services/flightData';
-import { FolderOpen, Plane, FileText, ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from 'lucide-react';
+import { FolderOpen, Plane, FileText, ChevronLeft, ChevronRight, BookOpen, Maximize2 } from 'lucide-react';
 import ImageModal from './ImageModal';
 import StickyNote from './StickyNote';
 
 interface ContextPanelProps {
   selectedEntry: LogEntry | null;
 }
-type Tab = 'MISSION' | 'AIRCRAFT';
+type Tab = 'MISSION' | 'AIRCRAFT' | 'LOGBOOK';
 
 const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
   const [activeTab, setActiveTab] = useState<Tab>('MISSION');
@@ -59,6 +59,11 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
     setGalleryIndex((prev) => (prev + 1) % galleryLength);
   };
 
+  // Base path for logbook images (served via vite-plugin-static-copy)
+  const logbookImageSrc = selectedEntry.sourceDocument 
+    ? `/logbook-images/${selectedEntry.sourceDocument}` 
+    : null;
+
   return (
     <div className={`
         bg-[#f4f1ea] border-t-4 border-stone-800 p-0 flex flex-col shadow-inner relative z-20 overflow-hidden h-full
@@ -71,17 +76,26 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
         <div className="bg-stone-200 border-b border-stone-300 flex relative z-10">
              <button 
                 onClick={() => setActiveTab('MISSION')}
-                className={`flex-1 py-2 px-4 flex items-center justify-center gap-2 text-xs font-typewriter uppercase tracking-wider transition-colors border-r border-stone-300
+                className={`flex-1 py-2 px-2 flex items-center justify-center gap-1.5 text-[10px] md:text-xs font-typewriter uppercase tracking-wider transition-colors border-r border-stone-300
                     ${activeTab === 'MISSION' ? 'bg-[#f4f1ea] text-stone-900 font-bold shadow-[0_2px_0_#f4f1ea]' : 'bg-stone-300 text-stone-500 hover:bg-stone-200'}`}
              >
-                <FileText className="w-3 h-3" /> Mission Brief
+                <FileText className="w-3 h-3" /> Mission
+             </button>
+             <button 
+                onClick={() => setActiveTab('LOGBOOK')}
+                disabled={!logbookImageSrc}
+                className={`flex-1 py-2 px-2 flex items-center justify-center gap-1.5 text-[10px] md:text-xs font-typewriter uppercase tracking-wider transition-colors border-r border-stone-300
+                    ${activeTab === 'LOGBOOK' ? 'bg-[#f4f1ea] text-stone-900 font-bold shadow-[0_2px_0_#f4f1ea]' : 'bg-stone-300 text-stone-500 hover:bg-stone-200'}
+                    ${!logbookImageSrc ? 'opacity-50 cursor-not-allowed' : ''}`}
+             >
+                <BookOpen className="w-3 h-3" /> Logbook
              </button>
              <button 
                 onClick={() => setActiveTab('AIRCRAFT')}
-                className={`flex-1 py-2 px-4 flex items-center justify-center gap-2 text-xs font-typewriter uppercase tracking-wider transition-colors
+                className={`flex-1 py-2 px-2 flex items-center justify-center gap-1.5 text-[10px] md:text-xs font-typewriter uppercase tracking-wider transition-colors
                     ${activeTab === 'AIRCRAFT' ? 'bg-[#f4f1ea] text-stone-900 font-bold shadow-[0_2px_0_#f4f1ea]' : 'bg-stone-300 text-stone-500 hover:bg-stone-200'}`}
              >
-                <Plane className="w-3 h-3" /> Aircraft Intel
+                <Plane className="w-3 h-3" /> Aircraft
              </button>
         </div>
 
@@ -95,63 +109,51 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
 
              {/* Content Switching */}
              {activeTab === 'MISSION' && (
-                 <div className="mt-2 font-old-print text-stone-800 leading-relaxed text-sm animate-in fade-in duration-300 space-y-4">
-                    {/* Historical Note */}
-                    {selectedEntry.historicalNote ? (
-                        <div className="relative my-4 mx-1">
-                            <div className="bg-[#f8f5f0] p-4 shadow-sm border border-stone-300 relative">
+                 <div className="mt-2 font-old-print text-stone-800 leading-relaxed text-sm animate-in fade-in duration-300 space-y-6">
+                    
+                    {/* Pilot's Notes (Handwritten style) */}
+                    {selectedEntry.pilotNotes && (
+                        <div className="relative transform rotate-1">
+                            <h4 className="font-typewriter text-xs font-bold uppercase text-stone-600 mb-2 flex items-center gap-2">
+                                <span className="w-2 h-2 bg-stone-800 rounded-full"></span>
+                                Pilot's Log
+                            </h4>
+                            <div className="font-handwriting text-xl text-blue-900 leading-snug bg-white/40 p-4 border border-stone-200 shadow-sm rounded-sm">
+                                "{selectedEntry.pilotNotes}"
+                            </div>
+                        </div>
+                    )}
 
-                                {/* Stamped Header */}
+                    {/* Historical Context */}
+                    {selectedEntry.historicalNote ? (
+                        <div className="relative">
+                            <div className="bg-[#f8f5f0] p-4 shadow-sm border border-stone-300 relative">
                                 <div className="mb-2 border-b border-stone-300 pb-1 flex justify-between items-end">
                                     <span className="font-typewriter text-[10px] uppercase tracking-widest text-stone-500">Historical Record</span>
                                     <span className="font-typewriter text-[10px] text-stone-400">{selectedEntry.date}</span>
                                 </div>
-                                
                                 <p className="whitespace-pre-line font-typewriter text-sm text-stone-800 leading-relaxed">
                                     {selectedEntry.historicalNote}
                                 </p>
                             </div>
                         </div>
-                    ) : (
+                    ) : !selectedEntry.pilotNotes && (
                         <div className="text-stone-500 italic font-handwriting text-lg pl-4 border-l-4 border-stone-300 py-2">
                             "Routine flight operations. No special incident reports filed for this date."
                         </div>
                     )}
 
-                    {/* Mission Brief / Annotation */}
+                    {/* Mission Brief / Annotation (Gallery) */}
                     {missionBriefVisible && (
                          <div className="mt-6 border-t border-stone-300 pt-4">
                             <h4 className="font-typewriter text-xs font-bold uppercase text-stone-600 mb-3 flex items-center gap-2">
                                 <span className="w-2 h-2 bg-stone-500 rounded-full"></span>
-                                Logbook Annotation
+                                Mission Artifacts
                             </h4>
                             
-                            {/* Image Container (Visual placeholder if image is missing) */}
                             {hasMissionSlides && (
                                 <div className="space-y-2">
-                                    <div className="flex justify-between text-[10px] font-typewriter uppercase tracking-[0.3em] text-stone-600">
-                                        <button
-                                            type="button"
-                                            onClick={goToPreviousImage}
-                                            disabled={!canNavigateGallery}
-                                            className={`px-3 py-1 rounded-full border border-stone-300 bg-white/80 text-stone-700 transition ${
-                                                canNavigateGallery ? 'hover:border-stone-500 hover:text-stone-900' : 'cursor-not-allowed opacity-40'
-                                            }`}
-                                        >
-                                            Prev
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={goToNextImage}
-                                            disabled={!canNavigateGallery}
-                                            className={`px-3 py-1 rounded-full border border-stone-300 bg-white/80 text-stone-700 transition ${
-                                                canNavigateGallery ? 'hover:border-stone-500 hover:text-stone-900' : 'cursor-not-allowed opacity-40'
-                                            }`}
-                                        >
-                                            Next
-                                        </button>
-                                    </div>
-                                    <div className="mb-3 border-4 border-white shadow-md max-w-[50rem] mx-auto rotate-1 transition-transform hover:rotate-0">
+                                    <div className="mb-3 border-4 border-white shadow-md max-w-[50rem] mx-auto rotate-1 transition-transform hover:rotate-0 group relative">
                                         <div className="relative">
                                             <img 
                                                 src={activeGalleryImage ?? undefined}
@@ -162,35 +164,39 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
                                                 }}
                                                 onClick={() => activeGalleryImage && setFullscreenImage(activeGalleryImage)}
                                             />
+                                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 text-white p-1 rounded">
+                                                 <Maximize2 className="w-4 h-4" />
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="flex items-center justify-between text-[10px] font-typewriter uppercase tracking-[0.3em] text-stone-600">
-                                        <button
-                                            type="button"
-                                            onClick={goToPreviousImage}
-                                            disabled={!canNavigateGallery}
-                                            className="flex items-center justify-center w-8 h-8 rounded-full border border-stone-300 bg-white/90 text-stone-600 transition hover:border-stone-500 hover:text-stone-900 disabled:cursor-not-allowed disabled:opacity-40"
-                                        >
-                                            <ChevronLeft className="w-3 h-3" />
-                                        </button>
-                                        <span>
-                                            Image {galleryPosition + 1} of {galleryLength}
-                                        </span>
-                                        <button
-                                            type="button"
-                                            onClick={goToNextImage}
-                                            disabled={!canNavigateGallery}
-                                            className="flex items-center justify-center w-8 h-8 rounded-full border border-stone-300 bg-white/90 text-stone-600 transition hover:border-stone-500 hover:text-stone-900 disabled:cursor-not-allowed disabled:opacity-40"
-                                        >
-                                            <ChevronRight className="w-3 h-3" />
-                                        </button>
-                                    </div>
+                                    
+                                    {canNavigateGallery && (
+                                        <div className="flex items-center justify-between text-[10px] font-typewriter uppercase tracking-[0.3em] text-stone-600 px-4">
+                                            <button
+                                                type="button"
+                                                onClick={goToPreviousImage}
+                                                className="flex items-center justify-center w-8 h-8 rounded-full border border-stone-300 bg-white/90 text-stone-600 transition hover:border-stone-500 hover:text-stone-900"
+                                            >
+                                                <ChevronLeft className="w-3 h-3" />
+                                            </button>
+                                            <span>
+                                                Image {galleryPosition + 1} of {galleryLength}
+                                            </span>
+                                            <button
+                                                type="button"
+                                                onClick={goToNextImage}
+                                                className="flex items-center justify-center w-8 h-8 rounded-full border border-stone-300 bg-white/90 text-stone-600 transition hover:border-stone-500 hover:text-stone-900"
+                                            >
+                                                <ChevronRight className="w-3 h-3" />
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             )}
 
                             {hasSlideText && (
                                 <div className="mt-4">
-                                    <StickyNote className="w-full max-w-none transform rotate-1">
+                                    <StickyNote className="w-full max-w-none transform -rotate-1">
                                         <div dangerouslySetInnerHTML={{ __html: activeSlideText }} />
                                     </StickyNote>
                                 </div>
@@ -199,6 +205,34 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ selectedEntry }) => {
                     )}
                  </div>
              )}
+
+            {activeTab === 'LOGBOOK' && logbookImageSrc && (
+                <div className="mt-2 animate-in fade-in duration-300 flex flex-col h-full">
+                    <div className="mb-4 bg-stone-800 text-stone-200 p-3 text-xs font-mono rounded-sm shadow-sm border border-stone-700">
+                        <p className="uppercase tracking-widest mb-1 text-stone-400">Source Document</p>
+                        <p className="break-all">{selectedEntry.sourceDocument}</p>
+                    </div>
+                    
+                    <div className="relative group border-8 border-stone-200 shadow-lg bg-stone-100 flex-1 min-h-[300px] flex items-center justify-center overflow-hidden cursor-zoom-in"
+                         onClick={() => setFullscreenImage(logbookImageSrc)}
+                    >
+                        <img 
+                            src={logbookImageSrc} 
+                            alt={`Logbook page ${selectedEntry.sourceDocument}`}
+                            className="w-full h-full object-contain sepia-[0.3]"
+                        />
+                         <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none">
+                            <div className="bg-stone-900/80 text-white px-3 py-2 rounded opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
+                                <Maximize2 className="w-4 h-4" />
+                                <span className="text-xs font-bold uppercase tracking-wider">View Fullscreen</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p className="text-center mt-3 font-typewriter text-[10px] text-stone-500">
+                        CLICK IMAGE TO INSPECT ORIGINAL DOCUMENT
+                    </p>
+                </div>
+            )}
 
             {activeTab === 'AIRCRAFT' && (
                 <div className="mt-2 animate-in fade-in duration-300">
