@@ -47,8 +47,8 @@ describe('Gallery', () => {
       renderGallery();
 
       expect(screen.getByRole('button', { name: /photos/i })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /full logbook/i })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /historical videos/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /logbook/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /videos/i })).toBeInTheDocument();
     });
 
     it('starts with Photos tab active by default', () => {
@@ -62,7 +62,7 @@ describe('Gallery', () => {
     it('switches to Logbook tab when clicked', () => {
       renderGallery();
 
-      const logbookTab = screen.getByRole('button', { name: /full logbook/i });
+      const logbookTab = screen.getByRole('button', { name: /logbook/i });
       fireEvent.click(logbookTab);
 
       expect(logbookTab).toHaveClass('text-amber-500');
@@ -72,7 +72,7 @@ describe('Gallery', () => {
     it('switches to Historical Videos tab when clicked', () => {
       renderGallery();
 
-      const videosTab = screen.getByRole('button', { name: /historical videos/i });
+      const videosTab = screen.getByRole('button', { name: /videos/i });
       fireEvent.click(videosTab);
 
       expect(videosTab).toHaveClass('text-amber-500');
@@ -250,7 +250,7 @@ describe('Gallery', () => {
     it('displays logbook header and description', () => {
       renderGallery();
 
-      const logbookTab = screen.getByRole('button', { name: /full logbook/i });
+      const logbookTab = screen.getByRole('button', { name: /logbook/i });
       fireEvent.click(logbookTab);
 
       expect(screen.getByText("Robin Glen's Flying Logbook")).toBeInTheDocument();
@@ -260,7 +260,7 @@ describe('Gallery', () => {
     it('renders all logbook pages (058 to 086 = 29 pages)', () => {
       renderGallery();
 
-      const logbookTab = screen.getByRole('button', { name: /full logbook/i });
+      const logbookTab = screen.getByRole('button', { name: /logbook/i });
       fireEvent.click(logbookTab);
 
       // Check for first and last page labels
@@ -273,7 +273,7 @@ describe('Gallery', () => {
     it('displays disclaimer about videos not being Robin-specific', () => {
       renderGallery();
 
-      const videosTab = screen.getByRole('button', { name: /historical videos/i });
+      const videosTab = screen.getByRole('button', { name: /videos/i });
       fireEvent.click(videosTab);
 
       expect(screen.getByText(/they are not specifically about robin glen/i)).toBeInTheDocument();
@@ -282,7 +282,7 @@ describe('Gallery', () => {
     it('renders video titles and descriptions', () => {
       renderGallery();
 
-      const videosTab = screen.getByRole('button', { name: /historical videos/i });
+      const videosTab = screen.getByRole('button', { name: /videos/i });
       fireEvent.click(videosTab);
 
       // Check for at least one video title
@@ -292,7 +292,7 @@ describe('Gallery', () => {
     it('renders YouTube iframes', () => {
       renderGallery();
 
-      const videosTab = screen.getByRole('button', { name: /historical videos/i });
+      const videosTab = screen.getByRole('button', { name: /videos/i });
       fireEvent.click(videosTab);
 
       const iframes = document.querySelectorAll('iframe');

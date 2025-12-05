@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, TouchEvent } from 'react';
 import { FLIGHT_LOG } from '../services/flightData';
 import { MissionBriefSlide } from '../types';
 import { X, ChevronLeft, ChevronRight, Images, BookOpen, Film } from 'lucide-react';
@@ -62,6 +62,10 @@ export const Gallery: React.FC = () => {
   const [selectedSlide, setSelectedSlide] = useState<GalleryItem | null>(null);
   const [selectedLogbookIndex, setSelectedLogbookIndex] = useState<number | null>(null);
   const logbookContainerRef = useRef<HTMLDivElement>(null);
+  
+  // Touch handling for swipe gestures
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
 
   const galleryItems: GalleryItem[] = FLIGHT_LOG.flatMap((entry) => {
     if (!entry.missionBrief || !entry.missionBrief.slides) return [];
@@ -74,7 +78,7 @@ export const Gallery: React.FC = () => {
   });
 
   const tabClass = (tab: GalleryTab) =>
-    `flex items-center gap-2 px-4 py-2.5 text-sm font-medium tracking-wide transition-all duration-200 border-b-2 ${
+    `flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2.5 text-xs sm:text-sm font-medium tracking-wide transition-all duration-200 border-b-2 flex-1 sm:flex-initial ${
       activeTab === tab
         ? 'text-amber-500 border-amber-500 bg-stone-800/50'
         : 'text-stone-400 border-transparent hover:text-stone-200 hover:bg-stone-800/30'
@@ -100,30 +104,62 @@ export const Gallery: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedLogbookIndex]);
 
+  // Touch handlers for swipe navigation in logbook viewer
+  const handleTouchStart = (e: TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null || selectedLogbookIndex === null) return;
+    
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaX = touchEndX - touchStartX.current;
+    const deltaY = touchEndY - touchStartY.current;
+    
+    // Only trigger if horizontal swipe is dominant and significant
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+      if (deltaX > 0) {
+        // Swipe right - go to previous
+        setSelectedLogbookIndex(Math.max(0, selectedLogbookIndex - 1));
+      } else {
+        // Swipe left - go to next
+        setSelectedLogbookIndex(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1));
+      }
+    }
+    
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-stone-900">
       {/* Tab Navigation */}
-      <div className="flex border-b border-stone-700 bg-stone-950 shrink-0">
+      <div className="flex border-b border-stone-700 bg-stone-950 shrink-0 overflow-x-auto">
         <button
           onClick={() => setActiveTab('photos')}
           className={tabClass('photos')}
+          aria-label="Photos"
         >
-          <Images size={18} />
-          <span>Photos</span>
+          <Images size={18} className="shrink-0" />
+          <span className="truncate">Photos</span>
         </button>
         <button
           onClick={() => setActiveTab('logbook')}
           className={tabClass('logbook')}
+          aria-label="Logbook"
         >
-          <BookOpen size={18} />
-          <span>Full Logbook</span>
+          <BookOpen size={18} className="shrink-0" />
+          <span className="truncate">Logbook</span>
         </button>
         <button
           onClick={() => setActiveTab('videos')}
           className={tabClass('videos')}
+          aria-label="Videos"
         >
-          <Film size={18} />
-          <span>Historical Videos</span>
+          <Film size={18} className="shrink-0" />
+          <span className="truncate">Videos</span>
         </button>
       </div>
 
@@ -131,12 +167,12 @@ export const Gallery: React.FC = () => {
       <div className="flex-1 overflow-y-auto">
         {/* Photos Tab */}
         {activeTab === 'photos' && (
-          <div className="p-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="p-4 sm:p-6 md:p-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {galleryItems.map((item) => (
                 <div
                   key={item.id}
-                  className="group relative flex flex-col bg-stone-800 rounded-lg overflow-hidden border border-stone-700 hover:border-amber-500/50 transition-colors cursor-pointer shadow-lg"
+                  className="group relative flex flex-col bg-stone-800 rounded-lg overflow-hidden border border-stone-700 hover:border-amber-500/50 transition-colors cursor-pointer shadow-lg active:scale-[0.98] transition-transform"
                   onClick={() => setSelectedSlide(item)}
                 >
                   <div className="aspect-video w-full overflow-hidden bg-black">
@@ -168,20 +204,20 @@ export const Gallery: React.FC = () => {
 
         {/* Logbook Tab */}
         {activeTab === 'logbook' && (
-          <div className="p-8" ref={logbookContainerRef}>
+          <div className="p-4 sm:p-6 md:p-8" ref={logbookContainerRef}>
             <div className="max-w-4xl mx-auto">
-              <div className="mb-6 text-center">
-                <h2 className="text-xl font-serif text-amber-500 mb-2">Robin Glen's Flying Logbook</h2>
-                <p className="text-stone-400 text-sm">
-                  Original handwritten pages from 1944-1946. Click any page to view full size.
+              <div className="mb-4 sm:mb-6 text-center">
+                <h2 className="text-lg sm:text-xl font-serif text-amber-500 mb-2">Robin Glen's Flying Logbook</h2>
+                <p className="text-stone-400 text-xs sm:text-sm px-2">
+                  Original handwritten pages from 1944-1946. Tap any page to view full size.
                 </p>
               </div>
               
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {LOGBOOK_PAGES.map((page, index) => (
                   <div
                     key={page.id}
-                    className="group cursor-pointer bg-stone-800 rounded-lg overflow-hidden border border-stone-700 hover:border-amber-500/50 transition-all duration-300 shadow-lg hover:shadow-xl"
+                    className="group cursor-pointer bg-stone-800 rounded-lg overflow-hidden border border-stone-700 hover:border-amber-500/50 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.99] transition-transform"
                     onClick={() => setSelectedLogbookIndex(index)}
                   >
                     <div className="relative">
@@ -191,8 +227,8 @@ export const Gallery: React.FC = () => {
                         className="w-full h-auto opacity-90 group-hover:opacity-100 transition-opacity duration-300"
                         loading="lazy"
                       />
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                        <span className="text-stone-200 font-mono text-sm">{page.label}</span>
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 sm:p-4">
+                        <span className="text-stone-200 font-mono text-xs sm:text-sm">{page.label}</span>
                       </div>
                     </div>
                   </div>
@@ -204,19 +240,19 @@ export const Gallery: React.FC = () => {
 
         {/* Historical Videos Tab */}
         {activeTab === 'videos' && (
-          <div className="p-8">
+          <div className="p-4 sm:p-6 md:p-8">
             <div className="max-w-5xl mx-auto">
-              <div className="mb-8 text-center">
-                <h2 className="text-xl font-serif text-amber-500 mb-2">Historical Videos</h2>
-                <div className="inline-block bg-stone-800 border border-amber-500/30 rounded-lg px-4 py-2 mt-2">
-                  <p className="text-stone-300 text-sm">
+              <div className="mb-6 sm:mb-8 text-center">
+                <h2 className="text-lg sm:text-xl font-serif text-amber-500 mb-2">Historical Videos</h2>
+                <div className="bg-stone-800 border border-amber-500/30 rounded-lg px-3 sm:px-4 py-2 mt-2 mx-auto max-w-lg">
+                  <p className="text-stone-300 text-xs sm:text-sm">
                     <span className="text-amber-500">Note:</span> These videos provide general historical context about WW2 Spitfires and RAF operations. 
                     They are not specifically about Robin Glen.
                   </p>
                 </div>
               </div>
 
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 {HISTORICAL_VIDEOS.map((video) => (
                   <div
                     key={video.id}
@@ -231,9 +267,9 @@ export const Gallery: React.FC = () => {
                         className="w-full h-full"
                       />
                     </div>
-                    <div className="p-4">
-                      <h3 className="text-lg font-serif text-stone-100 mb-2">{video.title}</h3>
-                      <p className="text-stone-400 text-sm leading-relaxed">{video.description}</p>
+                    <div className="p-3 sm:p-4">
+                      <h3 className="text-base sm:text-lg font-serif text-stone-100 mb-1 sm:mb-2">{video.title}</h3>
+                      <p className="text-stone-400 text-xs sm:text-sm leading-relaxed">{video.description}</p>
                     </div>
                   </div>
                 ))}
@@ -246,32 +282,36 @@ export const Gallery: React.FC = () => {
       {/* Photo Modal */}
       {selectedSlide && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm" 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-2 sm:p-4 backdrop-blur-sm" 
           onClick={() => setSelectedSlide(null)}
         >
           <div 
-            className="relative bg-stone-800 rounded-lg max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border border-stone-600"
+            className="relative bg-stone-800 rounded-lg w-full max-w-5xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border border-stone-600"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Close button - larger touch target on mobile */}
             <button
               onClick={() => setSelectedSlide(null)}
-              className="absolute top-4 right-4 z-10 p-2 bg-black/50 hover:bg-black/70 rounded-full text-stone-200 hover:text-white transition-colors"
+              className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 p-2 sm:p-2 bg-black/60 hover:bg-black/80 rounded-full text-stone-200 hover:text-white transition-colors"
+              aria-label="Close"
             >
-              <X size={24} />
+              <X size={20} className="sm:w-6 sm:h-6" />
             </button>
             
             <div className="flex flex-col md:flex-row h-full overflow-auto">
-              <div className="md:w-2/3 bg-black flex items-center justify-center p-2">
+              {/* Image container - takes more space on mobile */}
+              <div className="w-full md:w-2/3 bg-black flex items-center justify-center p-2 min-h-[40vh] md:min-h-0">
                 <img
                   src={selectedSlide.image}
                   alt="Full Slide"
-                  className="max-h-[80vh] max-w-full object-contain"
+                  className="max-h-[50vh] md:max-h-[80vh] max-w-full object-contain"
                 />
               </div>
-              <div className="md:w-1/3 p-6 overflow-y-auto bg-stone-800 border-l border-stone-700">
-                <div className="text-sm text-amber-500 mb-2 font-mono">{selectedSlide.sourceEntryDate}</div>
+              {/* Text sidebar - scrollable on mobile */}
+              <div className="w-full md:w-1/3 p-4 sm:p-6 overflow-y-auto bg-stone-800 border-t md:border-t-0 md:border-l border-stone-700 max-h-[40vh] md:max-h-none">
+                <div className="text-xs sm:text-sm text-amber-500 mb-2 font-mono">{selectedSlide.sourceEntryDate}</div>
                 <div 
-                  className="text-stone-200 font-serif text-lg leading-relaxed whitespace-pre-wrap"
+                  className="text-stone-200 font-serif text-base sm:text-lg leading-relaxed whitespace-pre-wrap"
                   dangerouslySetInnerHTML={{ __html: selectedSlide.text || '' }}
                 />
               </div>
@@ -283,51 +323,91 @@ export const Gallery: React.FC = () => {
       {/* Logbook Fullscreen Viewer */}
       {selectedLogbookIndex !== null && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm touch-none"
           onClick={() => setSelectedLogbookIndex(null)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
           <div 
-            className="relative w-full h-full flex items-center justify-center p-4"
+            className="relative w-full h-full flex items-center justify-center p-2 sm:p-4"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button */}
+            {/* Close button - larger touch target on mobile */}
             <button
               onClick={() => setSelectedLogbookIndex(null)}
-              className="absolute top-4 right-4 z-10 p-2 bg-black/50 hover:bg-black/70 rounded-full text-stone-200 hover:text-white transition-colors"
+              className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 p-2.5 sm:p-2 bg-black/60 hover:bg-black/80 rounded-full text-stone-200 hover:text-white transition-colors"
+              aria-label="Close"
             >
-              <X size={24} />
+              <X size={20} className="sm:w-6 sm:h-6" />
             </button>
 
             {/* Page counter */}
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/50 rounded-full px-4 py-2 text-stone-200 font-mono text-sm">
+            <div className="absolute top-2 sm:top-4 left-1/2 -translate-x-1/2 bg-black/60 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-stone-200 font-mono text-xs sm:text-sm">
               {selectedLogbookIndex + 1} / {LOGBOOK_PAGES.length}
             </div>
 
-            {/* Navigation buttons */}
+            {/* Navigation buttons - hidden on mobile (use swipe), visible on tablet+ */}
             <button
-              onClick={() => setSelectedLogbookIndex(Math.max(0, selectedLogbookIndex - 1))}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedLogbookIndex(Math.max(0, selectedLogbookIndex - 1));
+              }}
               disabled={selectedLogbookIndex === 0}
-              className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-black/50 hover:bg-black/70 disabled:opacity-30 disabled:cursor-not-allowed rounded-full text-stone-200 hover:text-white transition-colors"
+              className="hidden sm:block absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 bg-black/60 hover:bg-black/80 disabled:opacity-30 disabled:cursor-not-allowed rounded-full text-stone-200 hover:text-white transition-colors"
+              aria-label="Previous page"
             >
-              <ChevronLeft size={32} />
+              <ChevronLeft size={24} className="sm:w-8 sm:h-8" />
             </button>
             <button
-              onClick={() => setSelectedLogbookIndex(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1))}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedLogbookIndex(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1));
+              }}
               disabled={selectedLogbookIndex === LOGBOOK_PAGES.length - 1}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-black/50 hover:bg-black/70 disabled:opacity-30 disabled:cursor-not-allowed rounded-full text-stone-200 hover:text-white transition-colors"
+              className="hidden sm:block absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 bg-black/60 hover:bg-black/80 disabled:opacity-30 disabled:cursor-not-allowed rounded-full text-stone-200 hover:text-white transition-colors"
+              aria-label="Next page"
             >
-              <ChevronRight size={32} />
+              <ChevronRight size={24} className="sm:w-8 sm:h-8" />
             </button>
 
-            {/* Image */}
+            {/* Mobile navigation buttons - at bottom for easy thumb access */}
+            <div className="sm:hidden absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-6 bg-black/60 rounded-full px-4 py-2">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedLogbookIndex(Math.max(0, selectedLogbookIndex - 1));
+                }}
+                disabled={selectedLogbookIndex === 0}
+                className="p-2 disabled:opacity-30 disabled:cursor-not-allowed text-stone-200 active:text-amber-500 transition-colors"
+                aria-label="Previous page"
+              >
+                <ChevronLeft size={28} />
+              </button>
+              <span className="text-stone-400 text-xs font-mono min-w-[4rem] text-center">
+                {selectedLogbookIndex + 1} / {LOGBOOK_PAGES.length}
+              </span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedLogbookIndex(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1));
+                }}
+                disabled={selectedLogbookIndex === LOGBOOK_PAGES.length - 1}
+                className="p-2 disabled:opacity-30 disabled:cursor-not-allowed text-stone-200 active:text-amber-500 transition-colors"
+                aria-label="Next page"
+              >
+                <ChevronRight size={28} />
+              </button>
+            </div>
+
+            {/* Image - fills available space */}
             <img
               src={LOGBOOK_PAGES[selectedLogbookIndex].src}
               alt={LOGBOOK_PAGES[selectedLogbookIndex].label}
-              className="max-h-[90vh] max-w-[90vw] object-contain shadow-2xl rounded-lg"
+              className="max-h-[85vh] sm:max-h-[90vh] max-w-[95vw] sm:max-w-[90vw] object-contain shadow-2xl rounded-lg"
             />
 
-            {/* Keyboard hint */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 rounded-full px-4 py-2 text-stone-400 text-xs">
+            {/* Keyboard hint - desktop only */}
+            <div className="hidden md:block absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 rounded-full px-4 py-2 text-stone-400 text-xs">
               Use ← → arrow keys to navigate • ESC to close
             </div>
           </div>
