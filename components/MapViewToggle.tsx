@@ -16,6 +16,7 @@ interface MapViewToggleProps {
   customCenter?: [number, number];
   customZoom?: number;
   isTimelineCollapsed?: boolean;
+  closePopoverTrigger?: number;
 }
 
 // Loading component for the 3D globe
@@ -56,7 +57,8 @@ const MapViewToggle: React.FC<MapViewToggleProps> = ({
   shouldCenter,
   customCenter,
   customZoom,
-  isTimelineCollapsed = false
+  isTimelineCollapsed = false,
+  closePopoverTrigger
 }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('map');
   const [hasLoadedGlobe, setHasLoadedGlobe] = useState(false);
@@ -143,6 +145,7 @@ const MapViewToggle: React.FC<MapViewToggleProps> = ({
             customCenter={customCenter}
             customZoom={customZoom}
             isTimelineCollapsed={isTimelineCollapsed}
+            closePopoverTrigger={closePopoverTrigger}
           />
         </div>
 

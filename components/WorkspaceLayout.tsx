@@ -21,6 +21,7 @@ interface WorkspaceLayoutProps {
   customMapCenter?: [number, number];
   customMapZoom?: number;
   onFlyToCoordinate?: (coord: Coordinate) => void;
+  closePopoverTrigger?: number;
 }
 
 const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
@@ -37,7 +38,8 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
   setShowSignificantOnly,
   customMapCenter,
   customMapZoom,
-  onFlyToCoordinate
+  onFlyToCoordinate,
+  closePopoverTrigger
 }) => {
   const [isTimelineCollapsed, setIsTimelineCollapsed] = useState(false);
   
@@ -74,6 +76,7 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
             customCenter={customMapCenter}
             customZoom={customMapZoom}
             isTimelineCollapsed={isTimelineCollapsed}
+            closePopoverTrigger={closePopoverTrigger}
           />
           <MapTimelineScrubber
             entries={entries}

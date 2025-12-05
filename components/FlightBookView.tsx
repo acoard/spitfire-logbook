@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FLIGHT_LOG } from '../services/flightData';
 import { LogEntry, Phase, Coordinate } from '../types';
@@ -13,6 +13,9 @@ const FlightBookView: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [showSignificantOnly, setShowSignificantOnly] = useState(false);
   const [flyToCoordinate, setFlyToCoordinate] = useState<Coordinate | null>(null);
+  const [flyToZoom, setFlyToZoom] = useState<number | null>(null);
+  const flyToTimeoutRef = useRef<number | null>(null);
+  const [closePopoverTrigger, setClosePopoverTrigger] = useState(0);
 
   // Handle URL parameters for deep linking
   useEffect(() => {
@@ -43,10 +46,12 @@ const FlightBookView: React.FC = () => {
   }, [searchParams, flyToCoordinate]);
 
   const customMapZoom = useMemo(() => {
+    // Priority: flyToZoom > URL params
+    if (flyToZoom !== null) return flyToZoom;
     const zoom = parseInt(searchParams.get('zoom') || '');
     if (!isNaN(zoom)) return zoom;
     return undefined;
-  }, [searchParams]);
+  }, [searchParams, flyToZoom]);
 
   const filteredEntries = useMemo(() => {
     let result = FLIGHT_LOG;
@@ -71,15 +76,35 @@ const FlightBookView: React.FC = () => {
   };
 
   const handleMarkerSelect = (entry: LogEntry) => {
+    // Cancel any pending flyTo timeout to prevent zoom changes
+    if (flyToTimeoutRef.current) {
+      clearTimeout(flyToTimeoutRef.current);
+      flyToTimeoutRef.current = null;
+    }
+    // Clear flyTo state immediately
+    setFlyToCoordinate(null);
+    setFlyToZoom(null);
     setSelectedId(entry.id);
     setShouldCenterMap(false);
   };
 
   const handleFlyToCoordinate = (coord: Coordinate) => {
+    // Cancel any existing timeout
+    if (flyToTimeoutRef.current) {
+      clearTimeout(flyToTimeoutRef.current);
+    }
+    // Close any open popovers on the map
+    setClosePopoverTrigger(prev => prev + 1);
     setFlyToCoordinate(coord);
+    setFlyToZoom(10); // Zoom in close when clicking a location link
     setShouldCenterMap(true);
-    // Clear the flyToCoordinate after a short delay so it doesn't persist
-    setTimeout(() => setFlyToCoordinate(null), 100);
+    // Clear the flyTo state after animation completes (1.5s) to prevent re-triggering
+    flyToTimeoutRef.current = window.setTimeout(() => {
+      setFlyToCoordinate(null);
+      setFlyToZoom(null);
+      setShouldCenterMap(false); // Prevent flying back to selectedEntry.origin
+      flyToTimeoutRef.current = null;
+    }, 1600);
   };
 
   return (
@@ -100,6 +125,7 @@ const FlightBookView: React.FC = () => {
         customMapCenter={customMapCenter}
         customMapZoom={customMapZoom}
         onFlyToCoordinate={handleFlyToCoordinate}
+        closePopoverTrigger={closePopoverTrigger}
       />
     </>
   );

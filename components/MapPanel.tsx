@@ -67,6 +67,7 @@ interface MapPanelProps {
   customCenter?: [number, number];
   customZoom?: number;
   isTimelineCollapsed?: boolean;
+  closePopoverTrigger?: number;
 }
 
 // Robust coordinate validation
@@ -115,7 +116,7 @@ const MapController: React.FC<{
   return null;
 };
 
-const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, onMarkerSelect, shouldCenter, customCenter, customZoom, isTimelineCollapsed = false }) => {
+const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, onMarkerSelect, shouldCenter, customCenter, customZoom, isTimelineCollapsed = false, closePopoverTrigger }) => {
   
   // Calculate map center based on selection with validation
   // Default to English Channel/Europe view
@@ -165,16 +166,23 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
       }
     });
     
-    // Update primary category to most common or most significant
+    // Update primary category to the most common category at this location
     groups.forEach(group => {
-      // If any entry is significant, prioritize FIGHTER category
-      const hasSignificant = group.entries.some(e => e.isSignificant);
-      if (hasSignificant) {
-        group.primaryCategory = AircraftCategory.FIGHTER;
-      } else {
-        // Use the category of the most recent entry
-        group.primaryCategory = group.entries[group.entries.length - 1].aircraftCategory;
-      }
+      // Count occurrences of each category
+      const categoryCounts = new Map<AircraftCategory, number>();
+      group.entries.forEach(e => {
+        categoryCounts.set(e.aircraftCategory, (categoryCounts.get(e.aircraftCategory) || 0) + 1);
+      });
+      // Find the most common category
+      let maxCount = 0;
+      let mostCommon = group.entries[0].aircraftCategory;
+      categoryCounts.forEach((count, cat) => {
+        if (count > maxCount) {
+          maxCount = count;
+          mostCommon = cat;
+        }
+      });
+      group.primaryCategory = mostCommon;
     });
     
     return Array.from(groups.values());
@@ -220,6 +228,15 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
       setPopoverPosition(null);
     }
   }, [selectedEntry?.id]);
+
+  // Close popover when triggered externally (e.g., when clicking a location link)
+  useEffect(() => {
+    if (closePopoverTrigger) {
+      setActiveSelectorGroup(null);
+      setHoveredEntryId(null);
+      setPopoverPosition(null);
+    }
+  }, [closePopoverTrigger]);
 
   return (
     <div className="h-full w-full relative z-0">
