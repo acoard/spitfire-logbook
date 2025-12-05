@@ -120,11 +120,13 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
   
   // Calculate map center based on selection with validation
   // Default to English Channel/Europe view
-  let centerPosition: [number, number] = customCenter || [50.5, 0.0]; 
-
-  if (!customCenter && selectedEntry && selectedEntry.origin && isValidCoord(selectedEntry.origin.lat) && isValidCoord(selectedEntry.origin.lng)) {
-    centerPosition = [selectedEntry.origin.lat, selectedEntry.origin.lng];
-  }
+  const centerPosition = useMemo((): [number, number] => {
+    if (customCenter) return customCenter;
+    if (selectedEntry && selectedEntry.origin && isValidCoord(selectedEntry.origin.lat) && isValidCoord(selectedEntry.origin.lng)) {
+      return [selectedEntry.origin.lat, selectedEntry.origin.lng];
+    }
+    return [50.5, 0.0];
+  }, [customCenter, selectedEntry]);
 
   const zoomLevel = customZoom || (selectedEntry ? 7 : 5);
 
@@ -378,117 +380,146 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
       />
 
       {/* Mission Selector Popup - appears when clicking a marker with multiple missions */}
-      {activeSelectorGroup && popoverPosition && (
-        <>
-          {/* Backdrop - very subtle, click to close */}
-          <div 
-            className="absolute inset-0 z-[399] bg-stone-900/5 pointer-events-auto"
-            onClick={() => { setActiveSelectorGroup(null); setHoveredEntryId(null); setPopoverPosition(null); }}
-          />
-          
-          {/* Selector Panel - positioned near marker */}
-          <div 
-            className="absolute z-[400] bg-[#f4f1ea] rounded shadow-xl border border-stone-400 w-64 max-h-[45%] overflow-hidden pointer-events-auto"
-            style={{
-              // Position above the marker, centered horizontally
-              left: `${Math.max(8, Math.min(popoverPosition.x - 128, window.innerWidth - 272))}px`,
-              top: `${Math.max(8, popoverPosition.y - 20)}px`,
-              // Shift up by the panel's height plus a small gap
-              transform: 'translateY(-100%)',
-            }}
-          >
-            {/* Small arrow pointing down to marker */}
+      {activeSelectorGroup && popoverPosition && (() => {
+        const mapHeight = mapRef.current?.getContainer().clientHeight || window.innerHeight;
+        const showBelow = popoverPosition.y < 220;
+
+        return (
+          <>
+            {/* Backdrop - very subtle, click to close */}
             <div 
-              className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0"
-              style={{
-                borderLeft: '8px solid transparent',
-                borderRight: '8px solid transparent',
-                borderTop: '8px solid #a8a29e',
-              }}
-            />
-            <div 
-              className="absolute -bottom-[6px] left-1/2 -translate-x-1/2 w-0 h-0"
-              style={{
-                borderLeft: '7px solid transparent',
-                borderRight: '7px solid transparent',
-                borderTop: '7px solid #f4f1ea',
-              }}
+              className="absolute inset-0 z-[399] bg-stone-900/5 pointer-events-auto"
+              onClick={() => { setActiveSelectorGroup(null); setHoveredEntryId(null); setPopoverPosition(null); }}
             />
             
-            {/* Header */}
-            <div className="bg-stone-200/90 border-b border-stone-300 px-2.5 py-1.5 flex items-center justify-between">
-              <div className="min-w-0">
-                <h3 className="font-typewriter text-[11px] font-bold text-stone-800 uppercase tracking-wide truncate">
-                  {activeSelectorGroup.entries[0]?.origin.name}
-                </h3>
-                <p className="font-typewriter text-[9px] text-stone-500">
-                  {activeSelectorGroup.entries.length} missions
-                </p>
+            {/* Selector Panel - positioned near marker */}
+            <div 
+              className="absolute z-[400] bg-[#f4f1ea] rounded shadow-xl border border-stone-400 w-64 max-h-[45%] overflow-hidden pointer-events-auto"
+              style={{
+                // Position above/below the marker, centered horizontally
+                left: `${Math.max(8, Math.min(popoverPosition.x - 128, window.innerWidth - 272))}px`,
+                top: showBelow ? `${popoverPosition.y + 15}px` : `${Math.max(8, popoverPosition.y - 15)}px`,
+                // Shift up by the panel's height if showing above
+                transform: showBelow ? 'none' : 'translateY(-100%)',
+              }}
+            >
+              {/* Arrow pointing to marker */}
+              {!showBelow && (
+                <>
+                  <div 
+                    className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0"
+                    style={{
+                      borderLeft: '8px solid transparent',
+                      borderRight: '8px solid transparent',
+                      borderTop: '8px solid #a8a29e',
+                    }}
+                  />
+                  <div 
+                    className="absolute -bottom-[6px] left-1/2 -translate-x-1/2 w-0 h-0"
+                    style={{
+                      borderLeft: '7px solid transparent',
+                      borderRight: '7px solid transparent',
+                      borderTop: '7px solid #f4f1ea',
+                    }}
+                  />
+                </>
+              )}
+              {showBelow && (
+                <>
+                  <div 
+                    className="absolute -top-2 left-1/2 -translate-x-1/2 w-0 h-0"
+                    style={{
+                      borderLeft: '8px solid transparent',
+                      borderRight: '8px solid transparent',
+                      borderBottom: '8px solid #a8a29e',
+                    }}
+                  />
+                  <div 
+                    className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-0 h-0"
+                    style={{
+                      borderLeft: '7px solid transparent',
+                      borderRight: '7px solid transparent',
+                      borderBottom: '7px solid #f4f1ea',
+                    }}
+                  />
+                </>
+              )}
+              
+              {/* Header */}
+              <div className="bg-stone-200/90 border-b border-stone-300 px-2.5 py-1.5 flex items-center justify-between">
+                <div className="min-w-0">
+                  <h3 className="font-typewriter text-[11px] font-bold text-stone-800 uppercase tracking-wide truncate">
+                    {activeSelectorGroup.entries[0]?.origin.name}
+                  </h3>
+                  <p className="font-typewriter text-[9px] text-stone-500">
+                    {activeSelectorGroup.entries.length} missions
+                  </p>
+                </div>
+                <button
+                  onClick={() => { setActiveSelectorGroup(null); setHoveredEntryId(null); setPopoverPosition(null); }}
+                  className="w-5 h-5 flex items-center justify-center rounded bg-stone-300/80 hover:bg-stone-400/80 text-stone-600 hover:text-stone-800 transition-colors flex-shrink-0 ml-2"
+                >
+                  <span className="text-sm leading-none">&times;</span>
+                </button>
               </div>
-              <button
-                onClick={() => { setActiveSelectorGroup(null); setHoveredEntryId(null); setPopoverPosition(null); }}
-                className="w-5 h-5 flex items-center justify-center rounded bg-stone-300/80 hover:bg-stone-400/80 text-stone-600 hover:text-stone-800 transition-colors flex-shrink-0 ml-2"
-              >
-                <span className="text-sm leading-none">&times;</span>
-              </button>
-            </div>
-            
-            {/* Mission List - compact */}
-            <div className="overflow-y-auto max-h-[calc(45vh-50px)] p-1.5 space-y-1">
-              {activeSelectorGroup.entries.map((entry) => {
-                const isHovered = hoveredEntryId === entry.id;
-                return (
-                  <button
-                    key={entry.id}
-                    onClick={() => handleMissionSelect(entry)}
-                    onMouseEnter={() => setHoveredEntryId(entry.id)}
-                    onMouseLeave={() => setHoveredEntryId(null)}
-                    className={`
-                      w-full text-left px-2 py-1.5 rounded transition-all duration-100
-                      ${selectedEntry?.id === entry.id 
-                        ? 'bg-amber-100 border border-amber-400' 
-                        : isHovered
-                          ? 'bg-white border border-stone-400 shadow-sm'
-                          : 'bg-white/60 border border-transparent hover:bg-white hover:border-stone-300'
-                      }
-                    `}
-                  >
-                    <div className="flex items-center gap-2">
-                      {/* Category Indicator */}
-                      <span 
-                        className="w-2 h-2 rounded-full flex-shrink-0"
-                        style={{ backgroundColor: getColor(entry.aircraftCategory) }}
-                      />
-                      
-                      {/* Mission Details - single line */}
-                      <div className="flex-1 min-w-0 flex items-center gap-1.5">
-                        <span className="font-typewriter text-[10px] font-bold text-stone-700 flex-shrink-0">
-                          {entry.date}
-                        </span>
-                        <span className="font-typewriter text-[10px] text-stone-500 truncate">
-                          {entry.duty}
-                        </span>
-                        {entry.isSignificant && (
-                          <span className="px-1 py-0.5 bg-red-100 text-red-600 text-[7px] font-bold rounded flex-shrink-0">
-                            ★
+              
+              {/* Mission List - compact */}
+              <div className="overflow-y-auto max-h-[calc(45vh-50px)] p-1.5 space-y-1">
+                {activeSelectorGroup.entries.map((entry) => {
+                  const isHovered = hoveredEntryId === entry.id;
+                  return (
+                    <button
+                      key={entry.id}
+                      onClick={() => handleMissionSelect(entry)}
+                      onMouseEnter={() => setHoveredEntryId(entry.id)}
+                      onMouseLeave={() => setHoveredEntryId(null)}
+                      className={`
+                        w-full text-left px-2 py-1.5 rounded transition-all duration-100
+                        ${selectedEntry?.id === entry.id 
+                          ? 'bg-amber-100 border border-amber-400' 
+                          : isHovered
+                            ? 'bg-white border border-stone-400 shadow-sm'
+                            : 'bg-white/60 border border-transparent hover:bg-white hover:border-stone-300'
+                        }
+                      `}
+                    >
+                      <div className="flex items-center gap-2">
+                        {/* Category Indicator */}
+                        <span 
+                          className="w-2 h-2 rounded-full flex-shrink-0"
+                          style={{ backgroundColor: getColor(entry.aircraftCategory) }}
+                        />
+                        
+                        {/* Mission Details - single line */}
+                        <div className="flex-1 min-w-0 flex items-center gap-1.5">
+                          <span className="font-typewriter text-[10px] font-bold text-stone-700 flex-shrink-0">
+                            {entry.date}
                           </span>
+                          <span className="font-typewriter text-[10px] text-stone-500 truncate">
+                            {entry.duty}
+                          </span>
+                          {entry.isSignificant && (
+                            <span className="px-1 py-0.5 bg-red-100 text-red-600 text-[7px] font-bold rounded flex-shrink-0">
+                              ★
+                            </span>
+                          )}
+                        </div>
+                        
+                        {/* Hover indicator */}
+                        {isHovered && (
+                          <svg className="w-3 h-3 text-stone-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
                         )}
                       </div>
-                      
-                      {/* Hover indicator */}
-                      {isHovered && (
-                        <svg className="w-3 h-3 text-stone-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </>
-      )}
+          </>
+        );
+      })()}
 
       {/* Map Legend Overlay - top right, below zoom controls */}
       <div className="absolute top-16 right-2 sm:top-20 sm:right-4 bg-[#f4f1ea] p-1.5 md:p-3 rounded-sm shadow-xl border md:border-2 border-stone-400 text-[9px] md:text-xs font-serif z-[100] transform md:rotate-1 block">
