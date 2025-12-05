@@ -1,17 +1,62 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import { LogEntry, AircraftCategory } from '../types';
 import FlightInfoPanel from './FlightInfoPanel';
 
 // Fix for default Leaflet icon not showing
-const createIcon = (color: string) => {
+const createIcon = (color: string, count?: number) => {
+  // If count > 1, show a badge
+  if (count && count > 1) {
+    return L.divIcon({
+      className: 'custom-div-icon',
+      html: `
+        <div style="position: relative;">
+          <div style="background-color: ${color}; width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.5);"></div>
+          <div style="
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #1c1917;
+            color: #fef3c7;
+            font-size: 10px;
+            font-weight: bold;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid #f4f1ea;
+            font-family: 'Special Elite', monospace;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+          ">${count}</div>
+        </div>
+      `,
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+  }
   return L.divIcon({
     className: 'custom-div-icon',
     html: `<div style="background-color: ${color}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.4);"></div>`,
     iconSize: [14, 14],
     iconAnchor: [7, 7]
   });
+};
+
+// Group entries by location key
+interface LocationGroup {
+  key: string;
+  lat: number;
+  lng: number;
+  entries: LogEntry[];
+  primaryCategory: AircraftCategory;
+}
+
+const createLocationKey = (lat: number, lng: number): string => {
+  // Round to 3 decimal places to group nearby coordinates
+  return `${lat.toFixed(3)},${lng.toFixed(3)}`;
 };
 
 interface MapPanelProps {
@@ -30,8 +75,20 @@ const isValidCoord = (val: any): boolean => {
 };
 
 // Component to handle map movement and responsive resizing
-const MapController: React.FC<{ center: [number, number]; zoom: number; shouldCenter: boolean }> = ({ center, zoom, shouldCenter }) => {
+const MapController: React.FC<{ 
+  center: [number, number]; 
+  zoom: number; 
+  shouldCenter: boolean;
+  onMapReady?: (map: L.Map) => void;
+}> = ({ center, zoom, shouldCenter, onMapReady }) => {
   const map = useMap();
+  
+  useEffect(() => {
+    if (onMapReady) {
+      onMapReady(map);
+    }
+  }, [map, onMapReady]);
+  
   useEffect(() => {
     if (shouldCenter && isValidCoord(center[0]) && isValidCoord(center[1])) {
       try {
@@ -88,6 +145,82 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
     );
   }, [entries]);
 
+  // Group entries by location
+  const locationGroups = useMemo(() => {
+    const groups = new Map<string, LocationGroup>();
+    
+    validEntries.forEach(entry => {
+      const key = createLocationKey(entry.origin.lat, entry.origin.lng);
+      
+      if (groups.has(key)) {
+        groups.get(key)!.entries.push(entry);
+      } else {
+        groups.set(key, {
+          key,
+          lat: entry.origin.lat,
+          lng: entry.origin.lng,
+          entries: [entry],
+          primaryCategory: entry.aircraftCategory
+        });
+      }
+    });
+    
+    // Update primary category to most common or most significant
+    groups.forEach(group => {
+      // If any entry is significant, prioritize FIGHTER category
+      const hasSignificant = group.entries.some(e => e.isSignificant);
+      if (hasSignificant) {
+        group.primaryCategory = AircraftCategory.FIGHTER;
+      } else {
+        // Use the category of the most recent entry
+        group.primaryCategory = group.entries[group.entries.length - 1].aircraftCategory;
+      }
+    });
+    
+    return Array.from(groups.values());
+  }, [validEntries]);
+
+  // State for mission selector popup
+  const [activeSelectorGroup, setActiveSelectorGroup] = useState<LocationGroup | null>(null);
+  
+  // State for popover position (pixel coordinates relative to map container)
+  const [popoverPosition, setPopoverPosition] = useState<{ x: number; y: number } | null>(null);
+  
+  // Ref to access the map instance for coordinate conversion
+  const mapRef = React.useRef<L.Map | null>(null);
+  
+  // State for hover preview (highlights path without selecting)
+  const [hoveredEntryId, setHoveredEntryId] = useState<string | null>(null);
+
+  // Handle marker click - show selector if multiple missions, otherwise select directly
+  const handleMarkerClick = (group: LocationGroup, e: L.LeafletMouseEvent) => {
+    if (group.entries.length === 1) {
+      onMarkerSelect(group.entries[0]);
+    } else {
+      // Get pixel position from the click event
+      const containerPoint = e.containerPoint;
+      setPopoverPosition({ x: containerPoint.x, y: containerPoint.y });
+      setActiveSelectorGroup(group);
+    }
+  };
+
+  // Handle mission selection from the popup
+  const handleMissionSelect = (entry: LogEntry) => {
+    onMarkerSelect(entry);
+    setActiveSelectorGroup(null);
+    setHoveredEntryId(null);
+    setPopoverPosition(null);
+  };
+
+  // Close selector when clicking elsewhere or when selection changes
+  useEffect(() => {
+    if (selectedEntry) {
+      setActiveSelectorGroup(null);
+      setHoveredEntryId(null);
+      setPopoverPosition(null);
+    }
+  }, [selectedEntry?.id]);
+
   return (
     <div className="h-full w-full relative z-0">
       <MapContainer 
@@ -105,11 +238,17 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
         />
         
-        <MapController center={centerPosition} zoom={zoomLevel} shouldCenter={shouldCenter} />
+        <MapController 
+          center={centerPosition} 
+          zoom={zoomLevel} 
+          shouldCenter={shouldCenter}
+          onMapReady={(map) => { mapRef.current = map; }}
+        />
 
         {/* Render Routes (Polylines) first so markers sit on top */}
         {validEntries.map((entry) => {
              const isActive = selectedEntry?.id === entry.id;
+             const isHovered = hoveredEntryId === entry.id;
              const pathPoints: [number, number][] = [[entry.origin.lat, entry.origin.lng]];
              
              // Add target point if it exists
@@ -132,10 +271,10 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
                         key={`line-${entry.id}`}
                         positions={pathPoints}
                         pathOptions={{ 
-                            color: getColor(entry.aircraftCategory),
-                            weight: isActive ? 4 : 2,
-                            opacity: isActive ? 1 : 0.4,
-                            dashArray: isActive ? undefined : '5, 10'
+                            color: isHovered ? '#fff' : getColor(entry.aircraftCategory),
+                            weight: isActive ? 4 : isHovered ? 5 : 2,
+                            opacity: isActive ? 1 : isHovered ? 1 : 0.4,
+                            dashArray: (isActive || isHovered) ? undefined : '5, 10'
                         }}
                     />
                 )
@@ -143,65 +282,49 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
              return null;
         })}
 
-        {/* Render Markers */}
-        {validEntries.map((entry) => {
+        {/* Render Origin Markers (grouped by location) */}
+        {locationGroups.map((group) => {
+          const isGroupSelected = group.entries.some(e => selectedEntry?.id === e.id);
+          const count = group.entries.length;
+          
           return (
-            <React.Fragment key={`group-${entry.id}`}>
-                {/* Origin Marker */}
-                <Marker
-                  key={`marker-${entry.id}`}
-                  position={[entry.origin.lat, entry.origin.lng]}
-                  icon={createIcon(getColor(entry.aircraftCategory))}
-                  opacity={selectedEntry?.id === entry.id || selectedEntry === null ? 1 : 0.6}
-                  zIndexOffset={selectedEntry?.id === entry.id ? 1000 : 0}
-                  eventHandlers={{
-                      click: () => {
-                          onMarkerSelect(entry);
-                      }
-                  }}
-                >
-                  <Popup className="font-serif">
-                    <div className="p-1 min-w-[150px]">
-                      <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">{entry.origin.name}</h3>
-                      <div className="text-xs text-stone-600 space-y-1">
-                        <p><span className="font-semibold">Date:</span> {entry.date}</p>
-                        <p><span className="font-semibold">Aircraft:</span> {entry.aircraftType}</p>
-                        <p><span className="font-semibold">Duty:</span> {entry.duty}</p>
-                        {entry.isSignificant && (
-                             <p className="text-red-700 font-bold mt-1 bg-red-50 p-1 border border-red-100 text-center uppercase text-[10px]">High Priority Event</p>
-                        )}
-                      </div>
-                    </div>
-                  </Popup>
-                </Marker>
-
-                {/* Target Marker (only for selected entry or significant ones to avoid clutter?) 
-                    Decided: Show for all valid targets to visualize the missions. */}
-                {entry.target && isValidCoord(entry.target.lat) && isValidCoord(entry.target.lng) && (
-                    <Marker
-                        key={`target-${entry.id}`}
-                        position={[entry.target.lat, entry.target.lng]}
-                        // Use a distinct color (black/dark grey) for targets
-                        icon={createIcon('#1c1917')} 
-                        opacity={selectedEntry?.id === entry.id ? 1 : 0.5}
-                        zIndexOffset={selectedEntry?.id === entry.id ? 1000 : 0}
-                        eventHandlers={{
-                            click: () => { onMarkerSelect(entry); }
-                        }}
-                    >
-                        <Popup className="font-serif">
-                            <div className="p-1">
-                                <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">
-                                    {entry.target.name} {entry.targetIsApproximate && "(Approx)"}
-                                </h3>
-                                <p className="text-xs font-semibold text-red-800">Mission Target</p>
-                            </div>
-                        </Popup>
-                    </Marker>
-                )}
-            </React.Fragment>
+            <Marker
+              key={`group-marker-${group.key}`}
+              position={[group.lat, group.lng]}
+              icon={createIcon(getColor(group.primaryCategory), count)}
+              opacity={isGroupSelected || selectedEntry === null ? 1 : 0.6}
+              zIndexOffset={isGroupSelected ? 1000 : count > 1 ? 500 : 0}
+              eventHandlers={{
+                  click: (e) => handleMarkerClick(group, e)
+              }}
+            />
           );
         })}
+
+        {/* Render Target Markers for all entries */}
+        {validEntries.map((entry) => (
+          entry.target && isValidCoord(entry.target.lat) && isValidCoord(entry.target.lng) && (
+            <Marker
+              key={`target-${entry.id}`}
+              position={[entry.target.lat, entry.target.lng]}
+              icon={createIcon('#1c1917')}
+              opacity={selectedEntry?.id === entry.id ? 1 : 0.5}
+              zIndexOffset={selectedEntry?.id === entry.id ? 1000 : 0}
+              eventHandlers={{
+                  click: () => { onMarkerSelect(entry); }
+              }}
+            >
+              <Popup className="font-serif">
+                <div className="p-1">
+                  <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">
+                    {entry.target.name} {entry.targetIsApproximate && "(Approx)"}
+                  </h3>
+                  <p className="text-xs font-semibold text-red-800">Mission Target</p>
+                </div>
+              </Popup>
+            </Marker>
+          )
+        ))}
         
         {/* Destination Marker for selected entry if different */}
         {selectedEntry && 
@@ -232,6 +355,119 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
         variant="light" 
         isTimelineCollapsed={isTimelineCollapsed}
       />
+
+      {/* Mission Selector Popup - appears when clicking a marker with multiple missions */}
+      {activeSelectorGroup && popoverPosition && (
+        <>
+          {/* Backdrop - very subtle, click to close */}
+          <div 
+            className="absolute inset-0 z-[399] bg-stone-900/5 pointer-events-auto"
+            onClick={() => { setActiveSelectorGroup(null); setHoveredEntryId(null); setPopoverPosition(null); }}
+          />
+          
+          {/* Selector Panel - positioned near marker */}
+          <div 
+            className="absolute z-[400] bg-[#f4f1ea] rounded shadow-xl border border-stone-400 w-64 max-h-[45%] overflow-hidden pointer-events-auto"
+            style={{
+              // Position above the marker, centered horizontally
+              left: `${Math.max(8, Math.min(popoverPosition.x - 128, window.innerWidth - 272))}px`,
+              top: `${Math.max(8, popoverPosition.y - 20)}px`,
+              // Shift up by the panel's height plus a small gap
+              transform: 'translateY(-100%)',
+            }}
+          >
+            {/* Small arrow pointing down to marker */}
+            <div 
+              className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0"
+              style={{
+                borderLeft: '8px solid transparent',
+                borderRight: '8px solid transparent',
+                borderTop: '8px solid #a8a29e',
+              }}
+            />
+            <div 
+              className="absolute -bottom-[6px] left-1/2 -translate-x-1/2 w-0 h-0"
+              style={{
+                borderLeft: '7px solid transparent',
+                borderRight: '7px solid transparent',
+                borderTop: '7px solid #f4f1ea',
+              }}
+            />
+            
+            {/* Header */}
+            <div className="bg-stone-200/90 border-b border-stone-300 px-2.5 py-1.5 flex items-center justify-between">
+              <div className="min-w-0">
+                <h3 className="font-typewriter text-[11px] font-bold text-stone-800 uppercase tracking-wide truncate">
+                  {activeSelectorGroup.entries[0]?.origin.name}
+                </h3>
+                <p className="font-typewriter text-[9px] text-stone-500">
+                  {activeSelectorGroup.entries.length} missions
+                </p>
+              </div>
+              <button
+                onClick={() => { setActiveSelectorGroup(null); setHoveredEntryId(null); setPopoverPosition(null); }}
+                className="w-5 h-5 flex items-center justify-center rounded bg-stone-300/80 hover:bg-stone-400/80 text-stone-600 hover:text-stone-800 transition-colors flex-shrink-0 ml-2"
+              >
+                <span className="text-sm leading-none">&times;</span>
+              </button>
+            </div>
+            
+            {/* Mission List - compact */}
+            <div className="overflow-y-auto max-h-[calc(45vh-50px)] p-1.5 space-y-1">
+              {activeSelectorGroup.entries.map((entry) => {
+                const isHovered = hoveredEntryId === entry.id;
+                return (
+                  <button
+                    key={entry.id}
+                    onClick={() => handleMissionSelect(entry)}
+                    onMouseEnter={() => setHoveredEntryId(entry.id)}
+                    onMouseLeave={() => setHoveredEntryId(null)}
+                    className={`
+                      w-full text-left px-2 py-1.5 rounded transition-all duration-100
+                      ${selectedEntry?.id === entry.id 
+                        ? 'bg-amber-100 border border-amber-400' 
+                        : isHovered
+                          ? 'bg-white border border-stone-400 shadow-sm'
+                          : 'bg-white/60 border border-transparent hover:bg-white hover:border-stone-300'
+                      }
+                    `}
+                  >
+                    <div className="flex items-center gap-2">
+                      {/* Category Indicator */}
+                      <span 
+                        className="w-2 h-2 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: getColor(entry.aircraftCategory) }}
+                      />
+                      
+                      {/* Mission Details - single line */}
+                      <div className="flex-1 min-w-0 flex items-center gap-1.5">
+                        <span className="font-typewriter text-[10px] font-bold text-stone-700 flex-shrink-0">
+                          {entry.date}
+                        </span>
+                        <span className="font-typewriter text-[10px] text-stone-500 truncate">
+                          {entry.duty}
+                        </span>
+                        {entry.isSignificant && (
+                          <span className="px-1 py-0.5 bg-red-100 text-red-600 text-[7px] font-bold rounded flex-shrink-0">
+                            ★
+                          </span>
+                        )}
+                      </div>
+                      
+                      {/* Hover indicator */}
+                      {isHovered && (
+                        <svg className="w-3 h-3 text-stone-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Map Legend Overlay - top right, below zoom controls */}
       <div className="absolute top-16 right-2 sm:top-20 sm:right-4 bg-[#f4f1ea] p-1.5 md:p-3 rounded-sm shadow-xl border md:border-2 border-stone-400 text-[9px] md:text-xs font-serif z-[100] transform md:rotate-1 block">
