@@ -444,15 +444,14 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
     const years: { year: number; position: number }[] = [];
     const startYear = startDate.getFullYear();
     const endYear = endDate.getFullYear();
+    const earliestYear = Math.min(startYear, 1944);
     
-    for (let year = startYear; year <= endYear; year++) {
+    for (let year = earliestYear; year <= endYear; year++) {
       const yearDate = new Date(year, 0, 1);
-      if (yearDate >= startDate && yearDate <= endDate) {
-        years.push({
-          year,
-          position: calculateTimelinePosition(yearDate, startDate, endDate),
-        });
-      }
+      years.push({
+        year,
+        position: calculateTimelinePosition(yearDate, startDate, endDate),
+      });
     }
     
     return years;
