@@ -5,7 +5,7 @@ import React, {
   useCallback,
   ReactNode
 } from 'react';
-import { ArrowLeftRight, ArrowUpDown, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeftRight, ArrowUpDown, PanelLeft, PanelRight, Columns2 } from 'lucide-react';
 
 const MIN_SIDE = 0;
 const MAX_SIDE = 4000;
@@ -57,18 +57,21 @@ type PresetConfig = {
 };
 
 const layoutPresets: Record<'balanced' | 'sidebarMax' | 'sidebarMin', PresetConfig> = {
-  balanced: { side: 560, ratio: 0.64 },
+  balanced: { sideFraction: 0.4, ratio: 0.64 },
   sidebarMax: { sideFraction: 1 },
   sidebarMin: { sideFraction: 0, ratio: 0.3 }
 };
 
+// Maximum default width for logbook panel on large monitors
+const MAX_DEFAULT_LOGBOOK_WIDTH = 650;
+
 type PresetKey = keyof typeof layoutPresets;
 type LayoutPreset = PresetKey | 'custom';
 
-const layoutMenuOptions: Array<{ key: PresetKey; label: string; helper: string }> = [
-  { key: 'sidebarMax', label: 'Focus Sidebar', helper: 'Prioritize data' },
-  { key: 'sidebarMin', label: 'Focus Main', helper: 'Maximize view' },
-  { key: 'balanced', label: 'Focus Balanced', helper: 'Reset split' }
+const layoutPresetConfig: Array<{ key: PresetKey; label: string; shortcut: string }> = [
+  { key: 'sidebarMax', label: 'Focus Logbook', shortcut: '[' },
+  { key: 'balanced', label: 'Balanced', shortcut: '\\' },
+  { key: 'sidebarMin', label: 'Focus Map', shortcut: ']' }
 ];
 
 interface ResizableLayoutProps {
@@ -84,6 +87,14 @@ interface ResizableLayoutProps {
   expandSidebarBottomTrigger?: boolean; 
 }
 
+// Calculate smart default width: 40% of viewport, capped at MAX_DEFAULT_LOGBOOK_WIDTH
+const getDefaultSideWidth = () => {
+  if (typeof window === 'undefined') return 560;
+  const viewportWidth = window.innerWidth;
+  const targetWidth = viewportWidth * 0.4;
+  return Math.min(targetWidth, MAX_DEFAULT_LOGBOOK_WIDTH);
+};
+
 export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
   sidebarTop,
   sidebarBottom,
@@ -92,7 +103,7 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
   expandSidebarBottomTrigger
 }) => {
   const isDesktop = useMediaQuery('(min-width: 768px)');
-  const [sidePanelWidth, setSidePanelWidth] = useState(layoutPresets.balanced.side ?? 560);
+  const [sidePanelWidth, setSidePanelWidth] = useState(getDefaultSideWidth);
   const [logbookHeightRatio, setLogbookHeightRatio] = useState(layoutPresets.balanced.ratio);
   const [activePreset, setActivePreset] = useState<LayoutPreset>('balanced');
   const [isDraggingSide, setIsDraggingSide] = useState(false);
@@ -105,20 +116,16 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
   
   // Mobile tab state for cleaner tab-based interface
   const [mobileActiveTab, setMobileActiveTab] = useState<'logbook' | 'details' | 'map'>('logbook');
-  
-  const [isLayoutMenuOpen, setIsLayoutMenuOpen] = useState(false);
 
   const leftPanelRef = useRef<HTMLDivElement>(null);
   const layoutShellRef = useRef<HTMLDivElement>(null);
-  const layoutMenuRef = useRef<HTMLDivElement>(null);
-  const layoutMenuButtonRef = useRef<HTMLButtonElement>(null);
   
   // Refs to track values without re-rendering during drag
   const horizontalDragData = useRef({
     startX: 0,
-    initialWidth: layoutPresets.balanced.side ?? 560,
+    initialWidth: getDefaultSideWidth(),
     maxWidth: MAX_SIDE,
-    currentWidth: layoutPresets.balanced.side ?? 560
+    currentWidth: getDefaultSideWidth()
   });
   
   const verticalDragData = useRef({
@@ -138,32 +145,6 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
       setMobileActiveTab('details');
     }
   }, [expandSidebarBottomTrigger, isDesktop]);
-
-  // Click outside listener for layout menu
-  useEffect(() => {
-    if (!isLayoutMenuOpen) return;
-    const handlePointer = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (
-        layoutMenuRef.current?.contains(target) ||
-        layoutMenuButtonRef.current?.contains(target)
-      ) {
-        return;
-      }
-      setIsLayoutMenuOpen(false);
-    };
-    const handleKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsLayoutMenuOpen(false);
-      }
-    };
-    window.addEventListener('mousedown', handlePointer);
-    window.addEventListener('keydown', handleKey);
-    return () => {
-      window.removeEventListener('mousedown', handlePointer);
-      window.removeEventListener('keydown', handleKey);
-    };
-  }, [isLayoutMenuOpen]);
 
   // Cursor updates during drag
   useEffect(() => {
@@ -261,13 +242,21 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
     };
   }, [getMaxSideWidth, isDesktop]);
 
-  const handlePresetApply = (preset: PresetKey) => {
+  const handlePresetApply = useCallback((preset: PresetKey) => {
     const config = layoutPresets[preset];
     const maxWidth = getMaxSideWidth();
-    const targetWidth =
-      typeof config.sideFraction === 'number'
-        ? config.sideFraction * maxWidth
-        : clamp(config.side ?? maxWidth, MIN_SIDE, maxWidth);
+    
+    let targetWidth: number;
+    if (typeof config.sideFraction === 'number') {
+      // For balanced preset, apply max cap
+      if (preset === 'balanced') {
+        targetWidth = Math.min(config.sideFraction * maxWidth, MAX_DEFAULT_LOGBOOK_WIDTH);
+      } else {
+        targetWidth = config.sideFraction * maxWidth;
+      }
+    } else {
+      targetWidth = clamp(config.side ?? maxWidth, MIN_SIDE, maxWidth);
+    }
     
     setSidePanelWidth(targetWidth);
     
@@ -275,19 +264,43 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
       setLogbookHeightRatio(config.ratio);
     }
     setActivePreset(preset);
-  };
+  }, [getMaxSideWidth]);
 
   const handleLayoutReset = () => handlePresetApply('balanced');
 
-  const handleMenuSelect = (preset: PresetKey) => {
-    handlePresetApply(preset);
-    setIsLayoutMenuOpen(false);
-  };
+  // Keyboard shortcuts for layout presets
+  useEffect(() => {
+    if (!isDesktop) return;
+    
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Don't trigger if user is typing in an input
+      if (event.target instanceof HTMLInputElement || 
+          event.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+      
+      switch (event.key) {
+        case '[':
+          handlePresetApply('sidebarMax');
+          break;
+        case ']':
+          handlePresetApply('sidebarMin');
+          break;
+        case '\\':
+          handlePresetApply('balanced');
+          break;
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isDesktop, handlePresetApply]);
 
   const handleHorizontalDragStart = (event: React.MouseEvent) => {
     event.preventDefault();
     setActivePreset('custom');
-    setIsLayoutMenuOpen(false);
     const maxWidth = getMaxSideWidth();
     horizontalDragData.current = {
       startX: event.clientX,
@@ -309,7 +322,6 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
       currentRatio: logbookHeightRatio
     };
     setActivePreset('custom');
-    setIsLayoutMenuOpen(false);
     setIsDraggingStack(true);
   };
 
@@ -372,64 +384,82 @@ export const ResizableLayout: React.FC<ResizableLayoutProps> = ({
         </div>
       </div>
 
-      <div className="relative h-full">
-        <div
-          role="separator"
-          aria-orientation="vertical"
-          aria-label="Resize main panel"
-          onMouseDown={handleHorizontalDragStart}
-          onDoubleClick={handleLayoutReset}
-          className={`relative flex flex-col items-center justify-center gap-4 px-2 py-4 w-8 max-w-8 h-full cursor-col-resize bg-stone-900/80 text-stone-200 transition-colors ${
-            isDraggingSide ? 'bg-amber-500/60 text-stone-900' : 'hover:bg-amber-500/30 hover:text-stone-900'
-          }`}
-          title="Drag to adjust width"
-        >
-          <ArrowLeftRight className="w-4 h-4" />
-          <button
-            type="button"
-            ref={layoutMenuButtonRef}
-            aria-haspopup="menu"
-            aria-expanded={isLayoutMenuOpen}
-            aria-controls="layout-menu"
-            onMouseDown={(event) => event.stopPropagation()}
-            onClick={(event) => {
-              event.stopPropagation();
-              setIsLayoutMenuOpen((prev) => !prev);
-            }}
-            className="flex items-center justify-center w-6 h-6 rounded-full border border-current text-xs leading-none font-mono hover:bg-amber-500/20"
-            title="Layout presets"
-          >
-            ...
-          </button>
+      <div
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize main panel"
+        onMouseDown={handleHorizontalDragStart}
+        onDoubleClick={handleLayoutReset}
+        className={`relative flex flex-col items-center justify-center gap-1 px-1 py-4 w-8 max-w-8 h-full cursor-col-resize bg-stone-900/80 text-stone-200 transition-colors ${
+          isDraggingSide ? 'bg-amber-500/60 text-stone-900' : ''
+        }`}
+        title="Drag anywhere on this bar to resize"
+      >
+        {/* Drag indicator with hint */}
+        <div className="flex flex-col items-center gap-1 mb-1">
+          <ArrowLeftRight className="w-3.5 h-3.5 opacity-60" />
+          <span className="text-[7px] uppercase tracking-wide opacity-50 font-typewriter">Drag</span>
         </div>
-
-        {isLayoutMenuOpen && (
-          <div
-            id="layout-menu"
-            ref={layoutMenuRef}
-            role="menu"
-            className="absolute right-12 top-1/2 -translate-y-1/2 bg-stone-950 text-stone-100 border border-amber-500/40 rounded-md shadow-2xl w-48 z-50 py-2"
-          >
-            {layoutMenuOptions.map(({ key, label, helper }) => {
-              const isActive = activePreset === key;
-              return (
-                <button
-                  key={key}
-                  role="menuitem"
-                  onClick={() => handleMenuSelect(key)}
-                  className={`w-full text-left px-4 py-2 text-[11px] font-typewriter uppercase tracking-[0.35em] flex flex-col gap-1 border-l-4 transition ${
-                    isActive
-                      ? 'bg-amber-500/20 border-amber-400 text-amber-200'
-                      : 'border-transparent hover:border-amber-300 hover:bg-stone-900'
-                  }`}
-                >
-                  <span>{label}</span>
-                  <span className="text-[9px] text-stone-400 tracking-[0.4em]">{helper}</span>
-                </button>
-              );
-            })}
+        
+        {/* Layout preset buttons */}
+        <div className="flex flex-col gap-1">
+          {layoutPresetConfig.map(({ key, label, shortcut }) => {
+            const isActive = activePreset === key;
+            const Icon = key === 'sidebarMax' ? PanelLeft : key === 'sidebarMin' ? PanelRight : Columns2;
+            
+            // Determine tooltip position based on available space
+            // When sidebar is maximized (bar at right edge), show tooltip on left
+            // When sidebar is minimized (bar at left edge), show tooltip on right
+            // Otherwise default to right
+            const tooltipOnLeft = activePreset === 'sidebarMax' || sidePanelWidth > (typeof window !== 'undefined' ? window.innerWidth * 0.6 : 800);
+            
+            return (
+              <button
+                key={key}
+                type="button"
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePresetApply(key);
+                }}
+                className={`group relative flex items-center justify-center w-6 h-6 rounded transition-all ${
+                  isActive
+                    ? 'bg-amber-500/80 text-stone-900 shadow-sm'
+                    : 'hover:bg-amber-500/30 hover:text-stone-100 text-stone-400'
+                }`}
+                title={`${label} (${shortcut})`}
+              >
+                <Icon className="w-4 h-4" />
+                
+                {/* Tooltip on hover - position adapts based on sidebar width */}
+                <span className={`absolute px-2 py-1 bg-stone-950 text-stone-100 text-[10px] font-typewriter uppercase tracking-wider whitespace-nowrap rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-lg border border-stone-700 z-50 ${
+                  tooltipOnLeft 
+                    ? 'right-full mr-2' 
+                    : 'left-full ml-2'
+                }`}>
+                  {label}
+                  <span className="ml-1.5 text-amber-400">{shortcut}</span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        
+        {/* Visual drag handle dots */}
+        <div className="flex flex-col gap-0.5 mt-2 opacity-40">
+          <div className="flex gap-0.5">
+            <div className="w-1 h-1 rounded-full bg-current" />
+            <div className="w-1 h-1 rounded-full bg-current" />
           </div>
-        )}
+          <div className="flex gap-0.5">
+            <div className="w-1 h-1 rounded-full bg-current" />
+            <div className="w-1 h-1 rounded-full bg-current" />
+          </div>
+          <div className="flex gap-0.5">
+            <div className="w-1 h-1 rounded-full bg-current" />
+            <div className="w-1 h-1 rounded-full bg-current" />
+          </div>
+        </div>
       </div>
 
       <div className="flex-1 min-w-0 relative bg-stone-800 border-l-8 border-stone-900 shadow-inner transition-all duration-300 ease-out">
