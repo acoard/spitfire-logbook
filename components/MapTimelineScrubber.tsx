@@ -203,6 +203,17 @@ const PositionIndicator: React.FC<PositionIndicatorProps> = ({ position }) => {
 // Main Component
 // ============================================================================
 
+// Container size breakpoints for responsive layout
+type ContainerSize = 'hidden' | 'tiny' | 'narrow' | 'medium' | 'wide';
+
+const getContainerSize = (width: number): ContainerSize => {
+  if (width < 100) return 'hidden'; // Essentially collapsed - hide completely
+  if (width < 280) return 'tiny';
+  if (width < 400) return 'narrow';
+  if (width < 550) return 'medium';
+  return 'wide';
+};
+
 export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
   entries,
   selectedEntryId,
@@ -215,23 +226,29 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isNarrow, setIsNarrow] = useState(false);
+  const [containerSize, setContainerSize] = useState<ContainerSize>('wide');
   const playIntervalRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Track container width to hide legend when too narrow
+  // Track container width for responsive adjustments
   useEffect(() => {
     if (!containerRef.current) return;
     
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
-        // Hide chapter legend when container is narrower than 300px
-        setIsNarrow(entry.contentRect.width < 300);
+        setContainerSize(getContainerSize(entry.contentRect.width));
       }
     });
     
     observer.observe(containerRef.current);
     return () => observer.disconnect();
   }, []);
+  
+  // Derived responsive flags
+  const isHidden = containerSize === 'hidden';
+  const isTiny = containerSize === 'tiny';
+  const isNarrow = containerSize === 'narrow' || containerSize === 'tiny';
+  const isMedium = containerSize === 'medium';
+  const isWide = containerSize === 'wide';
   
   // Transform entries to timeline markers
   const markers: TimelineMarker[] = useMemo(() => {
@@ -456,7 +473,7 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [navigatePrev, navigateNext, navigateFirst, navigateLast, togglePlayback]);
   
-  // Year markers for the timeline
+  // Year markers for the timeline - filtered based on container width
   const yearMarkers = useMemo(() => {
     const years: { year: number; position: number }[] = [];
     const startYear = startDate.getFullYear();
@@ -471,41 +488,64 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
       });
     }
     
+    // Filter years based on container size to prevent overlap
+    if (isTiny) {
+      // Show only first and last year in tiny mode
+      return years.filter((_, idx) => idx === 0 || idx === years.length - 1);
+    }
+    if (isNarrow) {
+      // Show every other year in narrow mode
+      return years.filter((_, idx) => idx % 2 === 0 || idx === years.length - 1);
+    }
+    
     return years;
-  }, [startDate, endDate]);
+  }, [startDate, endDate, isTiny, isNarrow]);
   
   if (collapsed) {
     return (
-      <button
-        onClick={onToggleCollapse}
-        className={`
-          absolute z-[500]
-          bg-amber-950/90 hover:bg-amber-900/95 text-amber-200
-          shadow-lg font-typewriter text-xs tracking-wider
-          border border-amber-800/50
-          transition-all duration-300
-          flex items-center gap-2
-          
-          /* Mobile: full width bar at bottom */
-          bottom-0 left-0 right-0
-          px-4 py-2.5
-          justify-center
-          rounded-t-lg border-b-0
-          
-          /* Desktop/tablet: centered pill, higher to avoid Leaflet attribution */
-          sm:bottom-10 sm:left-1/2 sm:-translate-x-1/2 sm:right-auto
-          sm:px-4 sm:py-2
-          sm:rounded-lg sm:border-b
-          sm:hover:translate-y-[-2px]
-          
-          ${className}
-        `}
-        aria-label="Show Timeline"
-      >
-        <ChevronUp className="w-4 h-4" />
-        <span>TIMELINE</span>
-        <span className="text-amber-400/80">{selectedMarker?.dateDisplay || '1944-1946'}</span>
-      </button>
+      <>
+        {/* Hidden measure element to track container size even when collapsed */}
+        <div ref={containerRef} className="absolute inset-0 pointer-events-none" aria-hidden="true" />
+        {!isHidden && (
+          <button
+            onClick={onToggleCollapse}
+            className={`
+              absolute z-[500]
+              bg-amber-950/90 hover:bg-amber-900/95 text-amber-200
+              shadow-lg font-typewriter text-xs tracking-wider
+              border border-amber-800/50
+              transition-all duration-300
+              flex items-center gap-2
+              
+              /* Mobile: full width bar at bottom */
+              bottom-0 left-0 right-0
+              px-4 py-2.5
+              justify-center
+              rounded-t-lg border-b-0
+              
+              /* Desktop/tablet: centered pill, higher to avoid Leaflet attribution */
+              sm:bottom-10 sm:left-1/2 sm:-translate-x-1/2 sm:right-auto
+              sm:px-4 sm:py-2
+              sm:rounded-lg sm:border-b
+              sm:hover:translate-y-[-2px]
+              
+              ${className}
+            `}
+            aria-label="Show Timeline"
+          >
+            <ChevronUp className="w-4 h-4" />
+            <span>TIMELINE</span>
+            <span className="text-amber-400/80">{selectedMarker?.dateDisplay || '1944-1946'}</span>
+          </button>
+        )}
+      </>
+    );
+  }
+  
+  // Hide completely when container is too small (map panel essentially hidden)
+  if (isHidden) {
+    return (
+      <div ref={containerRef} className="absolute inset-0 pointer-events-none" aria-hidden="true" />
     );
   }
   
@@ -533,56 +573,68 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
       />
       
       {/* Main content container */}
-      <div className="relative px-2 sm:px-4 pt-2 pb-3">
-        {/* Top row: Info and controls */}
-        <div className="flex items-center justify-between mb-2 gap-2">
-          {/* Left: Current selection info */}
-          <div className="flex-1 min-w-0">
-            {selectedMarker ? (
-              <div className="flex flex-col">
-                <span className="font-typewriter text-amber-300 text-[10px] sm:text-xs tracking-wider">
-                  {selectedMarker.dateDisplay}
-                </span>
-                <span className="font-old-print text-amber-100 text-sm sm:text-base font-medium truncate">
-                  {selectedMarker.title}
-                </span>
-              </div>
-            ) : (
-              <div className="flex flex-col">
-                <span className="font-typewriter text-amber-400/70 text-[10px] sm:text-xs tracking-wider">
-                  ROBIN GLEN'S RAF JOURNEY
-                </span>
-                <span className="font-old-print text-amber-200/80 text-sm sm:text-base italic">
-                  Select an entry to explore
-                </span>
-              </div>
-            )}
-          </div>
+      <div className={`relative pt-2 pb-2 ${isTiny ? 'px-1.5' : isNarrow ? 'px-2' : 'px-2 sm:px-4'}`}>
+        {/* Top row: Info and controls - stacks vertically in tiny mode */}
+        <div className={`flex items-center mb-2 gap-1.5 ${isTiny ? 'flex-col' : 'justify-between gap-2'}`}>
+          {/* Left: Current selection info - hidden in tiny mode when not selected */}
+          {(!isTiny || selectedMarker) && (
+            <div className={`min-w-0 ${isTiny ? 'w-full text-center' : 'flex-1'}`}>
+              {selectedMarker ? (
+                <div className={`flex ${isTiny ? 'items-center justify-center gap-2' : 'flex-col'}`}>
+                  <span className={`font-typewriter text-amber-300 tracking-wider ${isTiny ? 'text-[9px]' : 'text-[10px] sm:text-xs'}`}>
+                    {selectedMarker.dateDisplay}
+                  </span>
+                  {!isTiny && (
+                    <span className="font-old-print text-amber-100 text-sm sm:text-base font-medium truncate">
+                      {selectedMarker.title}
+                    </span>
+                  )}
+                </div>
+              ) : (
+                <div className="flex flex-col">
+                  <span className={`font-typewriter text-amber-400/70 tracking-wider ${isNarrow ? 'text-[9px]' : 'text-[10px] sm:text-xs'}`}>
+                    {isNarrow ? 'RAF JOURNEY' : "ROBIN GLEN'S RAF JOURNEY"}
+                  </span>
+                  {!isNarrow && (
+                    <span className="font-old-print text-amber-200/80 text-sm sm:text-base italic">
+                      Select an entry to explore
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
           
-          {/* Center: Playback controls */}
-          <div className="flex items-center gap-1 bg-amber-950/50 rounded-full px-2 py-1 border border-amber-700/30">
-            <button
-              onClick={navigateFirst}
-              className="p-1 text-amber-300 hover:text-amber-100 transition-colors disabled:opacity-30"
-              disabled={selectedIndex <= 0}
-              aria-label="First entry"
-              title="First (Home)"
-            >
-              <SkipBack className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </button>
+          {/* Center: Playback controls - compact in narrow modes */}
+          <div className={`flex items-center bg-amber-950/50 rounded-full border border-amber-700/30 ${
+            isTiny ? 'gap-0.5 px-1.5 py-0.5' : isNarrow ? 'gap-0.5 px-1.5 py-1' : 'gap-1 px-2 py-1'
+          }`}>
+            {/* Skip to first - hidden in tiny mode */}
+            {!isTiny && (
+              <button
+                onClick={navigateFirst}
+                className={`text-amber-300 hover:text-amber-100 transition-colors disabled:opacity-30 ${isNarrow ? 'p-0.5' : 'p-1'}`}
+                disabled={selectedIndex <= 0}
+                aria-label="First entry"
+                title="First (Home)"
+              >
+                <SkipBack className={isNarrow ? 'w-3 h-3' : 'w-3.5 h-3.5 sm:w-4 sm:h-4'} />
+              </button>
+            )}
             <button
               onClick={navigatePrev}
-              className="p-1 text-amber-300 hover:text-amber-100 transition-colors disabled:opacity-30"
+              className={`text-amber-300 hover:text-amber-100 transition-colors disabled:opacity-30 ${isTiny ? 'p-0.5' : isNarrow ? 'p-0.5' : 'p-1'}`}
               disabled={selectedIndex <= 0}
               aria-label="Previous entry"
               title="Previous (←)"
             >
-              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+              <ChevronLeft className={isTiny ? 'w-4 h-4' : isNarrow ? 'w-4 h-4' : 'w-4 h-4 sm:w-5 sm:h-5'} />
             </button>
             <button
               onClick={togglePlayback}
               className={`
-                p-1.5 rounded-full transition-colors
+                rounded-full transition-colors
+                ${isTiny ? 'p-1' : isNarrow ? 'p-1' : 'p-1.5'}
                 ${isPlaying 
                   ? 'bg-amber-600 text-amber-950' 
                   : 'text-amber-300 hover:text-amber-100 hover:bg-amber-800/50'
@@ -592,44 +644,50 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
               title={isPlaying ? 'Pause (Space)' : 'Play (Space)'}
             >
               {isPlaying ? (
-                <Pause className="w-4 h-4 sm:w-5 sm:h-5" />
+                <Pause className={isTiny ? 'w-3.5 h-3.5' : isNarrow ? 'w-4 h-4' : 'w-4 h-4 sm:w-5 sm:h-5'} />
               ) : (
-                <Play className="w-4 h-4 sm:w-5 sm:h-5" />
+                <Play className={isTiny ? 'w-3.5 h-3.5' : isNarrow ? 'w-4 h-4' : 'w-4 h-4 sm:w-5 sm:h-5'} />
               )}
             </button>
             <button
               onClick={navigateNext}
-              className="p-1 text-amber-300 hover:text-amber-100 transition-colors disabled:opacity-30"
+              className={`text-amber-300 hover:text-amber-100 transition-colors disabled:opacity-30 ${isTiny ? 'p-0.5' : isNarrow ? 'p-0.5' : 'p-1'}`}
               disabled={selectedIndex >= markers.length - 1}
               aria-label="Next entry"
               title="Next (→)"
             >
-              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              <ChevronRight className={isTiny ? 'w-4 h-4' : isNarrow ? 'w-4 h-4' : 'w-4 h-4 sm:w-5 sm:h-5'} />
             </button>
-            <button
-              onClick={navigateLast}
-              className="p-1 text-amber-300 hover:text-amber-100 transition-colors disabled:opacity-30"
-              disabled={selectedIndex >= markers.length - 1}
-              aria-label="Last entry"
-              title="Last (End)"
-            >
-              <SkipForward className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </button>
+            {/* Skip to last - hidden in tiny mode */}
+            {!isTiny && (
+              <button
+                onClick={navigateLast}
+                className={`text-amber-300 hover:text-amber-100 transition-colors disabled:opacity-30 ${isNarrow ? 'p-0.5' : 'p-1'}`}
+                disabled={selectedIndex >= markers.length - 1}
+                aria-label="Last entry"
+                title="Last (End)"
+              >
+                <SkipForward className={isNarrow ? 'w-3 h-3' : 'w-3.5 h-3.5 sm:w-4 sm:h-4'} />
+              </button>
+            )}
           </div>
           
           {/* Right: Entry counter and collapse button */}
-          <div className="flex items-center gap-2">
-            <span className="font-typewriter text-amber-400/70 text-[10px] sm:text-xs hidden sm:block">
-              {selectedIndex >= 0 ? `${selectedIndex + 1}` : '-'}/{markers.length}
-            </span>
+          <div className={`flex items-center ${isTiny ? 'absolute top-2 right-1.5' : 'gap-2'}`}>
+            {/* Entry counter - shown in medium+ */}
+            {!isNarrow && (
+              <span className="font-typewriter text-amber-400/70 text-[10px] sm:text-xs">
+                {selectedIndex >= 0 ? `${selectedIndex + 1}` : '-'}/{markers.length}
+              </span>
+            )}
             {onToggleCollapse && (
               <button
                 onClick={onToggleCollapse}
-                className="p-1 text-amber-400/70 hover:text-amber-200 transition-colors"
+                className={`text-amber-400/70 hover:text-amber-200 transition-colors ${isTiny ? 'p-0.5' : 'p-1'}`}
                 aria-label="Hide timeline"
                 title="Hide Timeline"
               >
-                <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
+                <ChevronDown className={isTiny ? 'w-4 h-4' : 'w-4 h-4 sm:w-5 sm:h-5'} />
               </button>
             )}
           </div>
@@ -639,10 +697,11 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
         <div 
           ref={trackRef}
           className={`
-            relative h-6 sm:h-8 mx-8 sm:mx-12
-            bg-amber-950/60 rounded-full
+            relative rounded-full
+            bg-amber-950/60
             border border-amber-700/40
             cursor-pointer
+            ${isTiny ? 'h-5 mx-2' : isNarrow ? 'h-5 mx-4' : 'h-6 sm:h-8 mx-8 sm:mx-12'}
             ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}
           `}
           onMouseDown={handleMouseDown}
@@ -703,11 +762,11 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
         </div>
         
         {/* Year labels */}
-        <div className="relative mx-8 sm:mx-12 mt-1 h-4">
+        <div className={`relative mt-1 ${isTiny ? 'mx-2 h-3' : isNarrow ? 'mx-4 h-3' : 'mx-8 sm:mx-12 h-4'}`}>
           {yearMarkers.map(({ year, position }) => (
             <div
               key={year}
-              className="absolute -translate-x-1/2 font-typewriter text-[9px] sm:text-[10px] text-amber-500/70"
+              className={`absolute -translate-x-1/2 font-typewriter text-amber-500/70 ${isTiny ? 'text-[8px]' : 'text-[9px] sm:text-[10px]'}`}
               style={{ left: `${position * 100}%` }}
             >
               {year}
@@ -715,19 +774,19 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
           ))}
         </div>
         
-        {/* Chapter legend - hidden when panel is too narrow */}
-        {!isNarrow && (
-          <div className="flex items-center justify-center gap-4 sm:gap-6 mt-1">
+        {/* Chapter legend - hidden in narrow modes, compact in medium */}
+        {(isWide || isMedium) && (
+          <div className={`flex items-center justify-center mt-1 ${isMedium ? 'gap-2' : 'gap-4 sm:gap-6'}`}>
             {[Phase.TRAINING, Phase.COMBAT, Phase.FERRY].map(phase => {
               const info = getChapterFromPhase(phase);
               const count = markers.filter(m => m.phase === phase).length;
               return (
-                <div key={phase} className="flex items-center gap-1.5">
+                <div key={phase} className={`flex items-center ${isMedium ? 'gap-1' : 'gap-1.5'}`}>
                   <div 
-                    className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full"
+                    className={`rounded-full ${isMedium ? 'w-1.5 h-1.5' : 'w-2 h-2 sm:w-2.5 sm:h-2.5'}`}
                     style={{ backgroundColor: info.color }}
                   />
-                  <span className="font-typewriter text-[8px] sm:text-[10px] text-amber-400/70 tracking-wider">
+                  <span className={`font-typewriter text-amber-400/70 tracking-wider ${isMedium ? 'text-[7px]' : 'text-[8px] sm:text-[10px]'}`}>
                     {info.name.toUpperCase()} ({count})
                   </span>
                 </div>
