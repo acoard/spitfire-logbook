@@ -113,6 +113,64 @@ const createDiamondIcon = (color: string, isActive: boolean) => {
   });
 };
 
+// Grouped marker for locations with multiple missions
+const createGroupedIcon = (color: string, count: number, hasSelectedEntry: boolean) => {
+  const size = 18;
+  return L.divIcon({
+    className: 'grouped-marker',
+    html: `
+      <div style="position: relative;">
+        <div style="
+          background-color: ${color}; 
+          width: ${size}px; 
+          height: ${size}px; 
+          border-radius: 50%; 
+          border: 2px solid white; 
+          box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+          opacity: ${hasSelectedEntry ? 0.6 : 1};
+        "></div>
+        <div style="
+          position: absolute;
+          top: -8px;
+          right: -10px;
+          background: #1c1917;
+          color: #fef3c7;
+          font-size: 10px;
+          font-weight: bold;
+          min-width: 16px;
+          height: 16px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1.5px solid #f4f1ea;
+          font-family: 'Special Elite', monospace;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        ">${count}</div>
+      </div>
+    `,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2]
+  });
+};
+
+// ============================================================================
+// LOCATION GROUPING
+// ============================================================================
+
+interface LocationGroup {
+  key: string;
+  lat: number;
+  lng: number;
+  entries: LogEntry[];
+  primaryCategory: AircraftCategory;
+}
+
+const createLocationKey = (lat: number, lng: number): string => {
+  // Round to 3 decimal places to group nearby coordinates
+  return `${lat.toFixed(3)},${lng.toFixed(3)}`;
+};
+
 interface MapPanelProps {
   entries: LogEntry[];
   selectedEntry: LogEntry | null;
@@ -399,6 +457,46 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
     );
   }, [entries]);
 
+  // Group entries by location for multi-mission markers
+  const locationGroups = useMemo(() => {
+    const groups = new Map<string, LocationGroup>();
+    
+    validEntries.forEach(entry => {
+      const key = createLocationKey(entry.origin.lat, entry.origin.lng);
+      
+      if (groups.has(key)) {
+        groups.get(key)!.entries.push(entry);
+      } else {
+        groups.set(key, {
+          key,
+          lat: entry.origin.lat,
+          lng: entry.origin.lng,
+          entries: [entry],
+          primaryCategory: entry.aircraftCategory
+        });
+      }
+    });
+    
+    // Update primary category to the most common category at this location
+    groups.forEach(group => {
+      const categoryCounts = new Map<AircraftCategory, number>();
+      group.entries.forEach(e => {
+        categoryCounts.set(e.aircraftCategory, (categoryCounts.get(e.aircraftCategory) || 0) + 1);
+      });
+      let maxCount = 0;
+      let mostCommon = group.entries[0].aircraftCategory;
+      categoryCounts.forEach((count, cat) => {
+        if (count > maxCount) {
+          maxCount = count;
+          mostCommon = cat;
+        }
+      });
+      group.primaryCategory = mostCommon;
+    });
+    
+    return Array.from(groups.values());
+  }, [validEntries]);
+
   // Build path for active route (for animation)
   const activeRoutePath = useMemo((): [number, number][] | null => {
     if (!selectedEntry) return null;
@@ -493,6 +591,21 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
           background: transparent !important;
           border: none !important;
         }
+        
+        /* Mission list popup styling */
+        .mission-list-popup .leaflet-popup-content-wrapper {
+          background: #f4f1ea;
+          border-radius: 4px;
+          padding: 0;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+        .mission-list-popup .leaflet-popup-content {
+          margin: 0;
+          width: auto !important;
+        }
+        .mission-list-popup .leaflet-popup-tip {
+          background: #f4f1ea;
+        }
       `}</style>
       
       <MapContainer 
@@ -582,88 +695,203 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
           />
         )}
 
-        {/* Render Markers - inactive first */}
-        {validEntries.map((entry) => {
-          const isActive = selectedEntry?.id === entry.id;
-          if (isActive) return null; // Render active markers separately
+        {/* Render Origin Markers - grouped by location */}
+        {locationGroups.map((group) => {
+          const isGroupSelected = group.entries.some(e => selectedEntry?.id === e.id);
           
-          return (
-            <React.Fragment key={`group-${entry.id}`}>
-              {/* Origin Marker - smaller for inactive */}
-              <Marker
-                key={`marker-${entry.id}`}
-                position={[entry.origin.lat, entry.origin.lng]}
-                icon={createIcon(getColor(entry.aircraftCategory, false), 10)}
-                opacity={0.7}
-                eventHandlers={{
-                  click: () => onMarkerSelect(entry)
-                }}
-              >
-                <Popup className="font-serif">
-                  <div className="p-1 min-w-[150px]">
-                    <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">{entry.origin.name}</h3>
-                    <div className="text-xs text-stone-600 space-y-1">
-                      <p><span className="font-semibold">Date:</span> {entry.date}</p>
-                      <p><span className="font-semibold">Aircraft:</span> {entry.aircraftType}</p>
-                      <p><span className="font-semibold">Duty:</span> {entry.duty}</p>
-                      {entry.isSignificant && (
-                        <p className="text-red-700 font-bold mt-1 bg-red-50 p-1 border border-red-100 text-center uppercase text-[10px]">High Priority Event</p>
-                      )}
-                    </div>
-                  </div>
-                </Popup>
-              </Marker>
-
-              {/* Target Marker - diamond shape */}
-              {entry.target && isValidCoord(entry.target.lat) && isValidCoord(entry.target.lng) && (
+          // Skip if the selected entry is in this group (rendered separately with pulsing)
+          if (isGroupSelected) return null;
+          
+          const count = group.entries.length;
+          
+          if (count === 1) {
+            // Single entry - render normal small marker
+            const entry = group.entries[0];
+            return (
+              <React.Fragment key={`group-${group.key}`}>
                 <Marker
-                  key={`target-${entry.id}`}
-                  position={[entry.target.lat, entry.target.lng]}
-                  icon={createDiamondIcon('#1c1917', false)}
-                  opacity={0.5}
+                  position={[group.lat, group.lng]}
+                  icon={createIcon(getColor(entry.aircraftCategory, false), 10)}
+                  opacity={selectedEntry ? 0.6 : 0.8}
                   eventHandlers={{
                     click: () => onMarkerSelect(entry)
                   }}
                 >
                   <Popup className="font-serif">
-                    <div className="p-1">
-                      <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">
-                        {entry.target.name} {entry.targetIsApproximate && "(Approx)"}
-                      </h3>
-                      <p className="text-xs font-semibold text-red-800">Mission Target</p>
+                    <div className="p-1 min-w-[150px]">
+                      <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">{entry.origin.name}</h3>
+                      <div className="text-xs text-stone-600 space-y-1">
+                        <p><span className="font-semibold">Date:</span> {entry.date}</p>
+                        <p><span className="font-semibold">Aircraft:</span> {entry.aircraftType}</p>
+                        <p><span className="font-semibold">Duty:</span> {entry.duty}</p>
+                        {entry.isSignificant && (
+                          <p className="text-red-700 font-bold mt-1 bg-red-50 p-1 border border-red-100 text-center uppercase text-[10px]">★ Significant</p>
+                        )}
+                      </div>
                     </div>
                   </Popup>
                 </Marker>
-              )}
-            </React.Fragment>
+
+                {/* Target Marker - diamond shape */}
+                {entry.target && isValidCoord(entry.target.lat) && isValidCoord(entry.target.lng) && (
+                  <Marker
+                    position={[entry.target.lat, entry.target.lng]}
+                    icon={createDiamondIcon('#1c1917', false)}
+                    opacity={0.5}
+                    eventHandlers={{
+                      click: () => onMarkerSelect(entry)
+                    }}
+                  >
+                    <Popup className="font-serif">
+                      <div className="p-1">
+                        <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">
+                          {entry.target.name} {entry.targetIsApproximate && "(Approx)"}
+                        </h3>
+                        <p className="text-xs font-semibold text-red-800">Mission Target</p>
+                      </div>
+                    </Popup>
+                  </Marker>
+                )}
+              </React.Fragment>
+            );
+          }
+          
+          // Multiple entries - render grouped marker with mission list popup
+          return (
+            <Marker
+              key={`group-${group.key}`}
+              position={[group.lat, group.lng]}
+              icon={createGroupedIcon(getColor(group.primaryCategory, false), count, !!selectedEntry)}
+              zIndexOffset={500}
+            >
+              <Popup className="mission-list-popup" maxWidth={280} minWidth={220}>
+                <div className="p-0">
+                  <div className="bg-stone-200/90 px-2.5 py-1.5 border-b border-stone-300 -mx-[1px] -mt-[1px] rounded-t">
+                    <h3 className="font-typewriter text-[11px] font-bold text-stone-800 uppercase tracking-wide">
+                      {group.entries[0]?.origin.name}
+                    </h3>
+                    <p className="font-typewriter text-[9px] text-stone-500">{count} missions from this location</p>
+                  </div>
+                  <div className="py-1.5 px-1 max-h-[200px] overflow-y-auto">
+                    {group.entries.map((entry) => (
+                      <button
+                        key={entry.id}
+                        onClick={() => onMarkerSelect(entry)}
+                        className="w-full text-left px-2 py-1.5 rounded transition-all duration-100 bg-white/60 border border-transparent hover:bg-amber-50 hover:border-amber-300 mb-1 last:mb-0 group"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span 
+                            className="w-2 h-2 rounded-full flex-shrink-0"
+                            style={{ backgroundColor: getColor(entry.aircraftCategory, false) }}
+                          />
+                          <div className="flex-1 min-w-0 flex items-center gap-1.5">
+                            <span className="font-typewriter text-[10px] font-bold text-stone-700 flex-shrink-0">
+                              {entry.date}
+                            </span>
+                            <span className="font-typewriter text-[10px] text-stone-500 truncate">
+                              {entry.duty}
+                            </span>
+                            {entry.isSignificant && (
+                              <span className="px-1 py-0.5 bg-red-100 text-red-600 text-[7px] font-bold rounded flex-shrink-0">★</span>
+                            )}
+                          </div>
+                          <svg className="w-3 h-3 text-stone-300 group-hover:text-amber-500 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </Popup>
+            </Marker>
           );
         })}
         
         {/* Active entry markers - rendered on top */}
-        {selectedEntry && (
+        {selectedEntry && (() => {
+          // Find if the selected entry is part of a multi-mission location
+          const selectedLocationKey = createLocationKey(selectedEntry.origin.lat, selectedEntry.origin.lng);
+          const selectedGroup = locationGroups.find(g => g.key === selectedLocationKey);
+          const isMultiMission = selectedGroup && selectedGroup.entries.length > 1;
+          
+          return (
           <React.Fragment key={`group-active-${selectedEntry.id}`}>
             {/* Active Origin Marker - pulsing */}
             <Marker
               position={[selectedEntry.origin.lat, selectedEntry.origin.lng]}
               icon={createPulsingIcon(getColor(selectedEntry.aircraftCategory, true))}
               zIndexOffset={1000}
-              eventHandlers={{
-                click: () => onMarkerSelect(selectedEntry)
-              }}
             >
-              <Popup className="font-serif">
-                <div className="p-1 min-w-[150px]">
-                  <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">{selectedEntry.origin.name}</h3>
-                  <div className="text-xs text-stone-600 space-y-1">
-                    <p><span className="font-semibold">Date:</span> {selectedEntry.date}</p>
-                    <p><span className="font-semibold">Aircraft:</span> {selectedEntry.aircraftType}</p>
-                    <p><span className="font-semibold">Duty:</span> {selectedEntry.duty}</p>
-                    {selectedEntry.isSignificant && (
-                      <p className="text-red-700 font-bold mt-1 bg-red-50 p-1 border border-red-100 text-center uppercase text-[10px]">High Priority Event</p>
-                    )}
+              {isMultiMission && selectedGroup ? (
+                // Multi-mission popup - show all missions at this location
+                <Popup className="mission-list-popup" maxWidth={280} minWidth={220}>
+                  <div className="p-0">
+                    <div className="bg-stone-200/90 px-2.5 py-1.5 border-b border-stone-300 -mx-[1px] -mt-[1px] rounded-t">
+                      <h3 className="font-typewriter text-[11px] font-bold text-stone-800 uppercase tracking-wide">
+                        {selectedEntry.origin.name}
+                      </h3>
+                      <p className="font-typewriter text-[9px] text-stone-500">{selectedGroup.entries.length} missions from this location</p>
+                    </div>
+                    <div className="py-1.5 px-1 max-h-[200px] overflow-y-auto">
+                      {selectedGroup.entries.map((entry) => {
+                        const isCurrentlySelected = entry.id === selectedEntry.id;
+                        return (
+                          <button
+                            key={entry.id}
+                            onClick={() => onMarkerSelect(entry)}
+                            className={`w-full text-left px-2 py-1.5 rounded transition-all duration-100 mb-1 last:mb-0 group ${
+                              isCurrentlySelected 
+                                ? 'bg-amber-100 border border-amber-400' 
+                                : 'bg-white/60 border border-transparent hover:bg-amber-50 hover:border-amber-300'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <span 
+                                className="w-2 h-2 rounded-full flex-shrink-0"
+                                style={{ backgroundColor: getColor(entry.aircraftCategory, isCurrentlySelected) }}
+                              />
+                              <div className="flex-1 min-w-0 flex items-center gap-1.5">
+                                <span className="font-typewriter text-[10px] font-bold text-stone-700 flex-shrink-0">
+                                  {entry.date}
+                                </span>
+                                <span className="font-typewriter text-[10px] text-stone-500 truncate">
+                                  {entry.duty}
+                                </span>
+                                {entry.isSignificant && (
+                                  <span className="px-1 py-0.5 bg-red-100 text-red-600 text-[7px] font-bold rounded flex-shrink-0">★</span>
+                                )}
+                              </div>
+                              {isCurrentlySelected ? (
+                                <span className="text-[8px] font-typewriter text-amber-600 flex-shrink-0">ACTIVE</span>
+                              ) : (
+                                <svg className="w-3 h-3 text-stone-300 group-hover:text-amber-500 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                              )}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              </Popup>
+                </Popup>
+              ) : (
+                // Single mission popup
+                <Popup className="font-serif">
+                  <div className="p-1 min-w-[150px]">
+                    <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">{selectedEntry.origin.name}</h3>
+                    <div className="text-xs text-stone-600 space-y-1">
+                      <p><span className="font-semibold">Date:</span> {selectedEntry.date}</p>
+                      <p><span className="font-semibold">Aircraft:</span> {selectedEntry.aircraftType}</p>
+                      <p><span className="font-semibold">Duty:</span> {selectedEntry.duty}</p>
+                      {selectedEntry.isSignificant && (
+                        <p className="text-red-700 font-bold mt-1 bg-red-50 p-1 border border-red-100 text-center uppercase text-[10px]">High Priority Event</p>
+                      )}
+                    </div>
+                  </div>
+                </Popup>
+              )}
             </Marker>
 
             {/* Active Target Marker - pulsing diamond */}
@@ -704,7 +932,8 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
               </Marker>
             )}
           </React.Fragment>
-        )}
+          );
+        })()}
 
       </MapContainer>
 
