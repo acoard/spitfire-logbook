@@ -187,7 +187,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         isSignificant: true,
         sourceDocument: '061.jpg',
         customView: 'gradebook',
-        historicalNote: 'Robin graduates to become a full pilot. The rating system was known for being honest, and average is not a euphemism for "bad".'
+        historicalNote: 'Robin graduates to become a full pilot after extensive training, finally "earning his wings." The rating system was known for being honest, and "Average" was not a euphemism for "bad" - it meant he was ready for combat.',
+        pilotNotes: 'On May 30 1944 I was posted from 84 G.S.U. (RAF Aston Down) to 313 Squadron in 2nd Tactical Air Force. I\'d had my pilot\'s wings for 30 months - and arrived on a Grey Spitfire Mk. IX at a temporary airfield at Appledram. We were there about a week before the Invasion.'
     },
 
     // Phase 2: Combat (313 Squadron) - Reconstructed from Logbooks 062-074
@@ -201,12 +202,12 @@ export const FLIGHT_LOG: LogEntry[] = [
         duty: 'Convoy PATROL',
         time: '2:00',
         remarks: "Robin's first ever mission with his wings",
-        historicalNote: 'This "Convoy" was in Part-the Invasion Fleet.',
+        historicalNote: "Robin's very first operational mission as a combat pilot - patrolling over what he maybe didn't yet know was the gathering invasion fleet for D-Day. After 30 months of training, and now finally assigned to a squadron, his war was about to begin in the most dramatic way possible.",
         origin: LOCATIONS.APPLEDRAM,
         destination: LOCATIONS.APPLEDRAM,
-        isSignificant: false,
+        isSignificant: true,
         sourceDocument: '062.jpg',
-        pilotNotes: 'This "Convoy" was in Part-the Invasion Fleet.'
+        pilotNotes: 'This "Convoy" was in Part - the Invasion Fleet.'
     },
     {
         id: 'c-062-2',
@@ -221,9 +222,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.NORMANDY_BEACH,
         destination: LOCATIONS.APPLEDRAM,
         isSignificant: true,
-        historicalNote: "Day before D-Day. '30 mths elapsed from the time I got my pilots wings... what could be a more dramatic way of starting on ops than to fly daily over the tiny beach head'",
+        historicalNote: "The day before D-Day. The greatest amphibious invasion in history was about to begin, and Robin was patrolling over the massing fleet.",
         sourceDocument: '062.jpg',
-        pilotNotes: '30 mths elapsed from the time I got my pilots "wings" to getting to a squadron - and what could be a more dramatic way of starting on ops\' than to fly daily over the tiny beach head where the Allies struggled to get ashore and open up the second front.'
+        // pilotNotes: '30 mths elapsed from the time I got my pilot\'s "wings" to getting to a squadron - and what could be a more dramatic way of starting on ops than to fly daily over the tiny beach head where the Allies struggled to get ashore and open up the second front.'
     },
     {
         id: 'c-062-3',
@@ -238,7 +239,7 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.NORMANDY_BEACH,
         destination: LOCATIONS.APPLEDRAM,
         isSignificant: true,
-        historicalNote: "D-Day: Operation Overlord. 313 Squadron provided air cover. 'We were told... the outcome of the war required the armies to get safely ashore at all costs'",
+        historicalNote: "D-Day: June 6, 1944 - Operation Overlord. 313 Squadron flew air cover over the Normandy beaches as 156,000 Allied troops stormed ashore. At the briefing, pilots were told their squadrons could suffer 90% casualties and still be fully operational by Day 2 - that's how many reserves were waiting.",
         sourceDocument: '062.jpg',
         pilotNotes: 'Normandy provided the Beach Head for the invasion on D Day.\n\nAt our very detailed and comprehensive "briefing" on the morning before the invasion - we were told that the outcome of the war required the armies to get safely ashore at all costs - and (as far as the 2nd Tactical Air Force was concerned) there were enough pilots and aircraft - in close reserve for all squadrons to suffer 90% casualties on the first day - and they\'d be fully up to strength and operational pilots and planes on Day 2.',
         missionBrief: {
@@ -283,7 +284,7 @@ export const FLIGHT_LOG: LogEntry[] = [
         targetIsApproximate: true,
         destination: LOCATIONS.APPLEDRAM,
         isSignificant: true,
-        historicalNote: "'Noball' mission attacking V-1 'Doodle bug' sites. Spitfire Mk IX carried 500lb bombs for these precision attacks.",
+        historicalNote: "A \"noball\" mission was a bombing mission on a German V-1 site, their flying bombs that Robin refers to as \"Doodlebug\" launch sites. This mission took place in the Pas-de-Calais. The V-1 flying bombs were terrorizing London, and Spitfire pilots were tasked with destroying the launch ramps before the rockets could be fired. A dangerous mission requiring precision dive-bombing into heavily defended areas.",
         sourceDocument: '062.jpg',
         pilotNotes: 'Attack on V.1 Rocket launching site - with 500 lb bomb. (Spitfire Mk IX was capable of carrying a 1000 lb bomb)\n\n* Also known as "Doodle bug"'
     },
@@ -316,9 +317,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.NORMANDY_BEACH,
         destination: LOCATIONS.TANGMERE,
         isSignificant: true,
-        historicalNote: "Close call with Anti-Aircraft fire. 'The first of 2 nights just behind the Front Line - under shellfire... Got shot up'.",
+        historicalNote: "A close call with anti-aircraft fire - Robin's Spitfire's tailplane was hit by flak (which he calls \"Ack Ack\"). One of the many dangers pilots faced patrolling over the heavily defended Normandy beachhead, where Allied and German guns alike filled the sky with fire.",
         sourceDocument: '063.jpg',
-        pilotNotes: 'The first of 2 nights just behind the Front Line - under self/fire.\n\nGot shot up - my plane\'s tailplane sustaining Ack Ack damage.',
+        pilotNotes: 'The first of 2 nights just behind the Front Line - under shellfire.\n\nGot shot up - my plane\'s tailplane sustaining Ack Ack damage.',
         missionBrief: {
             slides: [
                 {
@@ -344,8 +345,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.TANGMERE,
         destination: LOCATIONS.B10_PLUMETOT,
         isSignificant: true,
-        historicalNote: "Moved to B.10 Plumetot, just behind the front line. Living under shellfire.",
+        historicalNote: "Moved to B.10 Plumetot, an Advanced Landing Ground hastily constructed in the Normandy fields just behind the front line. These temporary airstrips brought fighters closer to the action but put pilots under German artillery fire even on the ground.",
         sourceDocument: '063.jpg',
+        pilotNotes: 'The first of 2 nights just behind the Front Line - under shellfire.',
         missionBrief: {
             slides: [
                 {
@@ -383,9 +385,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.B10_PLUMETOT,
         destination: LOCATIONS.LYMPNE,
         isSignificant: true,
-        historicalNote: "Returning from the forward operating base.",
+        historicalNote: "Returning from the forward operating base after two intense nights behind the front lines under German artillery fire. Back in England, the squadron posed for PR photographs around the CO's aircraft - a moment of relief captured on film.",
         sourceDocument: '063.jpg',
-        pilotNotes: 'Back to B.10./ALG. - it was after we landed back from France - that we had some P.R. photographs taken of our plane around the C.O.\'s plane. (See Photos in "Memoribilia Album")'
+        pilotNotes: 'Back to B.10/ALG - it was after we landed back from France that we had some P.R. photographs taken of our plane around the C.O.\'s plane. (See Photos in "Memorabilia Album")'
     },
     // July 1944 - Base: LYMPNE
     {
@@ -401,9 +403,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.CAEN,
         destination: LOCATIONS.LYMPNE,
         isSignificant: true,
-        historicalNote: "Supporting massive daylight raids on Caen. 'The pattern bombing was devastating. So was the ack ack.'",
+        historicalNote: "This mission took place in the days prior to Operation Charnwood and formed part of the sustained Allied air effort over Caen. While not directly part of Charnwood itself, such bomber escort missions were crucial in softening German defenses and limiting their response ahead of the main offensive. Operation Charnwood, launched a few days later (July 8-9, 1944), was the Allied push to capture Caen, a D-Day objective, and was preceded by massive bombing raids supported by ongoing fighter operations in the region.",
         sourceDocument: '064.jpg',
-        pilotNotes: 'The V.1 A.A.F (German show) 700-800 per hour daylight-raids on Caen. The pattern bombing was devastating. So was the ack ack.'
+        pilotNotes: 'The V.1 A.A.F. (German show) - 700-800 per hour daylight-raids on Caen. The pattern bombing was devastating. So was the ack ack.'
     },
     {
         id: 'c-064-2',
@@ -411,7 +413,7 @@ export const FLIGHT_LOG: LogEntry[] = [
         phase: Phase.COMBAT,
         aircraftType: 'Spitfire IX',
         aircraftCategory: AircraftCategory.FIGHTER,
-        duty: 'Bomber Escort',
+        duty: 'Ramrod',
         time: '1:25',
         remarks: 'Low level sweep N. France.',
         origin: LOCATIONS.LYMPNE,
@@ -419,9 +421,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         targetIsApproximate: true,
         destination: LOCATIONS.LYMPNE,
         isSignificant: true,
-        historicalNote: "'We flew into occupied France at about 15,000ft and flew low level sweep... I wiped out the crew of an A.A. post scrambling to train their guns on the landing planes.'",
+        historicalNote: "Ramrod was another name for a bombing escort mission. Usually bombing escorts were high altitude, but this time Robin reports going low and hitting an anti-air site. Attacking anti-air was one of the most dangerous missions for a pilot.",
         sourceDocument: '064.jpg',
-        pilotNotes: 'Just one flight (low level sweep in N. France) We flew well into occupied France at about 15.000ft and flew low level sweep in open formation. At one point we swept across a airfield and I wiped out the crew of an A.A. port scrambling to train landing planes.'
+        pilotNotes: 'Just one flight (low level sweep in N. France). We flew well into occupied France at about 15,000ft and flew low level sweep in open formation. At one point we swept across an airfield and I wiped out the crew of an A.A. post scrambling to train their guns on the landing planes.'
     },
     // August - September 1944: SKEABRAE (Orkneys) - mostly patrols
     {
@@ -436,7 +438,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.SKEABRAE,
         destination: LOCATIONS.SKEABRAE,
         isSignificant: false,
-        sourceDocument: '065.jpg'
+        sourceDocument: '065.jpg',
+        historicalNote: "After the intense combat of Normandy, 313 Squadron was redeployed to the Orkney Islands to defend Scapa Flow - the Royal Navy's main base. A quieter posting, but still on alert for German reconnaissance aircraft.",
+        pilotNotes: 'Looking down on the Fleet in Scapa Flow.'
     },
      // October 1944 - Moves to NORTH WEALD
     {
@@ -452,8 +456,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.DUISBURG,
         destination: LOCATIONS.NORTH_WEALD,
         isSignificant: true,
+        historicalNote: "313 Squadron's new mission: long-range bomber escort deep into Germany. Moving from the Orkneys to North Weald put them within range to escort heavy bombers to industrial targets in the Ruhr Valley. Duisburg was a major inland port and industrial center.",
         sourceDocument: '067.jpg',
-        pilotNotes: 'At this time the Squadron had moved from the Orkneys to R.A.F. Station North Weald - north east of London.\n\nWhen the squadron left the Orkneys for N. Weald one Spitfire was u/s - and I was left behind to follow on in the Auster. The C.O. at Skeabrea and our Squadron were at Lossiemouth - and I recall the particular sight as our Squadron took off & circled for the last time. 10 tons of twisted metal tissues - the R.A.F\'s best "dump" came fluttering down - Two or three days later I flew the long way from the South of Britain to rejoin the Squadron - I can\'t think we had not recorded operations here - since it was not operational. Some pilots did not record operational flights - so that they could stay longer in the Squadron!\n\nWith vivid recollections of embarkation & a drive back, at Huthra when going to coming back from Bardufoss - I knew the Target area more often. And I recall the C/O\'s voice on R/T. clear & loud that was a prior experience was particularly spectacular.'
+        pilotNotes: 'At this time the Squadron had moved from the Orkneys to R.A.F. Station North Weald - north east of London.\n\nWhen the squadron left the Orkneys for N. Weald one Spitfire was u/s - and I was left behind to follow on in the Auster. The C.O. at Skeabrae and our Squadron were at Lossiemouth - and I recall the particular sight as our Squadron took off & circled for the last time. 10 tons of twisted metal tissues - the R.A.F\'s best "dump" came fluttering down. Two or three days later I flew the long way from the south of Britain to rejoin the Squadron. I can\'t think we had not recorded operations here - since it was not operational. Some pilots did not record operational flights - so that they could stay longer in the Squadron!'
     },
     {
         id: 'c-067-2',
@@ -513,8 +518,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         remarks: 'Escort to major port city.',
         origin: LOCATIONS.NORTH_WEALD,
         target: LOCATIONS.HAMBURG,
-        destination: LOCATIONS.MANSTON, // Diverted? "To Manston" usually implies landing there
+        destination: LOCATIONS.MANSTON,
         isSignificant: true,
+        historicalNote: "A deep penetration escort mission to Hamburg - Germany's second-largest city and a major target throughout the war. These long-range missions pushed Spitfire range to its limits.",
         sourceDocument: '068.jpg'
     },
     {
@@ -529,9 +535,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.NORTH_WEALD, // Inferred start
         destination: LOCATIONS.MANSTON,
         isSignificant: true,
-        historicalNote: "1000 Bomber Raid. 'Gloomy but a clear day... What devastation.' 'Even the clouds were red – and fires were raging underneath'.",
+        historicalNote: "A thousand-bomber raid - the culmination of Bomber Command's strategic campaign. From his escort position, Robin witnessed the awesome and terrible sight of concentrated aerial bombardment: 'Even the clouds were red – and fires were raging underneath.'",
         sourceDocument: '068.jpg',
-        pilotNotes: 'Gloomy but a clear day was a 1000 Bomber Raid. What devastation.\n\nThese Bomber Escort trips took place in all weather. This day was cloudless the covering flights had a fantastic view of power bombing by ± 1000 bombers But sometimes we never saw the target – God knew where it was by the ack ack aimed at the bombers. I need a comment in a fellow pilot\'s log book. Even the clouds were red – and fires were raging underneath.....'
+        pilotNotes: 'Gloomy but a clear day was a 1000 Bomber Raid. What devastation.\n\nThese Bomber Escort trips took place in all weather. This day was cloudless - the covering flights had a fantastic view of pattern bombing by ± 1000 bombers. But sometimes we never saw the target – God knew where it was by the ack ack aimed at the bombers. I read a comment in a fellow pilot\'s log book: "Even the clouds were red – and fires were raging underneath..."'
     },
     {
         id: 'c-068-5',
@@ -562,9 +568,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.BRUSSELS,
         destination: LOCATIONS.BRADWELL_BAY,
         isSignificant: true,
-        historicalNote: "Tasked with relaying radio messages from the Wing Commander at 15,000 feet over Brussels. Of the 37 Spitfires in the wing, only two made it back across the sea to England due to deteriorating weather.",
+        historicalNote: "A harrowing mission during rapidly deteriorating weather. Robin was tasked with relaying radio messages from the Wing Commander at 15,000 feet over Brussels. Of the 37 Spitfires in the wing, only two made it back across the sea to England - a testament to both skill and luck.",
         sourceDocument: '069.jpg',
-        pilotNotes: "Of the 37 Spitfires in our wing, I was one of only two who made it across the sea back to England. I made it to Bradwell Bay."
+        pilotNotes: "My mission was to fly over Brussels at 15,000' to relay radio messages from Wing Commander. I passed on a message to abort the operational mission on account of rapid deteriorating weather. The weather was too bad for bombers and fighters, mission was for Germany. Of the 37 Spitfires in our wing, I was one of only two who made it across the sea back to England. I made it to Bradwell Bay. Flight Commander actually got back to North Weald."
     },
     // March 1945 - Base: BRADWELL BAY
     {
@@ -641,9 +647,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.HELIGOLAND,
         destination: LOCATIONS.PETIT_BROGEL,
         isSignificant: true,
-        historicalNote: "Attack on Heligoland fortress.",
+        historicalNote: "Providing fighter cover for the attack on Heligoland - a heavily fortified German island fortress in the North Sea. With the war in Europe clearly ending, Robin's thoughts were turning to what came next.",
         sourceDocument: '072.jpg',
-        pilotNotes: 'With the war in Europe obviously about to end I volunteered for the Far East. Incredibly my application was turned down as I had not given any reason. I then wrote that while there were many tens of thousand British and allied prisoners of war still in Japanese hands I would consider it a disgrace to stay in England.'
+        pilotNotes: 'With the war in Europe obviously about to end I volunteered for the Far East. Incredibly my application was turned down as I had not given any reason. I then wrote that while there were many tens of thousands of British and Allied prisoners of war still in Japanese hands I would consider it a disgrace to stay in England.'
     },
     {
         id: 'c-072-2',
@@ -658,7 +664,7 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.HELIGOLAND,
         destination: LOCATIONS.PETIT_BROGEL,
         isSignificant: true,
-        historicalNote: "'What a spectacle! Heligoland is a tiny island Fortress in North Sea - and to see it receive everything Bomber Command could dump on it.'",
+        historicalNote: "The massive RAF bombardment of Heligoland on April 18-19, 1945 - nearly 1,000 aircraft dropping over 4,000 tons of bombs on the tiny 1km² island fortress. One of the last major bombing operations of the war in Europe.",
         sourceDocument: '072.jpg',
         pilotNotes: 'What a spectacle! Heligoland is a tiny island Fortress in North Sea - and to see it receive everything Bomber Command could dump on it.'
     },
@@ -676,9 +682,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.WARMWELL,
         destination: LOCATIONS.POOLE,
         isSignificant: true,
-        historicalNote: "Royal Escort. 'A great honour for the Squadron to escort Their Majesties - but we all just about ran out of gas!'",
+        historicalNote: "A fitting end to Robin's combat career with 313 Squadron - escorting King George VI and Queen Elizabeth on their victory tour of the liberated Channel Islands. Shortly after, Robin would answer a new call: ferrying Spitfires to the Far East where the war against Japan continued.",
         sourceDocument: '074.jpg',
-        pilotNotes: 'A great honour for the Squadron to escort Their Majesties - but we all just about ran out of gas!\n\nAnd then a W.A.A.F. from no less Biggin Hill to ask if I\'d be interested in ferrying Spitfires in to the Far East. Ferrying Spitfires! I didn\'t have to be asked twice.\n\nA couple of weeks leave - a few days in Morecombe (Transit Camp) - and then I was on my way.'
+        pilotNotes: 'A great honour for the Squadron to escort Their Majesties - but we all just about ran out of gas!\n\nAnd then a W.A.A.F. from no less Biggin Hill to ask if I\'d be interested in ferrying Spitfires to the Far East. Ferrying Spitfires! I didn\'t have to be asked twice.\n\nA couple of weeks leave - a few days in Morecambe (Transit Camp) - and then I was on my way.'
     },
 
     // Phase 3: Post-War Ferry (SEAC)
@@ -694,9 +700,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.KARACHI,
         destination: LOCATIONS.JODHPUR,
         isSignificant: true,
-        historicalNote: "Beginning a long series of ferry flights across the Indian subcontinent.",
-        sourceDocument: '080.jpg',
-        pilotNotes: 'Visited with Frank again.\n\nThe special free mess for Army Command air crew in Calcutta (Park St) - just off Chowringhee - was only 2 blocks from Frank\'s apartment.'
+        historicalNote: "Beginning a long series of ferry flights across the Indian subcontinent. After the war, experienced pilots were needed to deliver Spitfires to squadrons throughout South-East Asia Command (SEAC).",
+        sourceDocument: '080.jpg'
     },
     {
         id: 'f-080-2',
@@ -710,7 +715,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.ALLAHABAD,
         destination: LOCATIONS.CALCUTTA,
         isSignificant: false,
-        sourceDocument: '080.jpg'
+        sourceDocument: '080.jpg',
+        pilotNotes: 'Visited with Frank again.\n\nThe special free mess for Army Command air crew in Calcutta (Park St) - just off Chowringhee - was only 2 blocks from Frank\'s apartment.'
     },
     {
         id: 'f-080-3',
@@ -738,7 +744,7 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.RANGOON,
         destination: LOCATIONS.BANGKOK,
         isSignificant: true,
-        historicalNote: "Delivering Spitfires as far east as Bangkok.",
+        historicalNote: "The furthest east Robin would fly - delivering a Spitfire XIV to Bangkok, Thailand. Just three months after Japan's surrender, the RAF was still repositioning aircraft throughout the former battlefields of South-East Asia.",
         sourceDocument: '080.jpg'
     },
     {
@@ -767,9 +773,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.LAHORE,
         destination: LOCATIONS.KOHAT,
         isSignificant: true,
-        historicalNote: "Kohat is about 50 miles from the Khyber Pass on the North West Frontier.",
+        historicalNote: "Delivering a Spitfire to Kohat, just 50 miles from the legendary Khyber Pass on the North West Frontier - the gateway between Afghanistan and the Indian subcontinent, rich with military history.",
         sourceDocument: '080.jpg',
-        pilotNotes: 'Kohat + about 50 miles from the Khyber Pass.\n\nBy now Frank was getting used to flying his nephew!'
+        pilotNotes: 'Kohat - about 50 miles from the Khyber Pass.'
     },
     {
         id: 'f-082-1',
@@ -826,9 +832,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.KARACHI,
         destination: LOCATIONS.RANCHI,
         isSignificant: true,
-        historicalNote: "Delivering a Spitfire to Ranchi. 'Stayed on with F.P.O. at Ranchi for 10 Days. What a life.'",
+        historicalNote: "Robin's final significant flight of the war - a delivery to Ranchi that gave him the chance to visit family one last time before demobilization. After over six years in the RAF, he would soon travel home by sea on the M.V. Durham Castle, closing a remarkable chapter of service.",
         sourceDocument: '083.jpg',
-        pilotNotes: 'Had to deliver a Spitfire to Ranchi - of all places + so stayed on with F.P.O. at Ranchi for 10 Days. What a life.\n\nAfter F/Lt Pederson (a ferry pilot) married in Allahabad Dennis Yeardly flew me to Ranch this time (another [illegible]) - and it was my pleasure to show him Mera[?] - and stay on with Frank for another week! Said goodbye to Frank. This was my last visit - as my "demob" ticket was coming up. Travelled to Bombay by train and back home by sea - on the M.V. "Durham Castle" - after over 6 years in RAF. DC ferry flight -'
+        pilotNotes: 'Had to deliver a Spitfire to Ranchi - of all places - so stayed on with F.P.O. at Ranchi for 10 Days. What a life.\n\nAfter F/Lt Pederson (a ferry pilot) married in Allahabad, Dennis Yeardly flew me to Ranchi this time - and it was my pleasure to show him Mesra - and stay on with Frank for another week! Said goodbye to Frank. This was my last visit - as my "demob" ticket was coming up. Travelled to Bombay by train and back home by sea - on the M.V. "Durham Castle" - after over 6 years in RAF.'
     },
     {
         id: 'f-083-2',
