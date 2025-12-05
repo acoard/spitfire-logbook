@@ -28,7 +28,7 @@ const FlightInfoPanel: React.FC<FlightInfoPanelProps> = ({
   className = '',
   isTimelineCollapsed = false
 }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true); // Start collapsed by default
   const [isMobile, setIsMobile] = useState(false);
   
   // Detect mobile viewport
@@ -40,13 +40,6 @@ const FlightInfoPanel: React.FC<FlightInfoPanelProps> = ({
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-  
-  // Auto-expand when new entry is selected
-  useEffect(() => {
-    if (selectedEntry) {
-      setIsCollapsed(false);
-    }
-  }, [selectedEntry?.id]);
 
   if (!selectedEntry) return null;
   

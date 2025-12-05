@@ -235,6 +235,10 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
       setActiveSelectorGroup(null);
       setHoveredEntryId(null);
       setPopoverPosition(null);
+      // Also close any open Leaflet native popups
+      if (mapRef.current) {
+        mapRef.current.closePopup();
+      }
     }
   }, [closePopoverTrigger]);
 
