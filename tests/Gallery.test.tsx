@@ -42,7 +42,45 @@ const renderGallery = () => {
 };
 
 describe('Gallery', () => {
-  describe('rendering gallery items', () => {
+  describe('tab navigation', () => {
+    it('renders all three tabs', () => {
+      renderGallery();
+
+      expect(screen.getByRole('button', { name: /photos/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /full logbook/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /historical videos/i })).toBeInTheDocument();
+    });
+
+    it('starts with Photos tab active by default', () => {
+      renderGallery();
+
+      // Photos tab should be active (has amber color)
+      const photosTab = screen.getByRole('button', { name: /photos/i });
+      expect(photosTab).toHaveClass('text-amber-500');
+    });
+
+    it('switches to Logbook tab when clicked', () => {
+      renderGallery();
+
+      const logbookTab = screen.getByRole('button', { name: /full logbook/i });
+      fireEvent.click(logbookTab);
+
+      expect(logbookTab).toHaveClass('text-amber-500');
+      expect(screen.getByText("Robin Glen's Flying Logbook")).toBeInTheDocument();
+    });
+
+    it('switches to Historical Videos tab when clicked', () => {
+      renderGallery();
+
+      const videosTab = screen.getByRole('button', { name: /historical videos/i });
+      fireEvent.click(videosTab);
+
+      expect(videosTab).toHaveClass('text-amber-500');
+      expect(screen.getByText(/these videos provide general historical context/i)).toBeInTheDocument();
+    });
+  });
+
+  describe('Photos tab - rendering gallery items', () => {
     it('renders gallery items from flight log entries with mission briefs', () => {
       renderGallery();
 
@@ -86,7 +124,7 @@ describe('Gallery', () => {
     });
   });
 
-  describe('gallery item interaction', () => {
+  describe('Photos tab - gallery item interaction', () => {
     it('opens modal when clicking on a gallery item', async () => {
       renderGallery();
 
@@ -141,7 +179,7 @@ describe('Gallery', () => {
     });
   });
 
-  describe('modal closing', () => {
+  describe('Photos tab - modal closing', () => {
     it('closes modal when clicking the close button', async () => {
       renderGallery();
 
@@ -153,9 +191,15 @@ describe('Gallery', () => {
         expect(screen.getByAltText('Full Slide')).toBeInTheDocument();
       });
 
-      // Find and click close button (X icon)
-      const closeButton = screen.getByRole('button');
-      fireEvent.click(closeButton);
+      // Find and click close button (there are multiple buttons now due to tabs)
+      const closeButtons = screen.getAllByRole('button');
+      // The close button is within the modal, find it by looking for the X icon area
+      const closeButton = closeButtons.find(btn => 
+        btn.classList.contains('absolute') || btn.closest('.fixed.inset-0')
+      );
+      if (closeButton) {
+        fireEvent.click(closeButton);
+      }
 
       await waitFor(() => {
         expect(screen.queryByAltText('Full Slide')).not.toBeInTheDocument();
@@ -199,6 +243,61 @@ describe('Gallery', () => {
 
       // Modal should still be open
       expect(screen.getByAltText('Full Slide')).toBeInTheDocument();
+    });
+  });
+
+  describe('Logbook tab', () => {
+    it('displays logbook header and description', () => {
+      renderGallery();
+
+      const logbookTab = screen.getByRole('button', { name: /full logbook/i });
+      fireEvent.click(logbookTab);
+
+      expect(screen.getByText("Robin Glen's Flying Logbook")).toBeInTheDocument();
+      expect(screen.getByText(/original handwritten pages/i)).toBeInTheDocument();
+    });
+
+    it('renders all logbook pages (058 to 086 = 29 pages)', () => {
+      renderGallery();
+
+      const logbookTab = screen.getByRole('button', { name: /full logbook/i });
+      fireEvent.click(logbookTab);
+
+      // Check for first and last page labels
+      expect(screen.getByText('Page 058')).toBeInTheDocument();
+      expect(screen.getByText('Page 086')).toBeInTheDocument();
+    });
+  });
+
+  describe('Historical Videos tab', () => {
+    it('displays disclaimer about videos not being Robin-specific', () => {
+      renderGallery();
+
+      const videosTab = screen.getByRole('button', { name: /historical videos/i });
+      fireEvent.click(videosTab);
+
+      expect(screen.getByText(/they are not specifically about robin glen/i)).toBeInTheDocument();
+    });
+
+    it('renders video titles and descriptions', () => {
+      renderGallery();
+
+      const videosTab = screen.getByRole('button', { name: /historical videos/i });
+      fireEvent.click(videosTab);
+
+      // Check for at least one video title
+      expect(screen.getByText('Spitfire: The Plane that Saved the World')).toBeInTheDocument();
+    });
+
+    it('renders YouTube iframes', () => {
+      renderGallery();
+
+      const videosTab = screen.getByRole('button', { name: /historical videos/i });
+      fireEvent.click(videosTab);
+
+      const iframes = document.querySelectorAll('iframe');
+      expect(iframes.length).toBeGreaterThan(0);
+      expect(iframes[0]).toHaveAttribute('src', expect.stringContaining('youtube.com/embed'));
     });
   });
 
