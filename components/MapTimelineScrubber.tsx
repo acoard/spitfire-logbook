@@ -212,9 +212,26 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
   className = '',
 }) => {
   const trackRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isNarrow, setIsNarrow] = useState(false);
   const playIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Track container width to hide legend when too narrow
+  useEffect(() => {
+    if (!containerRef.current) return;
+    
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        // Hide chapter legend when container is narrower than 300px
+        setIsNarrow(entry.contentRect.width < 300);
+      }
+    });
+    
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
   
   // Transform entries to timeline markers
   const markers: TimelineMarker[] = useMemo(() => {
@@ -494,6 +511,7 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
   
   return (
     <div 
+      ref={containerRef}
       className={`
         absolute bottom-0 left-0 right-0 z-[500]
         bg-gradient-to-t from-amber-950/95 via-amber-900/90 to-amber-900/85
@@ -697,24 +715,26 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
           ))}
         </div>
         
-        {/* Chapter legend */}
-        <div className="flex items-center justify-center gap-4 sm:gap-6 mt-1">
-          {[Phase.TRAINING, Phase.COMBAT, Phase.FERRY].map(phase => {
-            const info = getChapterFromPhase(phase);
-            const count = markers.filter(m => m.phase === phase).length;
-            return (
-              <div key={phase} className="flex items-center gap-1.5">
-                <div 
-                  className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full"
-                  style={{ backgroundColor: info.color }}
-                />
-                <span className="font-typewriter text-[8px] sm:text-[10px] text-amber-400/70 tracking-wider">
-                  {info.name.toUpperCase()} ({count})
-                </span>
-              </div>
-            );
-          })}
-        </div>
+        {/* Chapter legend - hidden when panel is too narrow */}
+        {!isNarrow && (
+          <div className="flex items-center justify-center gap-4 sm:gap-6 mt-1">
+            {[Phase.TRAINING, Phase.COMBAT, Phase.FERRY].map(phase => {
+              const info = getChapterFromPhase(phase);
+              const count = markers.filter(m => m.phase === phase).length;
+              return (
+                <div key={phase} className="flex items-center gap-1.5">
+                  <div 
+                    className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full"
+                    style={{ backgroundColor: info.color }}
+                  />
+                  <span className="font-typewriter text-[8px] sm:text-[10px] text-amber-400/70 tracking-wider">
+                    {info.name.toUpperCase()} ({count})
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

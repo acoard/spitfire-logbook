@@ -420,6 +420,23 @@ const HoverablePolyline: React.FC<HoverablePolylineProps> = ({ positions, color,
 // ============================================================================
 
 const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, onMarkerSelect, shouldCenter, customCenter, customZoom, isTimelineCollapsed = false }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isNarrow, setIsNarrow] = useState(false);
+  
+  // Track container width to hide elements when too narrow
+  useEffect(() => {
+    if (!containerRef.current) return;
+    
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        // Hide legend/overlays when container is narrower than 200px
+        setIsNarrow(entry.contentRect.width < 200);
+      }
+    });
+    
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
   
   // Calculate map center based on selection with validation
   let centerPosition: [number, number] = customCenter || [50.5, 0.0]; 
@@ -522,7 +539,7 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
   }, [selectedEntry]);
 
   return (
-    <div className="h-full w-full relative z-0">
+    <div ref={containerRef} className="h-full w-full relative z-0">
       {/* Inject CSS for animations */}
       <style>{`
         /* Pulsing marker animation */
@@ -944,28 +961,30 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
         isTimelineCollapsed={isTimelineCollapsed}
       />
 
-      {/* Map Legend Overlay - top right, below zoom controls */}
-      <div className="absolute top-16 right-2 sm:top-20 sm:right-4 bg-[#f4f1ea] p-1.5 md:p-3 rounded-sm shadow-xl border md:border-2 border-stone-400 text-[9px] md:text-xs font-serif z-[100] transform md:rotate-1 block">
-        <h4 className="font-bold mb-1 md:mb-2 text-stone-800 border-b border-stone-300 pb-0.5 md:pb-1 text-[8px] md:text-xs">
-          <span className="hidden md:inline">MAP KEY</span>
-          <span className="md:hidden">KEY</span>
-        </h4>
-        <div className="flex items-center gap-1.5 md:gap-2 mb-1 md:mb-1.5">
-          <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-yellow-500 border border-stone-600 shadow-sm flex-shrink-0"></span>
-          <span className="font-typewriter text-stone-700 hidden md:inline">TRAINING</span>
-          <span className="font-typewriter text-stone-700 md:hidden">TRN</span>
+      {/* Map Legend Overlay - top right, below zoom controls - hidden when panel is too narrow */}
+      {!isNarrow && (
+        <div className="absolute top-16 right-2 sm:top-20 sm:right-4 bg-[#f4f1ea] p-1.5 md:p-3 rounded-sm shadow-xl border md:border-2 border-stone-400 text-[9px] md:text-xs font-serif z-[100] transform md:rotate-1 block transition-opacity duration-200">
+          <h4 className="font-bold mb-1 md:mb-2 text-stone-800 border-b border-stone-300 pb-0.5 md:pb-1 text-[8px] md:text-xs">
+            <span className="hidden md:inline">MAP KEY</span>
+            <span className="md:hidden">KEY</span>
+          </h4>
+          <div className="flex items-center gap-1.5 md:gap-2 mb-1 md:mb-1.5">
+            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-yellow-500 border border-stone-600 shadow-sm flex-shrink-0"></span>
+            <span className="font-typewriter text-stone-700 hidden md:inline">TRAINING</span>
+            <span className="font-typewriter text-stone-700 md:hidden">TRN</span>
+          </div>
+          <div className="flex items-center gap-1.5 md:gap-2 mb-1 md:mb-1.5">
+            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-red-600 border border-stone-600 shadow-sm flex-shrink-0"></span>
+            <span className="font-typewriter text-stone-700 hidden md:inline">COMBAT</span>
+            <span className="font-typewriter text-stone-700 md:hidden">OPS</span>
+          </div>
+          <div className="flex items-center gap-1.5 md:gap-2">
+            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-blue-500 border border-stone-600 shadow-sm flex-shrink-0"></span>
+            <span className="font-typewriter text-stone-700 hidden md:inline">TRANSPORT</span>
+            <span className="font-typewriter text-stone-700 md:hidden">TRP</span>
+          </div>
         </div>
-        <div className="flex items-center gap-1.5 md:gap-2 mb-1 md:mb-1.5">
-          <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-red-600 border border-stone-600 shadow-sm flex-shrink-0"></span>
-          <span className="font-typewriter text-stone-700 hidden md:inline">COMBAT</span>
-          <span className="font-typewriter text-stone-700 md:hidden">OPS</span>
-        </div>
-        <div className="flex items-center gap-1.5 md:gap-2">
-          <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-blue-500 border border-stone-600 shadow-sm flex-shrink-0"></span>
-          <span className="font-typewriter text-stone-700 hidden md:inline">TRANSPORT</span>
-          <span className="font-typewriter text-stone-700 md:hidden">TRP</span>
-        </div>
-      </div>
+      )}
     </div>
   );
 });
