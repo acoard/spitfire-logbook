@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, TouchEvent } from 'react';
 import { FLIGHT_LOG } from '../services/flightData';
 import { MissionBriefSlide } from '../types';
-import { X, ChevronLeft, ChevronRight, Images, BookOpen, Film } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Images, BookOpen, Film, Play, ArrowLeft } from 'lucide-react';
 
 const BASE_ASSET_URL = import.meta.env.BASE_URL;
 
@@ -23,13 +23,33 @@ const LOGBOOK_PAGES = Array.from({ length: 29 }, (_, i) => {
   };
 });
 
-// Historical videos playlist about WW2 Spitfires
-const PLAYLIST_ID = 'PLnRmDc5FW67ykbiJR5tvZM5-BnAmFTfXO';
+// Historical videos about WW2 Spitfires and RAF operations
+const HISTORICAL_VIDEOS = [
+  {
+    id: 'raf-combat-footage',
+    youtubeId: 'R0n9ZgRiXNs',
+    title: 'Combat Footage - RAF Cameras',
+    description: 'Authentic combat footage captured by RAF gun cameras during World War II aerial engagements.',
+  },
+  {
+    id: 'raf-spitfires-action',
+    youtubeId: 'crp9LBuzQkE',
+    title: 'RAF Spitfires in Action',
+    description: 'Historical footage of RAF Spitfires in combat operations during the Second World War.',
+  },
+  {
+    id: 'dunkirk',
+    youtubeId: 'Z52vVsMdBkc',
+    title: 'Dunkirk',
+    description: "This is not historical footage - it's the Hollywood movie Dunkirk - but it's such a good scene of being a Spitfire pilot.",
+  },
+];
 
 export const Gallery: React.FC = () => {
   const [activeTab, setActiveTab] = useState<GalleryTab>('photos');
   const [selectedSlide, setSelectedSlide] = useState<GalleryItem | null>(null);
   const [selectedLogbookIndex, setSelectedLogbookIndex] = useState<number | null>(null);
+  const [expandedVideoId, setExpandedVideoId] = useState<string | null>(null);
   const logbookContainerRef = useRef<HTMLDivElement>(null);
   
   // Touch handling for swipe gestures
@@ -53,9 +73,18 @@ export const Gallery: React.FC = () => {
         : 'text-stone-400 border-transparent hover:text-stone-200 hover:bg-stone-800/30'
     }`;
 
-  // Handle keyboard navigation for logbook viewer
+  // Handle keyboard navigation for logbook viewer and video escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (expandedVideoId) {
+          setExpandedVideoId(null);
+        } else if (selectedLogbookIndex !== null) {
+          setSelectedLogbookIndex(null);
+        }
+        return;
+      }
+      
       if (selectedLogbookIndex === null) return;
       
       if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
@@ -64,14 +93,12 @@ export const Gallery: React.FC = () => {
       } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         e.preventDefault();
         setSelectedLogbookIndex(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1));
-      } else if (e.key === 'Escape') {
-        setSelectedLogbookIndex(null);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedLogbookIndex]);
+  }, [selectedLogbookIndex, expandedVideoId]);
 
   // Touch handlers for swipe navigation in logbook viewer
   const handleTouchStart = (e: TouchEvent) => {
@@ -209,9 +236,14 @@ export const Gallery: React.FC = () => {
 
         {/* Historical Videos Tab */}
         {activeTab === 'videos' && (
-          <div className="p-4 sm:p-6 md:p-8">
+          <div className="p-4 sm:p-6 md:p-8 relative">
             <div className="max-w-5xl mx-auto">
-              <div className="mb-6 sm:mb-8 text-center">
+              {/* Header - fades out when video expanded */}
+              <div 
+                className={`mb-6 sm:mb-8 text-center transition-all duration-500 ease-out ${
+                  expandedVideoId ? 'opacity-0 pointer-events-none h-0 mb-0 overflow-hidden' : 'opacity-100'
+                }`}
+              >
                 <h2 className="text-lg sm:text-xl font-serif text-amber-500 mb-2">Historical Videos</h2>
                 <div className="bg-stone-800 border border-amber-500/30 rounded-lg px-3 sm:px-4 py-2 mt-2 mx-auto max-w-lg">
                   <p className="text-stone-300 text-xs sm:text-sm">
@@ -221,25 +253,115 @@ export const Gallery: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-stone-800 rounded-lg overflow-hidden border border-stone-700 shadow-lg">
-                <div className="aspect-video w-full">
-                  <iframe
-                    src={`https://www.youtube.com/embed/videoseries?list=${PLAYLIST_ID}`}
-                    title="Spitfire Historical Videos"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="w-full h-full"
-                  />
+              {/* Video Grid / Cinematic View Container */}
+              <div className="relative">
+                {/* Expanded Cinematic View */}
+                <div
+                  className={`transition-all duration-500 ease-out ${
+                    expandedVideoId 
+                      ? 'opacity-100 translate-y-0' 
+                      : 'opacity-0 pointer-events-none absolute inset-0 -translate-y-4'
+                  }`}
+                >
+                  {expandedVideoId && (
+                    <div className="animate-fadeIn">
+                      {/* Back Button */}
+                      <button
+                        onClick={() => setExpandedVideoId(null)}
+                        className="flex items-center gap-2 mb-4 text-stone-400 hover:text-amber-500 transition-colors group"
+                      >
+                        <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
+                        <span className="text-sm font-medium">Back to videos</span>
+                      </button>
+                      
+                      {/* Large Video Player */}
+                      <div className="bg-stone-800 rounded-xl overflow-hidden border border-stone-700 shadow-2xl">
+                        <div className="aspect-video w-full">
+                          <iframe
+                            src={`https://www.youtube.com/embed/${expandedVideoId}?autoplay=1`}
+                            title={HISTORICAL_VIDEOS.find(v => v.youtubeId === expandedVideoId)?.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className="w-full h-full"
+                          />
+                        </div>
+                        <div className="p-4 sm:p-6">
+                          <h3 className="text-xl sm:text-2xl font-serif text-stone-100 mb-2">
+                            {HISTORICAL_VIDEOS.find(v => v.youtubeId === expandedVideoId)?.title}
+                          </h3>
+                          <p className="text-stone-400 text-sm sm:text-base leading-relaxed">
+                            {HISTORICAL_VIDEOS.find(v => v.youtubeId === expandedVideoId)?.description}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Keyboard hint */}
+                      <div className="hidden md:block text-center mt-4 text-stone-500 text-xs">
+                        Press ESC to go back
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="p-3 sm:p-4">
-                  <h3 className="text-base sm:text-lg font-serif text-stone-100 mb-1 sm:mb-2">Spitfire History Collection</h3>
-                  <p className="text-stone-400 text-xs sm:text-sm leading-relaxed">
-                    A curated collection of videos detailing the history, mechanics, and combat operations of the Supermarine Spitfire. 
-                    Use the playlist icon in the top right of the video player to see all videos.
-                  </p>
+
+                {/* Thumbnail Grid */}
+                <div
+                  className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 transition-all duration-500 ease-out ${
+                    expandedVideoId 
+                      ? 'opacity-0 pointer-events-none scale-95 absolute inset-0' 
+                      : 'opacity-100 scale-100'
+                  }`}
+                >
+                  {HISTORICAL_VIDEOS.map((video, index) => (
+                    <div
+                      key={video.id}
+                      onClick={() => setExpandedVideoId(video.youtubeId)}
+                      className="group cursor-pointer bg-stone-800 rounded-lg overflow-hidden border border-stone-700 hover:border-amber-500/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
+                      style={{ 
+                        animationDelay: `${index * 100}ms`,
+                        animation: 'fadeSlideIn 0.4s ease-out backwards'
+                      }}
+                    >
+                      {/* Thumbnail */}
+                      <div className="relative aspect-video w-full overflow-hidden bg-black">
+                        <img
+                          src={`https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`}
+                          alt={video.title}
+                          className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                        />
+                        {/* Play overlay */}
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors duration-300">
+                          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-500/90 group-hover:bg-amber-500 group-hover:scale-110 flex items-center justify-center shadow-lg transition-all duration-300">
+                            <Play size={24} className="text-stone-900 ml-1" fill="currentColor" />
+                          </div>
+                        </div>
+                        {/* Duration-style badge (decorative) */}
+                        <div className="absolute bottom-2 right-2 bg-black/80 text-stone-200 text-xs px-1.5 py-0.5 rounded font-mono">
+                          VIDEO
+                        </div>
+                      </div>
+                      
+                      {/* Info */}
+                      <div className="p-3 sm:p-4">
+                        <h3 className="text-base sm:text-lg font-serif text-stone-100 mb-1 group-hover:text-amber-500 transition-colors line-clamp-1">
+                          {video.title}
+                        </h3>
+                        <p className="text-stone-400 text-xs sm:text-sm leading-relaxed line-clamp-2">
+                          {video.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
+
+            {/* Dimmed overlay when video is expanded */}
+            <div 
+              className={`fixed inset-0 bg-black/60 -z-10 transition-opacity duration-500 ${
+                expandedVideoId ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}
+              onClick={() => setExpandedVideoId(null)}
+            />
           </div>
         )}
       </div>

@@ -43,18 +43,14 @@ const PilotProfileModal: React.FC<PilotProfileModalProps> = ({ isOpen, onClose }
             <h3 className="font-typewriter text-lg font-bold uppercase text-stone-900 border-b border-stone-400 mb-2">I. Personal Particulars</h3>
             
             <p className="mb-4">
-              <span className="font-bold">Name:</span> Captain R. Glen (Robin)<br/>
+              <span className="font-bold">Name:</span> F/Lt R.A. Glen (Robin)<br/>
               <span className="font-bold">Service Period:</span> 1941 – 1946<br/>
-              <span className="font-bold">Total Flying Hours:</span> 741 hrs 05 mins (as of Mar 1946)
+              <span className="font-bold">Total Flying Hours:</span> 697 hrs 40 mins (as of Mar 1946)
             </p>
 
-            <div className="bg-stone-200/50 p-3 mb-4 border-l-4 border-stone-400 italic text-xs">
-              <span className="font-bold not-italic">Note:</span> This section is a work in progress—verification of details ongoing.
-            </div>
-
             <p>
-              Pilot Officer Robin Glen was a decorated Royal Air Force pilot whose service spanned intensive WWII operations and crucial post-war logistical ferry duties.
-              His early training involved flying aircraft types such as the Master II, Spitfire I, Typhoon, and Hurricane IIc at various training and operational units including Kirton-in-Lindsay and Aston Down.
+              Flight Lieutenant Robin Glen was a decorated Royal Air Force pilot whose service spanned intensive WWII operations and crucial post-war logistical ferry duties.
+              His early training involved flying aircraft types such as Tiger Moth, Harvard II, Master II, Spitfire I & II, Martinet, and Hurricane II at various training and operational units including I.T.E.U. Tealing and 84 G.S.U. Aston Down.
             </p>
 
             <h4 className="font-bold font-typewriter uppercase text-xs mt-4 mb-2 text-stone-600">World War II Operations</h4>
@@ -63,14 +59,14 @@ const PilotProfileModal: React.FC<PilotProfileModalProps> = ({ isOpen, onClose }
               This period placed him directly in one of the most significant military actions of the war:
             </p>
             <ul className="list-disc pl-5 space-y-1 mb-4">
-              <li><strong className="font-typewriter text-xs uppercase">D-Day Support:</strong> Flew a Beach Head Patrol on June 6, 1944. Logbook marginal notes confirm his unit "acted as the invasion flight".</li>
-              <li><strong className="font-typewriter text-xs uppercase">Combat Missions:</strong> Duties included Convoy Patrols, Dive Bombing, and Front Line Patrols. Participated in long-range Bomber Escorts to targets such as Hamburg and Stuttgart.</li>
-              <li>Logged a total of 53 operational sorties during the war.</li>
+              <li><strong className="font-typewriter text-xs uppercase">D-Day Support:</strong> Flew Beach Head Patrols starting June 6, 1944. Marginal notes describe "what could be a more dramatic way of starting on ops' than to fly daily over the tiny beach head where the Allies struggled to get ashore."</li>
+              <li><strong className="font-typewriter text-xs uppercase">Combat Missions:</strong> Duties included Convoy Patrols (including the Invasion Fleet), Dive Bombing, Armed Recce, and Front Line Patrols. Participated in long-range Bomber Escorts to targets including Hamburg, Duisburg, Cologne, and Dortmund.</li>
+              <li>Logged over 50 operational sorties during the war, with 133 hours 05 mins of operational flying time.</li>
             </ul>
 
             <h4 className="font-bold font-typewriter uppercase text-xs mt-4 mb-2 text-stone-600">Post-War Service</h4>
             <p>
-              Following VE-Day (May 1945), Glen transferred to logistical air service with 202 Staging Post. Operating multi-engine aircraft like the Dakota and Sunderland, he executed extensive ferry runs across the Indian subcontinent, connecting Karachi, Calcutta, Delhi, and Rangoon.
+              Following VE-Day (May 1945), Glen transferred to 202 S.P. Ferry Flight RAF, based at R.A.F. Station Drigh Road, Karachi. Operating aircraft including the Spitfire XIV, Lysander, Dakota, Sunderland, and Empire Flying Boat, he executed extensive ferry runs across the Indian subcontinent connecting Karachi, Jodhpur, Delhi, Allahabad, Calcutta, Rangoon, and Bangkok.
             </p>
           </div>
         </div>
@@ -170,7 +166,8 @@ const PilotProfileModal: React.FC<PilotProfileModalProps> = ({ isOpen, onClose }
            <div className="mt-8 border-t-2 border-stone-300 pt-4 flex justify-between items-end">
              <div>
                 <p className="font-typewriter text-xs uppercase text-stone-500">Officer Commanding</p>
-                <div className="font-handwriting text-xl text-stone-800 mt-2">S/Ldr. J. Smith</div>
+                <div className="font-handwriting text-xl text-stone-800 mt-2">Cerdan Norwood W/Cdr</div>
+                <p className="font-mono text-[10px] text-stone-500">O.C. 1 T.E.U.</p>
              </div>
              <div className="text-right">
                 <p className="font-typewriter text-xs uppercase text-stone-500">Date</p>
