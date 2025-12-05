@@ -26,7 +26,7 @@ const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry, o
 
   if (!selectedEntry) {
     return (
-      <div className="bg-[#f4f1ea] border-t-4 border-stone-800 p-6 flex flex-col items-center justify-center text-center h-full shadow-inner relative z-20">
+      <div className="bg-[#f4f1ea] border-t-4 border-stone-800 p-6 flex flex-col items-center justify-center text-center h-full shadow-inner relative">
          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cardboard.png')] pointer-events-none"></div>
          <div className="opacity-40">
             <FolderOpen className="w-12 h-12 text-stone-800 mx-auto mb-2" />
@@ -67,7 +67,7 @@ const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry, o
 
   return (
     <div className={`
-        bg-[#f4f1ea] border-t-4 border-stone-800 p-0 flex flex-col shadow-inner relative z-20 overflow-hidden h-full
+        bg-[#f4f1ea] border-t-4 border-stone-800 p-0 flex flex-col shadow-inner relative overflow-hidden h-full
         ${isDDay ? 'bg-red-50' : ''}
     `}>
         {/* Paper texture */}
