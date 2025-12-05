@@ -4,7 +4,7 @@ import ContextPanel from './ContextPanel';
 import MapViewToggle from './MapViewToggle';
 import MapTimelineScrubber from './MapTimelineScrubber';
 import { ResizableLayout } from './ResizableLayout';
-import { LogEntry, Phase } from '../types';
+import { LogEntry, Phase, Coordinate } from '../types';
 
 interface WorkspaceLayoutProps {
   entries: LogEntry[];
@@ -20,6 +20,7 @@ interface WorkspaceLayoutProps {
   setShowSignificantOnly: (show: boolean) => void;
   customMapCenter?: [number, number];
   customMapZoom?: number;
+  onFlyToCoordinate?: (coord: Coordinate) => void;
 }
 
 const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
@@ -35,7 +36,8 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
   showSignificantOnly,
   setShowSignificantOnly,
   customMapCenter,
-  customMapZoom
+  customMapZoom,
+  onFlyToCoordinate
 }) => {
   const [isTimelineCollapsed, setIsTimelineCollapsed] = useState(false);
   
@@ -60,7 +62,7 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
         />
       }
       sidebarBottom={
-        <ContextPanel selectedEntry={selectedEntry} />
+        <ContextPanel selectedEntry={selectedEntry} onFlyToCoordinate={onFlyToCoordinate} />
       }
       mainContent={() => (
         <div className="relative h-full w-full">

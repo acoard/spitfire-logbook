@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FLIGHT_LOG } from '../services/flightData';
-import { LogEntry, Phase } from '../types';
+import { LogEntry, Phase, Coordinate } from '../types';
 import PilotProfileModal from './PilotProfileModal';
 import WorkspaceLayout from './WorkspaceLayout';
 
@@ -12,6 +12,7 @@ const FlightBookView: React.FC = () => {
   const [shouldCenterMap, setShouldCenterMap] = useState(true);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [showSignificantOnly, setShowSignificantOnly] = useState(false);
+  const [flyToCoordinate, setFlyToCoordinate] = useState<Coordinate | null>(null);
 
   // Handle URL parameters for deep linking
   useEffect(() => {
@@ -29,13 +30,17 @@ const FlightBookView: React.FC = () => {
   }, [searchParams]);
 
   const customMapCenter = useMemo(() => {
+    // Priority: flyToCoordinate > URL params
+    if (flyToCoordinate) {
+      return [flyToCoordinate.lat, flyToCoordinate.lng] as [number, number];
+    }
     const lat = parseFloat(searchParams.get('lat') || '');
     const lng = parseFloat(searchParams.get('lng') || '');
     if (!isNaN(lat) && !isNaN(lng)) {
       return [lat, lng] as [number, number];
     }
     return undefined;
-  }, [searchParams]);
+  }, [searchParams, flyToCoordinate]);
 
   const customMapZoom = useMemo(() => {
     const zoom = parseInt(searchParams.get('zoom') || '');
@@ -70,6 +75,13 @@ const FlightBookView: React.FC = () => {
     setShouldCenterMap(false);
   };
 
+  const handleFlyToCoordinate = (coord: Coordinate) => {
+    setFlyToCoordinate(coord);
+    setShouldCenterMap(true);
+    // Clear the flyToCoordinate after a short delay so it doesn't persist
+    setTimeout(() => setFlyToCoordinate(null), 100);
+  };
+
   return (
     <>
       <PilotProfileModal isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
@@ -87,6 +99,7 @@ const FlightBookView: React.FC = () => {
         setShowSignificantOnly={setShowSignificantOnly}
         customMapCenter={customMapCenter}
         customMapZoom={customMapZoom}
+        onFlyToCoordinate={handleFlyToCoordinate}
       />
     </>
   );

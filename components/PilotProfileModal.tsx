@@ -13,7 +13,7 @@ const PilotProfileModal: React.FC<PilotProfileModalProps> = ({ isOpen, onClose }
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-stone-900/80 backdrop-blur-sm animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-6 bg-stone-900/80 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="bg-[#f4f1ea] w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-sm shadow-2xl relative flex flex-col md:flex-row border-4 border-stone-800">
         
         {/* Paper Texture Overlay */}

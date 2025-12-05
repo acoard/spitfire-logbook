@@ -12,7 +12,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onClose, imageSrc, altT
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/80 p-4 animate-in fade-in duration-200"
       role="dialog"
       aria-modal="true"
       onClick={onClose}

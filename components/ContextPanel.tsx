@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { LogEntry } from '../types';
+import { LogEntry, Coordinate } from '../types';
 import { AIRCRAFT_SPECS } from '../services/flightData';
 import { FolderOpen, Plane, FileText, ChevronLeft, ChevronRight, BookOpen, Maximize2, ExternalLink } from 'lucide-react';
 import ImageModal from './ImageModal';
@@ -8,10 +8,11 @@ import StickyNote from './StickyNote';
 
 interface ContextPanelProps {
   selectedEntry: LogEntry | null;
+  onFlyToCoordinate?: (coord: Coordinate) => void;
 }
 type Tab = 'MISSION' | 'AIRCRAFT' | 'LOGBOOK';
 
-const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry }) => {
+const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry, onFlyToCoordinate }) => {
   const [activeTab, setActiveTab] = useState<Tab>('MISSION');
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
@@ -101,12 +102,55 @@ const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry })
 
         <div className="p-5 relative z-10 overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-stone-400">
              <div className="max-w-2xl mx-auto w-full">
-             {/* Title */}
-             <h3 className="font-typewriter text-lg font-bold text-stone-900 mb-1 border-b-2 border-stone-800 inline-block pb-1">
-                {selectedEntry.origin.name} 
-                {selectedEntry.destination && selectedEntry.destination.name !== selectedEntry.origin.name && ` ➝ ${selectedEntry.destination.name}`}
-             </h3>
-             <p className="font-mono text-[10px] text-stone-500 mb-4">DATE: {selectedEntry.date}</p>
+             {/* Flight Route Header */}
+             <div className="mb-4 pb-3 border-b border-stone-300">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-typewriter text-sm text-stone-800">
+                   {/* Origin */}
+                   <button 
+                      onClick={() => onFlyToCoordinate?.(selectedEntry.origin)}
+                      className="font-bold hover:text-amber-700 hover:underline decoration-amber-700/50 transition-colors text-left"
+                   >
+                      {selectedEntry.origin.name}
+                   </button>
+
+                   {/* Target (if exists) */}
+                   {selectedEntry.target && (
+                      <>
+                         <span className="text-stone-400">→</span>
+                         <button 
+                            onClick={() => onFlyToCoordinate?.(selectedEntry.target!)}
+                            className="font-bold text-red-700 hover:text-red-900 hover:underline decoration-red-700/50 transition-colors text-left"
+                         >
+                            {selectedEntry.target.name}
+                            {selectedEntry.targetIsApproximate && <span className="text-stone-400 text-xs ml-0.5">~</span>}
+                         </button>
+                      </>
+                   )}
+
+                   {/* Destination (if different from origin) */}
+                   {selectedEntry.destination && selectedEntry.destination.name !== selectedEntry.origin.name && (
+                      <>
+                         <span className="text-stone-400">→</span>
+                         <button 
+                            onClick={() => onFlyToCoordinate?.(selectedEntry.destination!)}
+                            className="font-bold hover:text-amber-700 hover:underline decoration-amber-700/50 transition-colors text-left"
+                         >
+                            {selectedEntry.destination.name}
+                         </button>
+                      </>
+                   )}
+                </div>
+                <div className="mt-1 flex flex-wrap gap-x-3 text-[10px] font-mono text-stone-500">
+                   <span>{selectedEntry.date}</span>
+                   <button 
+                      onClick={() => setActiveTab('AIRCRAFT')}
+                      className="hover:text-amber-700 hover:underline decoration-amber-700/50 transition-colors"
+                   >
+                      {selectedEntry.aircraftType}
+                   </button>
+                   <span>{selectedEntry.time} hrs</span>
+                </div>
+             </div>
 
              {/* Content Switching */}
              {activeTab === 'MISSION' && (
