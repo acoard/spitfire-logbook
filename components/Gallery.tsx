@@ -307,7 +307,7 @@ export const Gallery: React.FC = () => {
                 <div
                   className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 transition-all duration-500 ease-out ${
                     expandedVideoId 
-                      ? 'opacity-0 pointer-events-none scale-95 absolute inset-0' 
+                      ? 'opacity-0 pointer-events-none scale-95 absolute top-0 left-0 right-0' 
                       : 'opacity-100 scale-100'
                   }`}
                 >
