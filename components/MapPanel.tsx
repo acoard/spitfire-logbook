@@ -1,62 +1,116 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import { LogEntry, AircraftCategory } from '../types';
 import FlightInfoPanel from './FlightInfoPanel';
 
-// Fix for default Leaflet icon not showing
-const createIcon = (color: string, count?: number) => {
-  // If count > 1, show a badge
-  if (count && count > 1) {
-    return L.divIcon({
-      className: 'custom-div-icon',
-      html: `
-        <div style="position: relative;">
-          <div style="background-color: ${color}; width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.5);"></div>
-          <div style="
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #1c1917;
-            color: #fef3c7;
-            font-size: 10px;
-            font-weight: bold;
-            min-width: 16px;
-            height: 16px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1.5px solid #f4f1ea;
-            font-family: 'Special Elite', monospace;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
-          ">${count}</div>
-        </div>
-      `,
-      iconSize: [18, 18],
-      iconAnchor: [9, 9]
-    });
-  }
+// ============================================================================
+// SPITFIRE CONFIGURATION - Set to false to disable the animated plane
+// ============================================================================
+const ENABLE_SPITFIRE_ANIMATION = true;
+
+// ============================================================================
+// SPITFIRE SVG - Spitfire IXe top-down silhouette
+// This is isolated here for easy removal if quality is insufficient.
+// Simply set ENABLE_SPITFIRE_ANIMATION to false above to disable.
+// ============================================================================
+const SPITFIRE_SVG = `
+<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Spitfire IXe top-down silhouette - distinctive elliptical wings -->
+  <g fill="#1a1a1a" stroke="#333" stroke-width="0.5">
+    <!-- Fuselage -->
+    <ellipse cx="30" cy="30" rx="3" ry="22" />
+    <!-- Nose cone -->
+    <ellipse cx="30" cy="6" rx="2" ry="4" />
+    <!-- Tail -->
+    <path d="M 28 50 Q 30 56 32 50 Z" />
+    <!-- Main wings - distinctive elliptical Spitfire shape -->
+    <ellipse cx="30" cy="26" rx="28" ry="5" />
+    <!-- Wing leading edge detail -->
+    <ellipse cx="30" cy="24" rx="26" ry="2" opacity="0.3"/>
+    <!-- Horizontal stabilizer -->
+    <ellipse cx="30" cy="48" rx="10" ry="2.5" />
+    <!-- Vertical stabilizer -->
+    <path d="M 30 46 L 30 54 L 32 52 L 32 46 Z" />
+    <!-- Cockpit canopy -->
+    <ellipse cx="30" cy="22" rx="2" ry="4" fill="#2a3a4a" stroke="none"/>
+    <!-- Engine cowling detail -->
+    <circle cx="30" cy="10" r="2.5" fill="#222" stroke="none"/>
+    <!-- Propeller disc (motion blur effect) -->
+    <ellipse cx="30" cy="4" rx="6" ry="1.5" fill="#666" opacity="0.4"/>
+  </g>
+</svg>
+`;
+
+// Create Spitfire DivIcon for Leaflet
+const createSpitfireIcon = (rotation: number) => {
   return L.divIcon({
-    className: 'custom-div-icon',
-    html: `<div style="background-color: ${color}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.4);"></div>`,
-    iconSize: [14, 14],
-    iconAnchor: [7, 7]
+    className: 'spitfire-icon',
+    html: `<div style="
+      transform: rotate(${rotation}deg);
+      width: 40px;
+      height: 40px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+      transition: transform 0.1s ease-out;
+    ">${SPITFIRE_SVG}</div>`,
+    iconSize: [40, 40],
+    iconAnchor: [20, 20]
   });
 };
 
-// Group entries by location key
-interface LocationGroup {
-  key: string;
-  lat: number;
-  lng: number;
-  entries: LogEntry[];
-  primaryCategory: AircraftCategory;
-}
+// ============================================================================
+// MARKER ICONS
+// ============================================================================
 
-const createLocationKey = (lat: number, lng: number): string => {
-  // Round to 3 decimal places to group nearby coordinates
-  return `${lat.toFixed(3)},${lng.toFixed(3)}`;
+// Standard marker for inactive flights
+const createIcon = (color: string, size: number = 14) => {
+  return L.divIcon({
+    className: 'custom-div-icon',
+    html: `<div style="
+      background-color: ${color}; 
+      width: ${size}px; 
+      height: ${size}px; 
+      border-radius: 50%; 
+      border: 2px solid white; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    "></div>`,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2]
+  });
+};
+
+// Pulsing marker for active origin
+const createPulsingIcon = (color: string) => {
+  return L.divIcon({
+    className: 'pulsing-marker',
+    html: `
+      <div class="pulse-ring" style="--pulse-color: ${color}"></div>
+      <div class="pulse-core" style="background-color: ${color}"></div>
+    `,
+    iconSize: [24, 24],
+    iconAnchor: [12, 12]
+  });
+};
+
+// Diamond marker for target locations
+const createDiamondIcon = (color: string, isActive: boolean) => {
+  const size = isActive ? 18 : 12;
+  return L.divIcon({
+    className: isActive ? 'diamond-marker-active' : 'diamond-marker',
+    html: `
+      ${isActive ? '<div class="diamond-pulse" style="--diamond-color: ' + color + '"></div>' : ''}
+      <div style="
+        width: ${size}px;
+        height: ${size}px;
+        background-color: ${color};
+        transform: rotate(45deg);
+        border: 2px solid white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      "></div>
+    `,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2]
+  });
 };
 
 interface MapPanelProps {
@@ -67,7 +121,6 @@ interface MapPanelProps {
   customCenter?: [number, number];
   customZoom?: number;
   isTimelineCollapsed?: boolean;
-  closePopoverTrigger?: number;
 }
 
 // Robust coordinate validation
@@ -75,20 +128,143 @@ const isValidCoord = (val: any): boolean => {
   return typeof val === 'number' && !isNaN(val) && isFinite(val);
 };
 
-// Component to handle map movement and responsive resizing
-const MapController: React.FC<{ 
-  center: [number, number]; 
-  zoom: number; 
-  shouldCenter: boolean;
-  onMapReady?: (map: L.Map) => void;
-}> = ({ center, zoom, shouldCenter, onMapReady }) => {
+// ============================================================================
+// ANIMATION UTILITIES
+// ============================================================================
+
+// Calculate bearing between two points (for plane rotation)
+const calculateBearing = (start: [number, number], end: [number, number]): number => {
+  const startLat = start[0] * Math.PI / 180;
+  const startLng = start[1] * Math.PI / 180;
+  const endLat = end[0] * Math.PI / 180;
+  const endLng = end[1] * Math.PI / 180;
+  
+  const dLng = endLng - startLng;
+  
+  const x = Math.sin(dLng) * Math.cos(endLat);
+  const y = Math.cos(startLat) * Math.sin(endLat) - 
+            Math.sin(startLat) * Math.cos(endLat) * Math.cos(dLng);
+  
+  let bearing = Math.atan2(x, y) * 180 / Math.PI;
+  return (bearing + 360) % 360;
+};
+
+// Interpolate position along a path
+const interpolateAlongPath = (
+  pathPoints: [number, number][],
+  progress: number // 0 to 1
+): { position: [number, number]; bearing: number } => {
+  if (pathPoints.length < 2) {
+    return { position: pathPoints[0], bearing: 0 };
+  }
+  
+  // Calculate total path length
+  let totalLength = 0;
+  const segmentLengths: number[] = [];
+  
+  for (let i = 0; i < pathPoints.length - 1; i++) {
+    const dx = pathPoints[i + 1][0] - pathPoints[i][0];
+    const dy = pathPoints[i + 1][1] - pathPoints[i][1];
+    const length = Math.sqrt(dx * dx + dy * dy);
+    segmentLengths.push(length);
+    totalLength += length;
+  }
+  
+  // Find position at progress
+  const targetDistance = progress * totalLength;
+  let accumulatedDistance = 0;
+  
+  for (let i = 0; i < segmentLengths.length; i++) {
+    if (accumulatedDistance + segmentLengths[i] >= targetDistance) {
+      // Interpolate within this segment
+      const segmentProgress = (targetDistance - accumulatedDistance) / segmentLengths[i];
+      const lat = pathPoints[i][0] + (pathPoints[i + 1][0] - pathPoints[i][0]) * segmentProgress;
+      const lng = pathPoints[i][1] + (pathPoints[i + 1][1] - pathPoints[i][1]) * segmentProgress;
+      const bearing = calculateBearing(pathPoints[i], pathPoints[i + 1]);
+      
+      return { position: [lat, lng], bearing };
+    }
+    accumulatedDistance += segmentLengths[i];
+  }
+  
+  // At the end
+  const lastIdx = pathPoints.length - 1;
+  return { 
+    position: pathPoints[lastIdx], 
+    bearing: calculateBearing(pathPoints[lastIdx - 1], pathPoints[lastIdx])
+  };
+};
+
+// ============================================================================
+// ANIMATED SPITFIRE COMPONENT
+// ============================================================================
+
+interface AnimatedSpitfireProps {
+  pathPoints: [number, number][];
+  isActive: boolean;
+}
+
+const AnimatedSpitfire: React.FC<AnimatedSpitfireProps> = ({ pathPoints, isActive }) => {
   const map = useMap();
+  const markerRef = useRef<L.Marker | null>(null);
+  const animationRef = useRef<number | null>(null);
+  const startTimeRef = useRef<number>(0);
+  
+  const ANIMATION_DURATION = 8000; // 8 seconds per loop
+  
+  const animate = useCallback((timestamp: number) => {
+    if (!startTimeRef.current) {
+      startTimeRef.current = timestamp;
+    }
+    
+    const elapsed = timestamp - startTimeRef.current;
+    const progress = (elapsed % ANIMATION_DURATION) / ANIMATION_DURATION;
+    
+    const { position, bearing } = interpolateAlongPath(pathPoints, progress);
+    
+    if (markerRef.current) {
+      markerRef.current.setLatLng(position);
+      markerRef.current.setIcon(createSpitfireIcon(bearing));
+    }
+    
+    animationRef.current = requestAnimationFrame(animate);
+  }, [pathPoints]);
   
   useEffect(() => {
-    if (onMapReady) {
-      onMapReady(map);
+    if (!isActive || pathPoints.length < 2 || !ENABLE_SPITFIRE_ANIMATION) {
+      return;
     }
-  }, [map, onMapReady]);
+    
+    // Create marker
+    const initialPos = interpolateAlongPath(pathPoints, 0);
+    markerRef.current = L.marker(initialPos.position, {
+      icon: createSpitfireIcon(initialPos.bearing),
+      zIndexOffset: 2000
+    }).addTo(map);
+    
+    // Start animation
+    startTimeRef.current = 0;
+    animationRef.current = requestAnimationFrame(animate);
+    
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      if (markerRef.current) {
+        map.removeLayer(markerRef.current);
+      }
+    };
+  }, [map, pathPoints, isActive, animate]);
+  
+  return null;
+};
+
+// ============================================================================
+// MAP CONTROLLER
+// ============================================================================
+
+const MapController: React.FC<{ center: [number, number]; zoom: number; shouldCenter: boolean }> = ({ center, zoom, shouldCenter }) => {
+  const map = useMap();
   
   useEffect(() => {
     if (shouldCenter && isValidCoord(center[0]) && isValidCoord(center[1])) {
@@ -113,24 +289,99 @@ const MapController: React.FC<{
       observer.disconnect();
     };
   }, [map]);
+  
   return null;
 };
 
-const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, onMarkerSelect, shouldCenter, customCenter, customZoom, isTimelineCollapsed = false, closePopoverTrigger }) => {
+// ============================================================================
+// HOVERABLE POLYLINE COMPONENT
+// ============================================================================
+
+interface HoverablePolylineProps {
+  positions: [number, number][];
+  color: string;
+  isActive: boolean;
+  onClick: () => void;
+}
+
+const HoverablePolyline: React.FC<HoverablePolylineProps> = ({ positions, color, isActive, onClick }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  if (isActive) {
+    // Active route: glow effect + main line
+    return (
+      <>
+        {/* Glow layer - wider, semi-transparent */}
+        <Polyline
+          positions={positions}
+          pathOptions={{
+            color: color,
+            weight: 14,
+            opacity: 0.25,
+            lineCap: 'round',
+            lineJoin: 'round'
+          }}
+          className="route-glow"
+        />
+        {/* Main active line */}
+        <Polyline
+          positions={positions}
+          pathOptions={{
+            color: color,
+            weight: 5,
+            opacity: 1,
+            lineCap: 'round',
+            lineJoin: 'round'
+          }}
+        />
+      </>
+    );
+  }
+  
+  // Inactive route with hover effect
+  return (
+    <Polyline
+      positions={positions}
+      pathOptions={{
+        color: color,
+        weight: 1.5,
+        opacity: isHovered ? 0.5 : 0.12,
+        dashArray: '5, 10'
+      }}
+      eventHandlers={{
+        mouseover: () => setIsHovered(true),
+        mouseout: () => setIsHovered(false),
+        click: onClick
+      }}
+    />
+  );
+};
+
+// ============================================================================
+// MAIN MAP PANEL COMPONENT
+// ============================================================================
+
+const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, onMarkerSelect, shouldCenter, customCenter, customZoom, isTimelineCollapsed = false }) => {
   
   // Calculate map center based on selection with validation
-  // Default to English Channel/Europe view
-  const centerPosition = useMemo((): [number, number] => {
-    if (customCenter) return customCenter;
-    if (selectedEntry && selectedEntry.origin && isValidCoord(selectedEntry.origin.lat) && isValidCoord(selectedEntry.origin.lng)) {
-      return [selectedEntry.origin.lat, selectedEntry.origin.lng];
-    }
-    return [50.5, 0.0];
-  }, [customCenter, selectedEntry]);
+  let centerPosition: [number, number] = customCenter || [50.5, 0.0]; 
+
+  if (!customCenter && selectedEntry && selectedEntry.origin && isValidCoord(selectedEntry.origin.lat) && isValidCoord(selectedEntry.origin.lng)) {
+    centerPosition = [selectedEntry.origin.lat, selectedEntry.origin.lng];
+  }
 
   const zoomLevel = customZoom || (selectedEntry ? 7 : 5);
 
-  const getColor = (cat: AircraftCategory) => {
+  // Enhanced colors - brighter/more saturated for active
+  const getColor = (cat: AircraftCategory, isActive: boolean = false) => {
+    if (isActive) {
+      switch (cat) {
+        case AircraftCategory.TRAINING: return '#facc15'; // brighter yellow
+        case AircraftCategory.FIGHTER: return '#ef4444'; // brighter red
+        case AircraftCategory.TRANSPORT: return '#60a5fa'; // brighter blue
+        default: return '#94a3b8';
+      }
+    }
     switch (cat) {
       case AircraftCategory.TRAINING: return '#EAB308'; // yellow-500
       case AircraftCategory.FIGHTER: return '#DC2626'; // red-600
@@ -148,104 +399,102 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
     );
   }, [entries]);
 
-  // Group entries by location
-  const locationGroups = useMemo(() => {
-    const groups = new Map<string, LocationGroup>();
+  // Build path for active route (for animation)
+  const activeRoutePath = useMemo((): [number, number][] | null => {
+    if (!selectedEntry) return null;
     
-    validEntries.forEach(entry => {
-      const key = createLocationKey(entry.origin.lat, entry.origin.lng);
-      
-      if (groups.has(key)) {
-        groups.get(key)!.entries.push(entry);
-      } else {
-        groups.set(key, {
-          key,
-          lat: entry.origin.lat,
-          lng: entry.origin.lng,
-          entries: [entry],
-          primaryCategory: entry.aircraftCategory
-        });
-      }
-    });
+    const pathPoints: [number, number][] = [];
     
-    // Update primary category to the most common category at this location
-    groups.forEach(group => {
-      // Count occurrences of each category
-      const categoryCounts = new Map<AircraftCategory, number>();
-      group.entries.forEach(e => {
-        categoryCounts.set(e.aircraftCategory, (categoryCounts.get(e.aircraftCategory) || 0) + 1);
-      });
-      // Find the most common category
-      let maxCount = 0;
-      let mostCommon = group.entries[0].aircraftCategory;
-      categoryCounts.forEach((count, cat) => {
-        if (count > maxCount) {
-          maxCount = count;
-          mostCommon = cat;
-        }
-      });
-      group.primaryCategory = mostCommon;
-    });
-    
-    return Array.from(groups.values());
-  }, [validEntries]);
-
-  // State for mission selector popup
-  const [activeSelectorGroup, setActiveSelectorGroup] = useState<LocationGroup | null>(null);
-  
-  // State for popover position (pixel coordinates relative to map container)
-  const [popoverPosition, setPopoverPosition] = useState<{ x: number; y: number } | null>(null);
-  
-  // Ref to access the map instance for coordinate conversion
-  const mapRef = React.useRef<L.Map | null>(null);
-  
-  // State for hover preview (highlights path without selecting)
-  const [hoveredEntryId, setHoveredEntryId] = useState<string | null>(null);
-
-  // Handle marker click - show selector if multiple missions, otherwise select directly
-  const handleMarkerClick = (group: LocationGroup, e: L.LeafletMouseEvent) => {
-    if (group.entries.length === 1) {
-      onMarkerSelect(group.entries[0]);
-    } else {
-      // Get pixel position from the click event
-      const containerPoint = e.containerPoint;
-      setPopoverPosition({ x: containerPoint.x, y: containerPoint.y });
-      setActiveSelectorGroup(group);
+    if (selectedEntry.origin && isValidCoord(selectedEntry.origin.lat) && isValidCoord(selectedEntry.origin.lng)) {
+      pathPoints.push([selectedEntry.origin.lat, selectedEntry.origin.lng]);
     }
-  };
-
-  // Handle mission selection from the popup
-  const handleMissionSelect = (entry: LogEntry) => {
-    onMarkerSelect(entry);
-    setActiveSelectorGroup(null);
-    setHoveredEntryId(null);
-    setPopoverPosition(null);
-  };
-
-  // Close selector when clicking elsewhere or when selection changes
-  useEffect(() => {
-    if (selectedEntry) {
-      setActiveSelectorGroup(null);
-      setHoveredEntryId(null);
-      setPopoverPosition(null);
+    
+    if (selectedEntry.target && isValidCoord(selectedEntry.target.lat) && isValidCoord(selectedEntry.target.lng)) {
+      pathPoints.push([selectedEntry.target.lat, selectedEntry.target.lng]);
     }
-  }, [selectedEntry?.id]);
-
-  // Close popover when triggered externally (e.g., when clicking a location link)
-  useEffect(() => {
-    if (closePopoverTrigger) {
-      setActiveSelectorGroup(null);
-      setHoveredEntryId(null);
-      setPopoverPosition(null);
-      // Also close any open Leaflet native popups
-      if (mapRef.current) {
-        mapRef.current.closePopup();
+    
+    if (selectedEntry.destination && isValidCoord(selectedEntry.destination.lat) && isValidCoord(selectedEntry.destination.lng)) {
+      const lastPoint = pathPoints[pathPoints.length - 1];
+      if (!lastPoint || lastPoint[0] !== selectedEntry.destination.lat || lastPoint[1] !== selectedEntry.destination.lng) {
+        pathPoints.push([selectedEntry.destination.lat, selectedEntry.destination.lng]);
       }
     }
-  }, [closePopoverTrigger]);
+    
+    return pathPoints.length >= 2 ? pathPoints : null;
+  }, [selectedEntry]);
 
   return (
     <div className="h-full w-full relative z-0">
+      {/* Inject CSS for animations */}
+      <style>{`
+        /* Pulsing marker animation */
+        .pulsing-marker {
+          position: relative;
+        }
+        .pulse-ring {
+          position: absolute;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          border: 3px solid var(--pulse-color);
+          animation: pulse-ring 1.5s ease-out infinite;
+        }
+        .pulse-core {
+          position: absolute;
+          top: 4px;
+          left: 4px;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          border: 2px solid white;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+        }
+        @keyframes pulse-ring {
+          0% {
+            transform: scale(1);
+            opacity: 1;
+          }
+          100% {
+            transform: scale(2);
+            opacity: 0;
+          }
+        }
+        
+        /* Diamond marker animation */
+        .diamond-marker-active {
+          position: relative;
+        }
+        .diamond-pulse {
+          position: absolute;
+          width: 18px;
+          height: 18px;
+          background-color: var(--diamond-color);
+          transform: rotate(45deg);
+          animation: diamond-pulse 1.5s ease-out infinite;
+        }
+        @keyframes diamond-pulse {
+          0% {
+            transform: rotate(45deg) scale(1);
+            opacity: 0.6;
+          }
+          100% {
+            transform: rotate(45deg) scale(2);
+            opacity: 0;
+          }
+        }
+        
+        /* Route glow effect */
+        .route-glow {
+          filter: blur(4px);
+        }
+        
+        /* Spitfire icon styling */
+        .spitfire-icon {
+          background: transparent !important;
+          border: none !important;
+        }
+      `}</style>
+      
       <MapContainer 
         center={centerPosition} 
         zoom={zoomLevel} 
@@ -261,113 +510,200 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
         />
         
-        <MapController 
-          center={centerPosition} 
-          zoom={zoomLevel} 
-          shouldCenter={shouldCenter}
-          onMapReady={(map) => { mapRef.current = map; }}
-        />
+        <MapController center={centerPosition} zoom={zoomLevel} shouldCenter={shouldCenter} />
 
-        {/* Render Routes (Polylines) first so markers sit on top */}
+        {/* Render Routes (Polylines) - inactive first, then active on top */}
         {validEntries.map((entry) => {
-             const isActive = selectedEntry?.id === entry.id;
-             const isHovered = hoveredEntryId === entry.id;
-             const pathPoints: [number, number][] = [[entry.origin.lat, entry.origin.lng]];
-             
-             // Add target point if it exists
-             if (entry.target && isValidCoord(entry.target.lat) && isValidCoord(entry.target.lng)) {
-                 pathPoints.push([entry.target.lat, entry.target.lng]);
-             }
+          const isActive = selectedEntry?.id === entry.id;
+          const pathPoints: [number, number][] = [[entry.origin.lat, entry.origin.lng]];
+          
+          // Add target point if it exists
+          if (entry.target && isValidCoord(entry.target.lat) && isValidCoord(entry.target.lng)) {
+            pathPoints.push([entry.target.lat, entry.target.lng]);
+          }
 
-             // Add destination point if it exists and differs from last point
-             if (entry.destination && isValidCoord(entry.destination.lat) && isValidCoord(entry.destination.lng)) {
-                 const lastPoint = pathPoints[pathPoints.length - 1];
-                 if (lastPoint[0] !== entry.destination.lat || lastPoint[1] !== entry.destination.lng) {
-                     pathPoints.push([entry.destination.lat, entry.destination.lng]);
-                 }
-             }
+          // Add destination point if it exists and differs from last point
+          if (entry.destination && isValidCoord(entry.destination.lat) && isValidCoord(entry.destination.lng)) {
+            const lastPoint = pathPoints[pathPoints.length - 1];
+            if (lastPoint[0] !== entry.destination.lat || lastPoint[1] !== entry.destination.lng) {
+              pathPoints.push([entry.destination.lat, entry.destination.lng]);
+            }
+          }
 
-             // Only draw if we have more than 1 point (i.e. a line)
-             if (pathPoints.length > 1) {
-                return (
-                    <Polyline 
-                        key={`line-${entry.id}`}
-                        positions={pathPoints}
-                        pathOptions={{ 
-                            color: isHovered ? '#fff' : getColor(entry.aircraftCategory),
-                            weight: isActive ? 4 : isHovered ? 5 : 2,
-                            opacity: isActive ? 1 : isHovered ? 1 : 0.4,
-                            dashArray: (isActive || isHovered) ? undefined : '5, 10'
-                        }}
-                    />
-                )
-             }
-             return null;
+          // Only draw if we have more than 1 point (i.e. a line)
+          if (pathPoints.length > 1 && !isActive) {
+            return (
+              <HoverablePolyline
+                key={`line-${entry.id}`}
+                positions={pathPoints}
+                color={getColor(entry.aircraftCategory, false)}
+                isActive={false}
+                onClick={() => onMarkerSelect(entry)}
+              />
+            );
+          }
+          return null;
         })}
+        
+        {/* Active route rendered last (on top) */}
+        {selectedEntry && (() => {
+          const pathPoints: [number, number][] = [[selectedEntry.origin.lat, selectedEntry.origin.lng]];
+          
+          if (selectedEntry.target && isValidCoord(selectedEntry.target.lat) && isValidCoord(selectedEntry.target.lng)) {
+            pathPoints.push([selectedEntry.target.lat, selectedEntry.target.lng]);
+          }
+          
+          if (selectedEntry.destination && isValidCoord(selectedEntry.destination.lat) && isValidCoord(selectedEntry.destination.lng)) {
+            const lastPoint = pathPoints[pathPoints.length - 1];
+            if (lastPoint[0] !== selectedEntry.destination.lat || lastPoint[1] !== selectedEntry.destination.lng) {
+              pathPoints.push([selectedEntry.destination.lat, selectedEntry.destination.lng]);
+            }
+          }
+          
+          if (pathPoints.length > 1) {
+            return (
+              <HoverablePolyline
+                key={`line-active-${selectedEntry.id}`}
+                positions={pathPoints}
+                color={getColor(selectedEntry.aircraftCategory, true)}
+                isActive={true}
+                onClick={() => {}}
+              />
+            );
+          }
+          return null;
+        })()}
 
-        {/* Render Origin Markers (grouped by location) */}
-        {locationGroups.map((group) => {
-          const isGroupSelected = group.entries.some(e => selectedEntry?.id === e.id);
-          const count = group.entries.length;
+        {/* Animated Spitfire on active route */}
+        {activeRoutePath && ENABLE_SPITFIRE_ANIMATION && (
+          <AnimatedSpitfire
+            pathPoints={activeRoutePath}
+            isActive={!!selectedEntry}
+          />
+        )}
+
+        {/* Render Markers - inactive first */}
+        {validEntries.map((entry) => {
+          const isActive = selectedEntry?.id === entry.id;
+          if (isActive) return null; // Render active markers separately
           
           return (
-            <Marker
-              key={`group-marker-${group.key}`}
-              position={[group.lat, group.lng]}
-              icon={createIcon(getColor(group.primaryCategory), count)}
-              opacity={isGroupSelected || selectedEntry === null ? 1 : 0.6}
-              zIndexOffset={isGroupSelected ? 1000 : count > 1 ? 500 : 0}
-              eventHandlers={{
-                  click: (e) => handleMarkerClick(group, e)
-              }}
-            />
+            <React.Fragment key={`group-${entry.id}`}>
+              {/* Origin Marker - smaller for inactive */}
+              <Marker
+                key={`marker-${entry.id}`}
+                position={[entry.origin.lat, entry.origin.lng]}
+                icon={createIcon(getColor(entry.aircraftCategory, false), 10)}
+                opacity={0.7}
+                eventHandlers={{
+                  click: () => onMarkerSelect(entry)
+                }}
+              >
+                <Popup className="font-serif">
+                  <div className="p-1 min-w-[150px]">
+                    <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">{entry.origin.name}</h3>
+                    <div className="text-xs text-stone-600 space-y-1">
+                      <p><span className="font-semibold">Date:</span> {entry.date}</p>
+                      <p><span className="font-semibold">Aircraft:</span> {entry.aircraftType}</p>
+                      <p><span className="font-semibold">Duty:</span> {entry.duty}</p>
+                      {entry.isSignificant && (
+                        <p className="text-red-700 font-bold mt-1 bg-red-50 p-1 border border-red-100 text-center uppercase text-[10px]">High Priority Event</p>
+                      )}
+                    </div>
+                  </div>
+                </Popup>
+              </Marker>
+
+              {/* Target Marker - diamond shape */}
+              {entry.target && isValidCoord(entry.target.lat) && isValidCoord(entry.target.lng) && (
+                <Marker
+                  key={`target-${entry.id}`}
+                  position={[entry.target.lat, entry.target.lng]}
+                  icon={createDiamondIcon('#1c1917', false)}
+                  opacity={0.5}
+                  eventHandlers={{
+                    click: () => onMarkerSelect(entry)
+                  }}
+                >
+                  <Popup className="font-serif">
+                    <div className="p-1">
+                      <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">
+                        {entry.target.name} {entry.targetIsApproximate && "(Approx)"}
+                      </h3>
+                      <p className="text-xs font-semibold text-red-800">Mission Target</p>
+                    </div>
+                  </Popup>
+                </Marker>
+              )}
+            </React.Fragment>
           );
         })}
-
-        {/* Render Target Markers for all entries */}
-        {validEntries.map((entry) => (
-          entry.target && isValidCoord(entry.target.lat) && isValidCoord(entry.target.lng) && (
+        
+        {/* Active entry markers - rendered on top */}
+        {selectedEntry && (
+          <React.Fragment key={`group-active-${selectedEntry.id}`}>
+            {/* Active Origin Marker - pulsing */}
             <Marker
-              key={`target-${entry.id}`}
-              position={[entry.target.lat, entry.target.lng]}
-              icon={createIcon('#1c1917')}
-              opacity={selectedEntry?.id === entry.id ? 1 : 0.5}
-              zIndexOffset={selectedEntry?.id === entry.id ? 1000 : 0}
+              position={[selectedEntry.origin.lat, selectedEntry.origin.lng]}
+              icon={createPulsingIcon(getColor(selectedEntry.aircraftCategory, true))}
+              zIndexOffset={1000}
               eventHandlers={{
-                  click: () => { onMarkerSelect(entry); }
+                click: () => onMarkerSelect(selectedEntry)
               }}
             >
               <Popup className="font-serif">
-                <div className="p-1">
-                  <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">
-                    {entry.target.name} {entry.targetIsApproximate && "(Approx)"}
-                  </h3>
-                  <p className="text-xs font-semibold text-red-800">Mission Target</p>
+                <div className="p-1 min-w-[150px]">
+                  <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">{selectedEntry.origin.name}</h3>
+                  <div className="text-xs text-stone-600 space-y-1">
+                    <p><span className="font-semibold">Date:</span> {selectedEntry.date}</p>
+                    <p><span className="font-semibold">Aircraft:</span> {selectedEntry.aircraftType}</p>
+                    <p><span className="font-semibold">Duty:</span> {selectedEntry.duty}</p>
+                    {selectedEntry.isSignificant && (
+                      <p className="text-red-700 font-bold mt-1 bg-red-50 p-1 border border-red-100 text-center uppercase text-[10px]">High Priority Event</p>
+                    )}
+                  </div>
                 </div>
               </Popup>
             </Marker>
-          )
-        ))}
-        
-        {/* Destination Marker for selected entry if different */}
-        {selectedEntry && 
-         selectedEntry.destination && 
-         isValidCoord(selectedEntry.destination.lat) && 
-         isValidCoord(selectedEntry.destination.lng) && (
-             (selectedEntry.origin.lat !== selectedEntry.destination.lat || selectedEntry.origin.lng !== selectedEntry.destination.lng) && (
-                <Marker
-                    position={[selectedEntry.destination.lat, selectedEntry.destination.lng]}
-                    icon={createIcon(getColor(selectedEntry.aircraftCategory))}
-                    zIndexOffset={1001}
-                >
-                     <Popup className="font-serif">
-                        <div className="p-1">
-                            <h3 className="font-bold text-sm border-b pb-1 mb-1">{selectedEntry.destination.name}</h3>
-                            <p className="text-xs">Destination</p>
-                        </div>
-                    </Popup>
-                </Marker>
-             )
+
+            {/* Active Target Marker - pulsing diamond */}
+            {selectedEntry.target && isValidCoord(selectedEntry.target.lat) && isValidCoord(selectedEntry.target.lng) && (
+              <Marker
+                position={[selectedEntry.target.lat, selectedEntry.target.lng]}
+                icon={createDiamondIcon('#dc2626', true)}
+                zIndexOffset={1000}
+              >
+                <Popup className="font-serif">
+                  <div className="p-1">
+                    <h3 className="font-bold text-sm border-b pb-1 mb-1 text-stone-800">
+                      {selectedEntry.target.name} {selectedEntry.targetIsApproximate && "(Approx)"}
+                    </h3>
+                    <p className="text-xs font-semibold text-red-800">Mission Target</p>
+                  </div>
+                </Popup>
+              </Marker>
+            )}
+            
+            {/* Destination Marker if different from origin */}
+            {selectedEntry.destination && 
+             isValidCoord(selectedEntry.destination.lat) && 
+             isValidCoord(selectedEntry.destination.lng) && 
+             (selectedEntry.origin.lat !== selectedEntry.destination.lat || 
+              selectedEntry.origin.lng !== selectedEntry.destination.lng) && (
+              <Marker
+                position={[selectedEntry.destination.lat, selectedEntry.destination.lng]}
+                icon={createIcon(getColor(selectedEntry.aircraftCategory, true), 16)}
+                zIndexOffset={1001}
+              >
+                <Popup className="font-serif">
+                  <div className="p-1">
+                    <h3 className="font-bold text-sm border-b pb-1 mb-1">{selectedEntry.destination.name}</h3>
+                    <p className="text-xs">Destination</p>
+                  </div>
+                </Popup>
+              </Marker>
+            )}
+          </React.Fragment>
         )}
 
       </MapContainer>
@@ -379,148 +715,6 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
         isTimelineCollapsed={isTimelineCollapsed}
       />
 
-      {/* Mission Selector Popup - appears when clicking a marker with multiple missions */}
-      {activeSelectorGroup && popoverPosition && (() => {
-        const mapHeight = mapRef.current?.getContainer().clientHeight || window.innerHeight;
-        const showBelow = popoverPosition.y < 220;
-
-        return (
-          <>
-            {/* Backdrop - very subtle, click to close */}
-            <div 
-              className="absolute inset-0 z-[399] bg-stone-900/5 pointer-events-auto"
-              onClick={() => { setActiveSelectorGroup(null); setHoveredEntryId(null); setPopoverPosition(null); }}
-            />
-            
-            {/* Selector Panel - positioned near marker */}
-            <div 
-              className="absolute z-[400] bg-[#f4f1ea] rounded shadow-xl border border-stone-400 w-64 max-h-[45%] overflow-hidden pointer-events-auto"
-              style={{
-                // Position above/below the marker, centered horizontally
-                left: `${Math.max(8, Math.min(popoverPosition.x - 128, window.innerWidth - 272))}px`,
-                top: showBelow ? `${popoverPosition.y + 15}px` : `${Math.max(8, popoverPosition.y - 15)}px`,
-                // Shift up by the panel's height if showing above
-                transform: showBelow ? 'none' : 'translateY(-100%)',
-              }}
-            >
-              {/* Arrow pointing to marker */}
-              {!showBelow && (
-                <>
-                  <div 
-                    className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0"
-                    style={{
-                      borderLeft: '8px solid transparent',
-                      borderRight: '8px solid transparent',
-                      borderTop: '8px solid #a8a29e',
-                    }}
-                  />
-                  <div 
-                    className="absolute -bottom-[6px] left-1/2 -translate-x-1/2 w-0 h-0"
-                    style={{
-                      borderLeft: '7px solid transparent',
-                      borderRight: '7px solid transparent',
-                      borderTop: '7px solid #f4f1ea',
-                    }}
-                  />
-                </>
-              )}
-              {showBelow && (
-                <>
-                  <div 
-                    className="absolute -top-2 left-1/2 -translate-x-1/2 w-0 h-0"
-                    style={{
-                      borderLeft: '8px solid transparent',
-                      borderRight: '8px solid transparent',
-                      borderBottom: '8px solid #a8a29e',
-                    }}
-                  />
-                  <div 
-                    className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-0 h-0"
-                    style={{
-                      borderLeft: '7px solid transparent',
-                      borderRight: '7px solid transparent',
-                      borderBottom: '7px solid #f4f1ea',
-                    }}
-                  />
-                </>
-              )}
-              
-              {/* Header */}
-              <div className="bg-stone-200/90 border-b border-stone-300 px-2.5 py-1.5 flex items-center justify-between">
-                <div className="min-w-0">
-                  <h3 className="font-typewriter text-[11px] font-bold text-stone-800 uppercase tracking-wide truncate">
-                    {activeSelectorGroup.entries[0]?.origin.name}
-                  </h3>
-                  <p className="font-typewriter text-[9px] text-stone-500">
-                    {activeSelectorGroup.entries.length} missions
-                  </p>
-                </div>
-                <button
-                  onClick={() => { setActiveSelectorGroup(null); setHoveredEntryId(null); setPopoverPosition(null); }}
-                  className="w-5 h-5 flex items-center justify-center rounded bg-stone-300/80 hover:bg-stone-400/80 text-stone-600 hover:text-stone-800 transition-colors flex-shrink-0 ml-2"
-                >
-                  <span className="text-sm leading-none">&times;</span>
-                </button>
-              </div>
-              
-              {/* Mission List - compact */}
-              <div className="overflow-y-auto max-h-[calc(45vh-50px)] p-1.5 space-y-1">
-                {activeSelectorGroup.entries.map((entry) => {
-                  const isHovered = hoveredEntryId === entry.id;
-                  return (
-                    <button
-                      key={entry.id}
-                      onClick={() => handleMissionSelect(entry)}
-                      onMouseEnter={() => setHoveredEntryId(entry.id)}
-                      onMouseLeave={() => setHoveredEntryId(null)}
-                      className={`
-                        w-full text-left px-2 py-1.5 rounded transition-all duration-100
-                        ${selectedEntry?.id === entry.id 
-                          ? 'bg-amber-100 border border-amber-400' 
-                          : isHovered
-                            ? 'bg-white border border-stone-400 shadow-sm'
-                            : 'bg-white/60 border border-transparent hover:bg-white hover:border-stone-300'
-                        }
-                      `}
-                    >
-                      <div className="flex items-center gap-2">
-                        {/* Category Indicator */}
-                        <span 
-                          className="w-2 h-2 rounded-full flex-shrink-0"
-                          style={{ backgroundColor: getColor(entry.aircraftCategory) }}
-                        />
-                        
-                        {/* Mission Details - single line */}
-                        <div className="flex-1 min-w-0 flex items-center gap-1.5">
-                          <span className="font-typewriter text-[10px] font-bold text-stone-700 flex-shrink-0">
-                            {entry.date}
-                          </span>
-                          <span className="font-typewriter text-[10px] text-stone-500 truncate">
-                            {entry.duty}
-                          </span>
-                          {entry.isSignificant && (
-                            <span className="px-1 py-0.5 bg-red-100 text-red-600 text-[7px] font-bold rounded flex-shrink-0">
-                              ★
-                            </span>
-                          )}
-                        </div>
-                        
-                        {/* Hover indicator */}
-                        {isHovered && (
-                          <svg className="w-3 h-3 text-stone-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </>
-        );
-      })()}
-
       {/* Map Legend Overlay - top right, below zoom controls */}
       <div className="absolute top-16 right-2 sm:top-20 sm:right-4 bg-[#f4f1ea] p-1.5 md:p-3 rounded-sm shadow-xl border md:border-2 border-stone-400 text-[9px] md:text-xs font-serif z-[100] transform md:rotate-1 block">
         <h4 className="font-bold mb-1 md:mb-2 text-stone-800 border-b border-stone-300 pb-0.5 md:pb-1 text-[8px] md:text-xs">
@@ -528,19 +722,19 @@ const MapPanel: React.FC<MapPanelProps> = React.memo(({ entries, selectedEntry, 
           <span className="md:hidden">KEY</span>
         </h4>
         <div className="flex items-center gap-1.5 md:gap-2 mb-1 md:mb-1.5">
-            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-yellow-500 border border-stone-600 shadow-sm flex-shrink-0"></span>
-            <span className="font-typewriter text-stone-700 hidden md:inline">TRAINING</span>
-            <span className="font-typewriter text-stone-700 md:hidden">TRN</span>
+          <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-yellow-500 border border-stone-600 shadow-sm flex-shrink-0"></span>
+          <span className="font-typewriter text-stone-700 hidden md:inline">TRAINING</span>
+          <span className="font-typewriter text-stone-700 md:hidden">TRN</span>
         </div>
         <div className="flex items-center gap-1.5 md:gap-2 mb-1 md:mb-1.5">
-            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-red-600 border border-stone-600 shadow-sm flex-shrink-0"></span>
-            <span className="font-typewriter text-stone-700 hidden md:inline">COMBAT</span>
-            <span className="font-typewriter text-stone-700 md:hidden">OPS</span>
+          <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-red-600 border border-stone-600 shadow-sm flex-shrink-0"></span>
+          <span className="font-typewriter text-stone-700 hidden md:inline">COMBAT</span>
+          <span className="font-typewriter text-stone-700 md:hidden">OPS</span>
         </div>
         <div className="flex items-center gap-1.5 md:gap-2">
-            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-blue-500 border border-stone-600 shadow-sm flex-shrink-0"></span>
-            <span className="font-typewriter text-stone-700 hidden md:inline">TRANSPORT</span>
-            <span className="font-typewriter text-stone-700 md:hidden">TRP</span>
+          <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-blue-500 border border-stone-600 shadow-sm flex-shrink-0"></span>
+          <span className="font-typewriter text-stone-700 hidden md:inline">TRANSPORT</span>
+          <span className="font-typewriter text-stone-700 md:hidden">TRP</span>
         </div>
       </div>
     </div>
