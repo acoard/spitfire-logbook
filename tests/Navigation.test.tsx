@@ -11,12 +11,15 @@ vi.mock('react-leaflet', () => ({
   Marker: () => <div data-testid="marker" />,
   Popup: ({ children }: { children: React.ReactNode }) => <div data-testid="popup">{children}</div>,
   Polyline: () => <div data-testid="polyline" />,
+  ZoomControl: () => <div data-testid="zoom-control" />,
   useMap: () => ({
     setView: vi.fn(),
     getZoom: () => 5,
     flyTo: vi.fn(),
     getContainer: () => document.createElement('div'),
     invalidateSize: vi.fn(),
+    addLayer: vi.fn(),
+    removeLayer: vi.fn(),
   }),
 }));
 
