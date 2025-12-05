@@ -340,7 +340,7 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
         } else {
           navigateNext();
         }
-      }, 2000); // 2 seconds per entry
+      }, 8000); // 9 seconds per entry - allows the animated plane to complete its 8-second journey
     } else {
       if (playIntervalRef.current) {
         clearInterval(playIntervalRef.current);
