@@ -4,8 +4,8 @@
 August 1944
 
 # AIRPORT
+Sumburgh Shetlands
 Skeabrae Orkneys
-(Also some from Sumburgh Shetlands)
 
 # SQUADRON
 313 Squadron
@@ -17,6 +17,9 @@ Skeabrae Orkneys
 - Night Pilot: 5.20
 
 # LOGBOOK ENTRIES
+
+Below flights are from Skeabrae Orkney.
+
 | Month | Date | Aircraft Type | No. | Pilot | Duty | Time |
 |---|---|---|---|---|---|---|
 | August | 3 | Spitfire V | W | self | G.C.I | .25 |
