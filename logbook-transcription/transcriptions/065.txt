@@ -26,9 +26,16 @@ Skeabrae Orkneys
 | " | " | " | " | " | Formation | .25 |
 | " | 8 | " | X | " | Air Firing | .35 |
 | " | 9 | " | W | " | Skeabrae - Sumburgh | .35 |
+
+Below flights are at Sumburgh Shetlands
+
 | " | 14 | " | P | " | Affiliation with Sunderland | 1.05 |
 | " | 22 | " | V | " | Formation | .35 |
 | " | 24 | " | P | " | Sumburgh - Skeabrae | .30 |
+
+Below flights are at RAF Skeabrae (Orkeys)
+
+
 | " | 26 | " | Y | " | Dusk Patrol | 1.10 |
 | " | 28 | " | U | " | Dive Bombing | 1.00 |
 | " | " | " | X | " | Dusk Patrol | 1.10 |
