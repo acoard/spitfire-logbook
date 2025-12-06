@@ -4,6 +4,7 @@ import LoadingScreen from './components/LoadingScreen';
 import { NavBar } from './components/NavBar';
 import { Gallery } from './components/Gallery';
 import { HeroJourney } from './components/HeroJourney';
+import { FAQ } from './components/FAQ';
 import FlightBookView from './components/FlightBookView';
 
 const App: React.FC = () => {
@@ -32,6 +33,7 @@ const App: React.FC = () => {
                 <Route path="/" element={<FlightBookView />} />
                 <Route path="/journey" element={<HeroJourney />} />
                 <Route path="/gallery" element={<Gallery />} />
+                <Route path="/faq" element={<FAQ />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </div>
