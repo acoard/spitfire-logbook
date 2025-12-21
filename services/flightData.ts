@@ -928,7 +928,7 @@ export const FLIGHT_LOG: LogEntry[] = [
         target: LOCATIONS.WARMWELL,
         destination: LOCATIONS.POOLE,
         isSignificant: true,
-        historicalNote: "A fitting end to Robin's combat career with 313 Squadron - escorting King George VI and Queen Elizabeth on their victory tour of the liberated Channel Islands. Shortly after, Robin would answer a new call: ferrying Spitfires to the Far East where the war against Japan continued.",
+        historicalNote: "A fitting end to Robin's combat career and also the end of 313 Squadron - escorting King George VI and Queen Elizabeth on their victory tour of the liberated Channel Islands. Shortly after, Robin would answer a new call: ferrying Spitfires to the Far East where the war against Japan continued. However by the time he arrived the war would be over.",
         sourceDocument: '074.jpg',
         pilotNotes: 'A great honour for the Squadron to escort Their Majesties - but we all just about ran out of gas!\n\nAnd then a W.A.A.F. from no less Biggin Hill to ask if I\'d be interested in ferrying Spitfires to the Far East. Ferrying Spitfires! I didn\'t have to be asked twice.\n\nA couple of weeks leave - a few days in Morecambe (Transit Camp) - and then I was on my way.'
     },
