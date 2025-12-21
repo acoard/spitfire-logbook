@@ -30,9 +30,11 @@ const PilotProfileModal: React.FC<PilotProfileModalProps> = ({ isOpen, onClose }
         {/* LEFT PANEL: BIOGRAPHY */}
         <div className="flex-1 p-8 md:border-r-2 border-stone-300 relative z-10">
           <div className="mb-6 flex items-center gap-3 border-b-2 border-stone-800 pb-4">
-             <div className="w-16 h-16 bg-stone-300 border-2 border-stone-400 flex items-center justify-center shadow-inner">
-                <User className="w-8 h-8 text-stone-500" />
-             </div>
+             <img
+                src="robin-square.jpg"
+                alt="Flight Lieutenant Robin Glen"
+                className="w-16 h-16 border-2 border-stone-400 shadow-inner object-cover"
+             />
              <div>
                 <h2 className="font-typewriter text-2xl font-bold text-stone-900 uppercase tracking-widest">Service Record</h2>
                 <p className="font-mono text-xs text-stone-600">ROYAL AIR FORCE — PERSONNEL FORM</p>
@@ -66,7 +68,7 @@ const PilotProfileModal: React.FC<PilotProfileModalProps> = ({ isOpen, onClose }
 
             <h4 className="font-bold font-typewriter uppercase text-xs mt-4 mb-2 text-stone-600">Post-War Service</h4>
             <p>
-              Following VE-Day (May 1945), Glen transferred to 202 S.P. Ferry Flight RAF, based at R.A.F. Station Drigh Road, Karachi. Operating aircraft including the Spitfire XIV, Lysander, Dakota, Sunderland, and Empire Flying Boat, he executed extensive ferry runs across the Indian subcontinent connecting Karachi, Jodhpur, Delhi, Allahabad, Calcutta, Rangoon, and Bangkok.
+              Following VE-Day (May 1945), Glen transferred to 202 S.P. Ferry Flight RAF, based at R.A.F. Station Drigh Road, Karachi. Operating aircraft including the Spitfire XIV, Lysander, and Dakota he executed extensive ferry runs across the Indian subcontinent connecting Karachi, Jodhpur, Delhi, Allahabad, Calcutta, Rangoon, and Bangkok.
             </p>
           </div>
         </div>
