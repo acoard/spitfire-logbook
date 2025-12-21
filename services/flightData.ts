@@ -580,7 +580,7 @@ export const FLIGHT_LOG: LogEntry[] = [
             slides: [
                 {
                     image: `${BASE_ASSET_URL}Short_Sunderland_Mk_V_ExCC.jpg`,
-                    text: "Public domain from Wikipedia"
+                    text: "The Short Sunderland was one of the most powerful and widely used flying boats throughout the Second World War. It was heavily involved in countering the threat of U-Boats in the Atlantic Ocean. (Public domain from Wikipedia)"
                 }
             ]
         }

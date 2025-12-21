@@ -77,42 +77,46 @@ const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry, o
         {/* Paper texture */}
         <div className="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/cardboard.png')] pointer-events-none"></div>
 
-        {/* Tab Header */}
+        {/* Tab Header - adapts to panel width */}
         <div className="bg-stone-200 border-b border-stone-300 flex relative z-10">
              <button 
                 onClick={() => setActiveTab('MISSION')}
-                className={`flex-1 py-2 px-2 flex items-center justify-center gap-1.5 text-[10px] md:text-xs font-typewriter uppercase tracking-wider transition-colors border-r border-stone-300
+                className={`flex-1 py-1.5 lg:py-2 px-1 lg:px-2 flex items-center justify-center gap-1 lg:gap-1.5 text-[9px] lg:text-xs font-typewriter uppercase tracking-wider transition-colors border-r border-stone-300
                     ${activeTab === 'MISSION' ? 'bg-[#f4f1ea] text-stone-900 font-bold shadow-[0_2px_0_#f4f1ea]' : 'bg-stone-300 text-stone-500 hover:bg-stone-200'}`}
+                title="Mission Details"
              >
-                <FileText className="w-3 h-3" /> Mission
+                <FileText className="w-3 h-3" /> <span className="hidden [@media(min-width:380px)]:inline">Mission</span>
              </button>
              <button 
                 onClick={() => setActiveTab('LOGBOOK')}
                 disabled={!logbookImageSrc}
-                className={`flex-1 py-2 px-2 flex items-center justify-center gap-1.5 text-[10px] md:text-xs font-typewriter uppercase tracking-wider transition-colors border-r border-stone-300
+                className={`flex-1 py-1.5 lg:py-2 px-1 lg:px-2 flex items-center justify-center gap-1 lg:gap-1.5 text-[9px] lg:text-xs font-typewriter uppercase tracking-wider transition-colors border-r border-stone-300
                     ${activeTab === 'LOGBOOK' ? 'bg-[#f4f1ea] text-stone-900 font-bold shadow-[0_2px_0_#f4f1ea]' : 'bg-stone-300 text-stone-500 hover:bg-stone-200'}
                     ${!logbookImageSrc ? 'opacity-50 cursor-not-allowed' : ''}`}
+                title="View Logbook Page"
              >
-                <BookOpen className="w-3 h-3" /> Logbook
+                <BookOpen className="w-3 h-3" /> <span className="hidden [@media(min-width:380px)]:inline">Logbook</span>
              </button>
              <button 
                 onClick={() => setActiveTab('AIRCRAFT')}
-                className={`flex-1 py-2 px-2 flex items-center justify-center gap-1.5 text-[10px] md:text-xs font-typewriter uppercase tracking-wider transition-colors
+                className={`flex-1 py-1.5 lg:py-2 px-1 lg:px-2 flex items-center justify-center gap-1 lg:gap-1.5 text-[9px] lg:text-xs font-typewriter uppercase tracking-wider transition-colors
                     ${activeTab === 'AIRCRAFT' ? 'bg-[#f4f1ea] text-stone-900 font-bold shadow-[0_2px_0_#f4f1ea]' : 'bg-stone-300 text-stone-500 hover:bg-stone-200'}`}
+                title="Aircraft Specifications"
              >
-                <Plane className="w-3 h-3" /> Aircraft
+                <Plane className="w-3 h-3" /> <span className="hidden [@media(min-width:380px)]:inline">Aircraft</span>
              </button>
         </div>
 
-        <div ref={contentRef} className="p-5 relative z-10 overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-stone-400">
+        <div ref={contentRef} className="p-3 lg:p-5 relative z-10 overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-stone-400">
              <div className="max-w-2xl mx-auto w-full">
-             {/* Flight Route Header */}
-             <div className="mb-4 pb-3 border-b border-stone-300">
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-typewriter text-sm text-stone-800">
+             {/* Flight Route Header - compact for narrow panels */}
+             <div className="mb-3 lg:mb-4 pb-2 lg:pb-3 border-b border-stone-300">
+                <div className="flex flex-wrap items-center gap-x-1.5 lg:gap-x-2 gap-y-0.5 font-typewriter text-xs lg:text-sm text-stone-800">
                    {/* Origin */}
                    <button 
                       onClick={() => onFlyToCoordinate?.(selectedEntry.origin)}
-                      className="font-bold hover:text-amber-700 hover:underline decoration-amber-700/50 transition-colors text-left"
+                      className="font-bold hover:text-amber-700 hover:underline decoration-amber-700/50 transition-colors text-left truncate max-w-[120px] lg:max-w-none"
+                      title={selectedEntry.origin.name}
                    >
                       {selectedEntry.origin.name}
                    </button>
@@ -123,7 +127,8 @@ const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry, o
                          <span className="text-stone-400">→</span>
                          <button 
                             onClick={() => onFlyToCoordinate?.(selectedEntry.target!)}
-                            className="font-bold text-red-700 hover:text-red-900 hover:underline decoration-red-700/50 transition-colors text-left"
+                            className="font-bold text-red-700 hover:text-red-900 hover:underline decoration-red-700/50 transition-colors text-left truncate max-w-[120px] lg:max-w-none"
+                            title={selectedEntry.target.name}
                          >
                             {selectedEntry.target.name}
                             {selectedEntry.targetIsApproximate && <span className="text-stone-400 text-xs ml-0.5">~</span>}
@@ -137,18 +142,19 @@ const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry, o
                          <span className="text-stone-400">→</span>
                          <button 
                             onClick={() => onFlyToCoordinate?.(selectedEntry.destination!)}
-                            className="font-bold hover:text-amber-700 hover:underline decoration-amber-700/50 transition-colors text-left"
+                            className="font-bold hover:text-amber-700 hover:underline decoration-amber-700/50 transition-colors text-left truncate max-w-[120px] lg:max-w-none"
+                            title={selectedEntry.destination.name}
                          >
                             {selectedEntry.destination.name}
                          </button>
                       </>
                    )}
                 </div>
-                <div className="mt-1 flex flex-wrap gap-x-3 text-[10px] font-mono text-stone-500">
+                <div className="mt-0.5 lg:mt-1 flex flex-wrap gap-x-2 lg:gap-x-3 text-[9px] lg:text-[10px] font-mono text-stone-500">
                    <span>{selectedEntry.date}</span>
                    <button 
                       onClick={() => setActiveTab('AIRCRAFT')}
-                      className="hover:text-amber-700 hover:underline decoration-amber-700/50 transition-colors"
+                      className="hover:text-amber-700 hover:underline decoration-amber-700/50 transition-colors truncate"
                    >
                       {selectedEntry.aircraftType}
                    </button>
@@ -391,20 +397,20 @@ const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry, o
                 </div>
             )}
 
-             {/* Footer Info */}
-             <div className="mt-6 pt-4 border-t border-stone-300 flex justify-between items-end">
-                <div>
-                    <span className="block font-typewriter text-[10px] text-stone-500 uppercase">Aircraft Type</span>
+             {/* Footer Info - compact for narrow panels */}
+             <div className="mt-4 lg:mt-6 pt-3 lg:pt-4 border-t border-stone-300 flex justify-between items-end gap-2">
+                <div className="min-w-0 flex-shrink">
+                    <span className="block font-typewriter text-[8px] lg:text-[10px] text-stone-500 uppercase">Aircraft</span>
                     <button 
                         onClick={() => setActiveTab('AIRCRAFT')}
-                        className="font-typewriter text-sm font-bold text-stone-900 hover:text-amber-700 hover:underline decoration-amber-700/50 decoration-2 transition-all text-left cursor-pointer"
+                        className="font-typewriter text-xs lg:text-sm font-bold text-stone-900 hover:text-amber-700 hover:underline decoration-amber-700/50 decoration-2 transition-all text-left cursor-pointer truncate block max-w-full"
                     >
                         {selectedEntry.aircraftType}
                     </button>
                 </div>
-                <div>
-                     <span className="block font-typewriter text-[10px] text-stone-500 uppercase text-right">Flight Duration</span>
-                    <span className="font-handwriting text-xl">{selectedEntry.time} hrs</span>
+                <div className="flex-shrink-0 text-right">
+                     <span className="block font-typewriter text-[8px] lg:text-[10px] text-stone-500 uppercase">Duration</span>
+                    <span className="font-handwriting text-base lg:text-xl">{selectedEntry.time} hrs</span>
                 </div>
              </div>
              </div>
