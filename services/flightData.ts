@@ -140,7 +140,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         aircraftCategory: AircraftCategory.TRAINING,
         duty: 'Check flight, local familiarization',
         time: '0:45',
-        remarks: 'Local area orientation.',
+        remarks: 'A check ride for solo flight.',
+        historicalNote: "A check ride was a required test for pilots to demonstrate their ability to fly solo. It was a chance to practice flying solo and to get a feel for the aircraft. This was Robin's first in his logbook.",
         origin: LOCATIONS.KIRTON,
         destination: LOCATIONS.KIRTON,
         isSignificant: false,
@@ -640,7 +641,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.SKEABRAE,
         destination: LOCATIONS.SKEABRAE,
         isSignificant: false,
-        sourceDocument: '065.jpg'
+        sourceDocument: '065.jpg',
+        historicalNote: "After the intense combat of Normandy, 313 Squadron was redeployed to the Orkney Islands to defend Scapa Flow - the Royal Navy's main base. A quieter posting, but still on alert for German reconnaissance aircraft.",
+        pilotNotes: 'Looking down on the Fleet in Scapa Flow.'
     },
      // October 1944 - Moves to NORTH WEALD
     {
