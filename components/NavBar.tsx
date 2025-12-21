@@ -28,7 +28,7 @@ export const NavBar: React.FC = () => {
             FLIGHT BOOK & MAP
           </NavLink>
           <NavLink to="/journey" className={navLinkClass}>
-            HERO'S JOURNEY
+            ROBIN'S JOURNEY
           </NavLink>
           <NavLink to="/gallery" className={navLinkClass}>
             GALLERY
@@ -71,7 +71,7 @@ export const NavBar: React.FC = () => {
             className={mobileNavLinkClass}
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            HERO'S JOURNEY
+            ROBIN'S JOURNEY
           </NavLink>
           <NavLink 
             to="/gallery" 

@@ -105,7 +105,7 @@ const HERO_JOURNEY: JourneyChapter[] = [
         title: 'Joining 313 Squadron',
         subtitle: 'The Czech Squadron',
         description: 'Robin was posted from 84 G.S.U. to 313 Squadron in the 2nd Tactical Air Force. He arrived in a grey Spitfire Mk. IX at a temporary airfield at Appledram—just one week before the invasion.',
-        quote: "I'd had my pilot's wings for 30 months—and arrived on a Grey Spitfire Mk. IX at a temporary airfield at Appledean.",
+        quote: "I'd had my pilot's wings for 30 months—and arrived on a Grey Spitfire Mk. IX at a temporary airfield at Appledram.",
         quoteSource: 'Robin Glen',
         significance: 'milestone',
         type: 'combat',
@@ -867,7 +867,7 @@ const HeroSection: React.FC = () => {
             </p>
             
             <h1 className="font-old-print text-3xl sm:text-4xl md:text-5xl font-bold text-amber-100 mb-3 leading-tight">
-              The Hero's Journey
+              Robin's Royal Air Force Journey
             </h1>
             
             <p className="font-old-print text-lg sm:text-xl md:text-2xl text-amber-400 italic mb-4">
@@ -895,7 +895,7 @@ const HeroSection: React.FC = () => {
                 <div className="font-typewriter text-[9px] sm:text-[10px] text-amber-500/70 tracking-wider">HOURS</div>
               </div>
               <div className="text-center px-3 py-2 border border-amber-600/30 rounded-sm bg-amber-950/30">
-                <div className="font-old-print text-2xl sm:text-3xl font-bold text-amber-400">3</div>
+                <div className="font-old-print text-2xl sm:text-3xl font-bold text-amber-400">2</div>
                 <div className="font-typewriter text-[9px] sm:text-[10px] text-amber-500/70 tracking-wider">CONTINENTS</div>
               </div>
             </div>
