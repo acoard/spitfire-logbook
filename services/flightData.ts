@@ -18,6 +18,7 @@ export const LOCATIONS = {
   POOLE: { lat: 50.715, lng: -1.987, name: "Poole" },
   JERSEY: { lat: 49.214, lng: -2.131, name: "Jersey" },
   LITTLE_RISSINGTON: { lat: 51.867, lng: -1.733, name: "Little Rissington" },
+  TEALING: { lat: 56.527, lng: -2.972, name: "RAF Tealing" },
 
   // European Theater Locations & Targets
   NORMANDY_BEACH: { lat: 49.369, lng: -0.871, name: "Normandy Beach Head" },
@@ -141,9 +142,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         duty: 'Check flight, local familiarization',
         time: '0:45',
         remarks: 'A check ride for solo flight.',
-        historicalNote: "A check ride was a required test for pilots to demonstrate their ability to fly solo. It was a chance to practice flying solo and to get a feel for the aircraft. This was Robin's first in his logbook.",
-        origin: LOCATIONS.KIRTON,
-        destination: LOCATIONS.KIRTON,
+        historicalNote: "A check ride was a required test for pilots to demonstrate their ability to fly solo. It was a chance to practice flying solo and to get a feel for the aircraft. This was Robin's first in his logbook. Most of Robin's time at RAF Tealing was spent in various training missions.",
+        origin: LOCATIONS.TEALING,
+        destination: LOCATIONS.TEALING,
         isSignificant: false,
         sourceDocument: '058.jpg'
     },
@@ -156,8 +157,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         duty: 'Formation flying and aerobatics',
         time: '1:10',
         remarks: 'Formation practice at altitude.',
-        origin: LOCATIONS.ASTON_DOWN,
-        destination: LOCATIONS.ASTON_DOWN,
+        origin: LOCATIONS.TEALING,
+        destination: LOCATIONS.TEALING,
         isSignificant: false,
         sourceDocument: '059.jpg'
     },
@@ -170,8 +171,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         duty: 'Low-level cross-country',
         time: '1:30',
         remarks: 'Navigation exercise.',
-        origin: LOCATIONS.ASTON_DOWN,
-        destination: LOCATIONS.KIRTON,
+        origin: LOCATIONS.TEALING,
+        destination: LOCATIONS.TEALING,
         isSignificant: false,
         sourceDocument: '060.jpg'
     },
@@ -353,8 +354,12 @@ export const FLIGHT_LOG: LogEntry[] = [
         missionBrief: {
             slides: [
                 {
-                    image: `${BASE_ASSET_URL}063.jpg`,
-                    text: "The first of 2 nights just behind the front line – under shellfire"
+                    image: `${BASE_ASSET_URL}plumetot-1.jpg`,
+                    text: "Soldiers of the Pioneer Corps laying prefabricated bitumised strips (PBS) for a new runway at B-10 Plumetot, Normandy, as a Hawker Typhoon of No. 198 Squadron RAF takes off on the airstrip. (Royal Air Force, 2nd Tactical Air Force, 1943-1945 © IWM (CL 468)) (Not from Robin's logbook)"
+                },
+                {
+                    image: `${BASE_ASSET_URL}plumetot-2.jpg`,
+                    text: "Hawker Typhoon Mark IB, JP963 'TP-T', of No. 198 Squadron RAF, parked by the perimeter track at B-10 Plumetot, Normandy, as a bomb-disposal squad explodes German mines in the background. (Royal Air Force, 2nd Tactical Air Force, 1943-1945 © IWM (CL 473)) (Not from Robin's logbook)"
                 }
             ]
         }
@@ -389,7 +394,16 @@ export const FLIGHT_LOG: LogEntry[] = [
         isSignificant: true,
         historicalNote: "Returning from the forward operating base after two intense nights behind the front lines under German artillery fire. Back in England, the squadron posed for PR photographs around the CO's aircraft - a moment of relief captured on film.",
         sourceDocument: '063.jpg',
-        pilotNotes: 'Back to B.10/ALG - it was after we landed back from France that we had some P.R. photographs taken of our plane around the C.O.\'s plane. (See Photos in "Memorabilia Album")'
+        pilotNotes: 'Back to B.10/ALG - it was after we landed back from France that we had some P.R. photographs taken of our plane around the C.O.\'s plane. (See Photos in "Memorabilia Album")',
+        missionBrief: {
+            slides: [
+                {
+                    image: `${BASE_ASSET_URL}squadron-by-spitfire-media-gallery.jpg`,
+                    text: "Robin's squadron posing for PR photographs around a Spitfire."
+                }
+            ]
+        }
+        
     },
     // July 1944 - Base: LYMPNE
     {

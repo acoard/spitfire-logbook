@@ -4,7 +4,7 @@
 None
 
 # AIRPORT
-T.E.U Tealing
+RAF Tealing (T.E.U Tealing)
 
 # SQUADRON
 None
