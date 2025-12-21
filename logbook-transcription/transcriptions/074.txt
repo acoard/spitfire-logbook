@@ -29,7 +29,7 @@ Bradwell Bay
 # TOTALS MONTH
 - Day Pilot: 8.55
 - Night Pilot: 1.40
-
+    
 # GRAND TOTAL
 593.30
 
