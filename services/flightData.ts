@@ -115,6 +115,13 @@ export const AIRCRAFT_SPECS: Record<string, { name: string, role: string, maxSpe
     range: "1,600 miles",
     description: "The military version of the DC-3. A workhorse of the war, used for transport, paratroop drops, and towing gliders. Known for its rugged reliability."
   },
+  'Auster': {
+    name: "Taylorcraft Auster",
+    role: "Liaison / Light Transport",
+    maxSpeed: "130 mph",
+    range: "250 miles",
+    description: "A British light aircraft used extensively by the RAF for liaison, observation, and light transport duties. Based on the American Taylorcraft design, it was ideal for short-range communication flights and could operate from small, unprepared airstrips."
+  },
   'Sunderland': {
     name: "Short Sunderland",
     role: "Flying Boat / Patrol",
@@ -914,6 +921,31 @@ export const FLIGHT_LOG: LogEntry[] = [
         sourceDocument: '072.jpg',
         pilotNotes: 'What a spectacle! Heligoland is a tiny island Fortress in North Sea - and to see it receive everything Bomber Command could dump on it.'
     },
+    // May 1945 - Base: BRADWELL BAY
+    {
+        id: 'c-073-1',
+        date: '1945-05-17',
+        phase: Phase.COMBAT,
+        aircraftType: 'Auster',
+        aircraftCategory: AircraftCategory.TRANSPORT,
+        duty: 'Local Flying (over Glenhome)',
+        time: '0:10',
+        remarks: 'Local flight with F/O McCracken as passenger.',
+        origin: LOCATIONS.BRADWELL_BAY,
+        destination: LOCATIONS.BRADWELL_BAY,
+        isSignificant: true,
+        historicalNote: "A short local flight in an Auster light aircraft with F/O McCracken piloting and Robin as passenger. During this flight, Robin photographed Glenhome.",
+        sourceDocument: '073.jpg',
+        pilotNotes: 'Photographed Glenhome during this flight.',
+        missionBrief: {
+            slides: [
+                {
+                    image: `${BASE_ASSET_URL}glenhome.jpg`,
+                    text: "Photograph of Glenhome taken during the flight on May 17th, 1945."
+                }
+            ]
+        }
+    },
     // June 1945 - Victory & Escort
     {
         id: 'c-074-1',
@@ -930,7 +962,15 @@ export const FLIGHT_LOG: LogEntry[] = [
         isSignificant: true,
         historicalNote: "A fitting end to Robin's combat career and also the end of 313 Squadron - escorting King George VI and Queen Elizabeth on their victory tour of the liberated Channel Islands. Shortly after, Robin would answer a new call: ferrying Spitfires to the Far East where the war against Japan continued. However by the time he arrived the war would be over.",
         sourceDocument: '074.jpg',
-        pilotNotes: 'A great honour for the Squadron to escort Their Majesties - but we all just about ran out of gas!\n\nAnd then a W.A.A.F. from no less Biggin Hill to ask if I\'d be interested in ferrying Spitfires to the Far East. Ferrying Spitfires! I didn\'t have to be asked twice.\n\nA couple of weeks leave - a few days in Morecambe (Transit Camp) - and then I was on my way.'
+        pilotNotes: 'A great honour for the Squadron to escort Their Majesties - but we all just about ran out of gas!\n\nAnd then a W.A.A.F. from no less Biggin Hill to ask if I\'d be interested in ferrying Spitfires to the Far East. Ferrying Spitfires! I didn\'t have to be asked twice.\n\nA couple of weeks leave - a few days in Morecambe (Transit Camp) - and then I was on my way.',
+        missionBrief: {
+            slides: [
+                {
+                    image: `${BASE_ASSET_URL}glenhome.jpg`,
+                    text: 'Dated a couple '
+                }
+            ]
+        }
     },
 
     // Phase 3: Post-War Ferry (SEAC)
