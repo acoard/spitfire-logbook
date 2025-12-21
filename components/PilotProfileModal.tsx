@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Award, User, FileText, Stamp, ExternalLink } from 'lucide-react';
 import ImageModal from './ImageModal';
 
@@ -11,11 +11,27 @@ const PilotProfileModal: React.FC<PilotProfileModalProps> = ({ isOpen, onClose }
   const [showReportCard, setShowReportCard] = useState(false);
   const [showStolenLogbook, setShowStolenLogbook] = useState(false);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-6 bg-stone-900/80 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-[#f4f1ea] w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-sm shadow-2xl relative flex flex-col md:flex-row border-4 border-stone-800">
+    <div 
+      className="fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-6 bg-stone-900/80 backdrop-blur-sm animate-in fade-in duration-300"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-[#f4f1ea] w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-sm shadow-2xl relative flex flex-col md:flex-row border-4 border-stone-800"
+        onClick={(e) => e.stopPropagation()}
+      >
         
         {/* Paper Texture Overlay */}
         <div className="absolute inset-0 pointer-events-none opacity-40 bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')] z-0"></div>
@@ -76,6 +92,14 @@ const PilotProfileModal: React.FC<PilotProfileModalProps> = ({ isOpen, onClose }
               <li><strong className="font-typewriter text-xs uppercase">Combat Missions:</strong> Duties included Convoy Patrols (including the Invasion Fleet), Dive Bombing, Armed Recce, and Front Line Patrols. Participated in long-range Bomber Escorts to targets including Hamburg, Duisburg, Cologne, and Dortmund.</li>
               <li>Logged over 50 operational sorties during the war, with 133 hours 05 mins of operational flying time.</li>
             </ul>
+
+            <h4 className="font-bold font-typewriter uppercase text-xs mt-4 mb-2 text-stone-600">No. 313 (Czechoslovak) Squadron RAF</h4>
+            <p>
+              Robin served with No. 313 (Czechoslovak) Squadron, a unique unit formed in 1941 primarily of escaped Czechoslovak pilots. Many Englishmen like Robin would join the 313 Squadron, and it's initial commander was an Englishman, F.A. Louchard, who was later replaced by a Czech pilot, Josef Vesely.
+            </p>
+            <p className="mt-2">
+              The squadron's motto, <span className="italic font-typewriter text-[10px]">"Jeden jestřáb mnoho vran rozhání"</span> (One hawk chases away many crows), reflected the unit's tenacity. Robin's time with 313 culminated in a high-honor mission: participating in the squadron's final flight at the end of the war, which served as an escort for the King and Queen. When the squadron was disbanded in 1946, Robin was awarded the Czechoslovak Military Cross for his service, the country's highest decoration for military service.
+            </p>
 
             <h4 className="font-bold font-typewriter uppercase text-xs mt-4 mb-2 text-stone-600">Post-War Service</h4>
             <p>
