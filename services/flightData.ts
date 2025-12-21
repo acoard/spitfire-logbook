@@ -146,7 +146,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.TEALING,
         destination: LOCATIONS.TEALING,
         isSignificant: false,
-        sourceDocument: '058.jpg'
+        sourceDocument: '058.jpg',
+
     },
     {
         id: '2',
@@ -210,7 +211,15 @@ export const FLIGHT_LOG: LogEntry[] = [
         destination: LOCATIONS.APPLEDRAM,
         isSignificant: true,
         sourceDocument: '062.jpg',
-        pilotNotes: 'This "Convoy" was in Part - the Invasion Fleet.'
+        pilotNotes: 'This "Convoy" was in Part - the Invasion Fleet.',
+        missionBrief: {
+            slides: [
+                {
+                    image: `${BASE_ASSET_URL}robin-seated-70.jpg`,
+                    text: "Robin seated in the cockpit of a Spitfire. (Image was undated, but during his RAF service)"
+                }
+            ]
+        }
     },
     {
         id: 'c-062-2',
