@@ -101,10 +101,6 @@ const PilotProfileModal: React.FC<PilotProfileModalProps> = ({ isOpen, onClose }
               The squadron's motto, <span className="italic font-typewriter text-[10px]">"Jeden jestřáb mnoho vran rozhání"</span> (One hawk chases away many crows), reflected the unit's tenacity. Robin's time with 313 culminated in a high-honor mission: participating in the squadron's final flight at the end of the war, which served as an escort for the King and Queen. When the squadron was disbanded in 1946, Robin was awarded the Czechoslovak Military Cross for his service, the country's highest decoration for military service.
             </p>
 
-            <h4 className="font-bold font-typewriter uppercase text-xs mt-4 mb-2 text-stone-600">Post-War Service</h4>
-            <p>
-              Following VE-Day (May 1945), Glen transferred to 202 S.P. Ferry Flight RAF, based at R.A.F. Station Drigh Road, Karachi. Operating aircraft including the Spitfire XIV, Lysander, and Dakota he executed extensive ferry runs across the Indian subcontinent connecting Karachi, Jodhpur, Delhi, Allahabad, Calcutta, Rangoon, and Bangkok.
-            </p>
           </div>
         </div>
 
@@ -200,16 +196,11 @@ const PilotProfileModal: React.FC<PilotProfileModalProps> = ({ isOpen, onClose }
 
            </div>
            
-           <div className="mt-8 border-t-2 border-stone-300 pt-4 flex justify-between items-end">
-             <div>
-                <p className="font-typewriter text-xs uppercase text-stone-500">Officer Commanding</p>
-                <div className="font-handwriting text-xl text-stone-800 mt-2">Cerdan Norwood W/Cdr</div>
-                <p className="font-mono text-[10px] text-stone-500">O.C. 1 T.E.U.</p>
-             </div>
-             <div className="text-right">
-                <p className="font-typewriter text-xs uppercase text-stone-500">Date</p>
-                <div className="font-typewriter text-sm text-stone-800 mt-1">26 MAY 1944</div>
-             </div>
+           <div className="mt-8 border-t-2 border-stone-300 pt-4">
+             <h4 className="font-typewriter text-sm font-bold uppercase text-stone-700 mb-3">III. Post-War Service</h4>
+             <p className="font-old-print text-sm text-stone-700 leading-relaxed">
+               Following VE-Day (May 1945), Glen transferred to 202 S.P. Ferry Flight RAF, based at R.A.F. Station Drigh Road, Karachi. Operating aircraft including the Spitfire XIV, Lysander, and Dakota he executed extensive ferry runs across the Indian subcontinent connecting Karachi, Jodhpur, Delhi, Allahabad, Calcutta, Rangoon, and Bangkok.
+             </p>
            </div>
 
         </div>
