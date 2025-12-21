@@ -18,10 +18,14 @@ const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry, o
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Reset transcription view when entry changes
+  // Reset transcription view and scroll position when entry changes
   useEffect(() => {
     setGalleryIndex(0);
     setFullscreenImage(null);
+    // Scroll to top of the details panel
+    if (contentRef.current) {
+      contentRef.current.scrollTop = 0;
+    }
   }, [selectedEntry?.id]);
 
   if (!selectedEntry) {
@@ -100,7 +104,7 @@ const ContextPanel: React.FC<ContextPanelProps> = React.memo(({ selectedEntry, o
              </button>
         </div>
 
-        <div className="p-5 relative z-10 overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-stone-400">
+        <div ref={contentRef} className="p-5 relative z-10 overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-stone-400">
              <div className="max-w-2xl mx-auto w-full">
              {/* Flight Route Header */}
              <div className="mb-4 pb-3 border-b border-stone-300">
