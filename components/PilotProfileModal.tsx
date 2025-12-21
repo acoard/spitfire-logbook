@@ -9,6 +9,7 @@ interface PilotProfileModalProps {
 
 const PilotProfileModal: React.FC<PilotProfileModalProps> = ({ isOpen, onClose }) => {
   const [showReportCard, setShowReportCard] = useState(false);
+  const [showStolenLogbook, setShowStolenLogbook] = useState(false);
 
   if (!isOpen) return null;
 
@@ -53,6 +54,16 @@ const PilotProfileModal: React.FC<PilotProfileModalProps> = ({ isOpen, onClose }
             <p>
               Flight Lieutenant Robin Glen was a decorated Royal Air Force pilot whose service spanned intensive WWII operations and crucial post-war logistical ferry duties.
               His early training involved flying aircraft types such as Tiger Moth, Harvard II, Master II, Spitfire I & II, Martinet, and Hurricane II at various training and operational units including I.T.E.U. Tealing and 84 G.S.U. Aston Down.
+            </p>
+
+            <p className="mt-4 font-old-print text-sm text-stone-700 italic border-l-2 border-amber-600 pl-3 bg-amber-50/30 py-2">
+              <span className="font-mono text-xs text-stone-600">Note:</span> Robin's previous logbook was stolen on 4th January 1944.
+              <button
+                onClick={() => setShowStolenLogbook(true)}
+                className="ml-2 underline text-amber-800 hover:text-amber-900 font-typewriter text-xs uppercase tracking-wide transition-colors"
+              >
+                View 
+              </button>
             </p>
 
             <h4 className="font-bold font-typewriter uppercase text-xs mt-4 mb-2 text-stone-600">World War II Operations</h4>
@@ -186,6 +197,13 @@ const PilotProfileModal: React.FC<PilotProfileModalProps> = ({ isOpen, onClose }
         onClose={() => setShowReportCard(false)}
         imageSrc="report-card.png"
         altText="Original Pilot Assessment Form 414A"
+      />
+
+      <ImageModal
+        isOpen={showStolenLogbook}
+        onClose={() => setShowStolenLogbook(false)}
+        imageSrc="previous-logbook-stolen.jpg"
+        altText="Incident Report - Previous Logbook Stolen"
       />
     </div>
   );
