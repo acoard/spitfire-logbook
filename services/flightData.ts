@@ -456,8 +456,16 @@ export const FLIGHT_LOG: LogEntry[] = [
         destination: LOCATIONS.SKEABRAE,
         isSignificant: false,
         sourceDocument: '065.jpg',
-        historicalNote: "After the intense combat of Normandy, 313 Squadron was redeployed to the Orkney Islands to defend Scapa Flow - the Royal Navy's main base. A quieter posting, but still on alert for German reconnaissance aircraft. It's not clear how Robin got from Lympne to Skeabrae, but he and his squadron did.",
-        pilotNotes: 'Looking down on the Fleet in Scapa Flow.'
+        historicalNote: "After the intense combat of Normandy, 313 Squadron was redeployed to the Orkney Islands to defend Scapa Flow - the Royal Navy's main base. A quieter posting, but still on alert for German reconnaissance aircraft. While Robin's logbooks don't mention it, RAF 313 Squadron relocated to Skeabrae from Lympne on July 11th, 1944, per accounts from other 313 Squadron pilots. \n\n Scapa Flow is the main base for the Royal Navy's fleet of aircraft carriers and battleships. As the main naval base it had immense strategic value, and protecting it was a top priority for the Allies.",
+        pilotNotes: 'Looking down on the Fleet in Scapa Flow.',
+        missionBrief: {
+            slides: [
+                {
+                    image: `${BASE_ASSET_URL}scapa-flow.jpg`,
+                    text: "Looking down on the Fleet in Scapa Flow. (Apologies for the watermarks, it was the best photo I could find)"
+                }
+            ]
+        }
     },
     {
         id: 'c-065-2',
@@ -541,7 +549,8 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.SKEABRAE,
         destination: LOCATIONS.SUMBURGH,
         isSignificant: false,
-        sourceDocument: '065.jpg'
+        sourceDocument: '065.jpg',
+        historicalNote: "Sumburgh is the main airport on the Shetland Islands. Robin would only spend around 15 days on the Shetland Islands in the far north of Scotland, and then return to Skeabrae in the Orkneys. His main mission: training with the Sunderland flying boat known as the 'Short Sunderland'.",
     },
     // Flights at Sumburgh Shetlands
     {
@@ -556,7 +565,16 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.SUMBURGH,
         destination: LOCATIONS.SUMBURGH,
         isSignificant: false,
-        sourceDocument: '065.jpg'
+        sourceDocument: '065.jpg',
+        historicalNote: "An 'affiliation' flight involved cooperation training with other aircraft types—in this case, the massive Short Sunderland. A four-engine flying boat developed for long-range maritime patrol, the Sunderland was a cornerstone of the Battle of the Atlantic. Its heavy defensive armament, including nose, tail, and dorsal turrets, earned it the nickname 'Flying Porcupine' from the Luftwaffe. In the Shetlands, these exercises were crucial for coordinating the defense of the northern approaches and the fleet at Scapa Flow. Robin spent flight time in the air with the Sunderland.",
+        missionBrief: {
+            slides: [
+                {
+                    image: `${BASE_ASSET_URL}Short_Sunderland_Mk_V_ExCC.jpg`,
+                    text: "Public domain from Wikipedia"
+                }
+            ]
+        }
     },
     {
         id: 'c-065-9',
@@ -584,7 +602,9 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.SUMBURGH,
         destination: LOCATIONS.SKEABRAE,
         isSignificant: false,
-        sourceDocument: '065.jpg'
+        sourceDocument: '065.jpg',
+        historicalNote: "Having spent 15 days on the Shetland Islands, including training with the Short Sunderland flying boat, Robin returned to Skeabrae in the Orkneys.",
+
     },
     // Back at RAF Skeabrae (Orkneys)
     {
@@ -656,7 +676,7 @@ export const FLIGHT_LOG: LogEntry[] = [
         destination: LOCATIONS.SKEABRAE,
         isSignificant: false,
         sourceDocument: '065.jpg',
-        historicalNote: "After the intense combat of Normandy, 313 Squadron was redeployed to the Orkney Islands to defend Scapa Flow - the Royal Navy's main base. A quieter posting, but still on alert for German reconnaissance aircraft.",
+        // historicalNote: "After the intense combat of Normandy, 313 Squadron was redeployed to the Orkney Islands to defend Scapa Flow - the Royal Navy's main base. A quieter posting, but still on alert for German reconnaissance aircraft.",
         pilotNotes: 'Looking down on the Fleet in Scapa Flow.'
     },
      // October 1944 - Moves to NORTH WEALD
