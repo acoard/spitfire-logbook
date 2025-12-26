@@ -61,6 +61,7 @@ export const LOCATIONS = {
   BOMBAY: { lat: 19.090, lng: 72.868, name: "Bombay (Juhu)" },
   BARODA: { lat: 22.332, lng: 73.226, name: "Baroda" },
   RANCHI: { lat: 23.314, lng: 85.322, name: "Ranchi" },
+  MAHARAJPUR: { lat: 26.293, lng: 78.228, name: "Maharajpur (Gwalior)" },
 };
 
 const BASE_ASSET_URL = import.meta.env.BASE_URL;
@@ -135,6 +136,13 @@ export const AIRCRAFT_SPECS: Record<string, { name: string, role: string, maxSpe
     maxSpeed: "205 mph",
     range: "750 miles",
     description: "The British Commonwealth name for the T-6 Texan. A ubiquitous advanced trainer aircraft used to train pilots of the RAF and other air forces."
+  },
+  'Lysander': {
+    name: "Westland Lysander",
+    role: "Army Cooperation / Liaison",
+    maxSpeed: "212 mph",
+    range: "600 miles",
+    description: "A British army cooperation and liaison aircraft. Known for its exceptional short-field performance, it was famously used for clandestine missions during the war."
   }
 };
 
@@ -974,6 +982,51 @@ export const FLIGHT_LOG: LogEntry[] = [
     },
 
     // Phase 3: Post-War Ferry (SEAC)
+    {
+        id: 'f-075-1',
+        date: '1945-07-30',
+        phase: Phase.FERRY,
+        aircraftType: 'Lysander',
+        aircraftCategory: AircraftCategory.TRANSPORT,
+        duty: 'Local familiarisation',
+        time: '0:15',
+        remarks: "Robin's first Lysander flight.",
+        origin: LOCATIONS.KARACHI,
+        destination: LOCATIONS.KARACHI,
+        isSignificant: true,
+        historicalNote: "This 15-minute flight marks Robin's first time piloting the Westland Lysander. A stark contrast to the Spitfire he had been flying in Europe, the Lysander was a high-wing monoplane designed for army cooperation. While the Spitfire was built for speed and high-altitude combat, the Lysander was famous for its 'Short Take-Off and Landing' (STOL) capabilities, allowing it to operate from small, unprepared fields. During the war, it gained legendary status for flying clandestine missions into occupied France to deliver and retrieve secret agents. Pilots described it as having a 'vicious' stall if mishandled but being incredibly stable and easy to fly at the very low speeds required for its specialized work.",
+        sourceDocument: '075.jpg',
+    },
+    {
+        id: 'f-077-1',
+        date: '1945-08-12',
+        phase: Phase.FERRY,
+        aircraftType: 'Lysander',
+        aircraftCategory: AircraftCategory.TRANSPORT,
+        duty: 'Ferry: Jodhpur - Maharajpur',
+        time: '1:45',
+        remarks: 'Surprise visit to Aunt Freda.',
+        origin: LOCATIONS.JODHPUR,
+        destination: LOCATIONS.MAHARAJPUR,
+        isSignificant: true,
+        historicalNote: "Just a month after arriving in India I \"navigated\" a trip via Ranchi - and paid a surprise visit to Aunt Freda at Mesra - the old Binning family home - and after a night with her flew on to Calcutta and visited Frank again!",
+        sourceDocument: '077.jpg',
+    },
+    {
+        id: 'f-077-2',
+        date: '1945-08-26',
+        phase: Phase.FERRY,
+        aircraftCategory: AircraftCategory.TRANSPORT,
+        aircraftType: 'Lysander',
+        duty: 'Ferry: Jodhpur - Allahabad',
+        time: '3:30',
+        remarks: 'Monsoon storm landing accident.',
+        origin: LOCATIONS.JODHPUR,
+        destination: LOCATIONS.ALLAHABAD,
+        isSignificant: true,
+        historicalNote: "This trip ended rather disastrously. Flew at zero feet through a monsoon storm and on landing the whole aerodrome was under inches of water. This got into my brakes and I before I finally stopped I'd written off my Lysander, a Beautifighter and seriously damaged a spitfire! Luckily, the war had just finished.",
+        sourceDocument: '077.jpg',
+    },
     {
         id: 'f-080-1',
         date: '1945-10-28',
