@@ -994,7 +994,7 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.KARACHI,
         destination: LOCATIONS.KARACHI,
         isSignificant: true,
-        historicalNote: "This 15-minute flight marks Robin's first time piloting the Westland Lysander. A stark contrast to the Spitfire he had been flying in Europe, the Lysander was a high-wing monoplane designed for army cooperation. While the Spitfire was built for speed and high-altitude combat, the Lysander was famous for its 'Short Take-Off and Landing' (STOL) capabilities, allowing it to operate from small, unprepared fields. During the war, it gained legendary status for flying clandestine missions into occupied France to deliver and retrieve secret agents. Pilots described it as having a 'vicious' stall if mishandled but being incredibly stable and easy to fly at the very low speeds required for its specialized work.",
+        historicalNote: "Beginning a long series of ferry flights across the Indian subcontinent. After the war, experienced pilots were needed to deliver Spitfires to squadrons throughout South-East Asia Command (SEAC). \n\nThis 15-minute flight marks Robin's first time piloting the Westland Lysander. A stark contrast to the Spitfire he had been flying in Europe, the Lysander was a high-wing monoplane designed for army cooperation. While the Spitfire was built for speed and high-altitude combat, the Lysander was famous for its 'Short Take-Off and Landing' (STOL) capabilities, allowing it to operate from small, unprepared fields. During the war, it gained legendary status for flying clandestine missions into occupied France to deliver and retrieve secret agents. Pilots described it as having a 'vicious' stall if mishandled but being incredibly stable and easy to fly at the very low speeds required for its specialized work.",
         sourceDocument: '075.jpg',
     },
     {
@@ -1039,7 +1039,6 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.KARACHI,
         destination: LOCATIONS.JODHPUR,
         isSignificant: true,
-        historicalNote: "Beginning a long series of ferry flights across the Indian subcontinent. After the war, experienced pilots were needed to deliver Spitfires to squadrons throughout South-East Asia Command (SEAC).",
         sourceDocument: '080.jpg'
     },
     {
