@@ -1009,7 +1009,7 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.JODHPUR,
         destination: LOCATIONS.MAHARAJPUR,
         isSignificant: true,
-        historicalNote: "Just a month after arriving in India I \"navigated\" a trip via Ranchi - and paid a surprise visit to Aunt Freda at Mesra - the old Binning family home - and after a night with her flew on to Calcutta and visited Frank again!",
+        pilotNotes: "Just a month after arriving in India I \"navigated\" a trip via Ranchi - and paid a surprise visit to Aunt Freda at Mesra - the old Binning family home - and after a night with her flew on to Calcutta and visited Frank again!",
         sourceDocument: '077.jpg',
     },
     {
@@ -1024,7 +1024,7 @@ export const FLIGHT_LOG: LogEntry[] = [
         origin: LOCATIONS.JODHPUR,
         destination: LOCATIONS.ALLAHABAD,
         isSignificant: true,
-        historicalNote: "This trip ended rather disastrously. Flew at zero feet through a monsoon storm and on landing the whole aerodrome was under inches of water. This got into my brakes and I before I finally stopped I'd written off my Lysander, a Beautifighter and seriously damaged a spitfire! Luckily, the war had just finished.",
+        pilotNotes: "This trip ended rather disastrously. Flew at zero feet through a monsoon storm and on landing the whole aerodrome was under inches of water. This got into my brakes and I before I finally stopped I'd written off my Lysander, a Beautifighter and seriously damaged a spitfire! Luckily, the war had just finished.",
         sourceDocument: '077.jpg',
     },
     {
