@@ -258,7 +258,7 @@ export const MapTimelineScrubber: React.FC<MapTimelineScrubberProps> = ({
       dateDisplay: formatDateDisplay(entry.date),
       title: entry.duty,
       subtitle: entry.remarks,
-      significance: entry.isSignificant ? 'milestone' : (entry.historicalNote ? 'major' : 'minor'),
+      significance: entry.isSignificant ? 'milestone' : (entry.historicalNote || entry.pilotNotes ? 'major' : 'minor'),
       phase: entry.phase,
       location: entry.origin ? {
         name: entry.origin.name,

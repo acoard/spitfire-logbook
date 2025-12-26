@@ -59,7 +59,7 @@ const FlightBookView: React.FC = () => {
       result = result.filter((entry) => entry.phase === filterPhase);
     }
     if (showSignificantOnly) {
-      result = result.filter(e => e.isSignificant || e.historicalNote);
+      result = result.filter(e => e.isSignificant || e.historicalNote || e.pilotNotes);
     }
     return result;
   }, [filterPhase, showSignificantOnly]);

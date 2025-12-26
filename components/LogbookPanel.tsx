@@ -165,7 +165,7 @@ const LogbookPanel: React.FC<LogbookPanelProps> = React.memo(({
                     entries.map((entry) => {
                     const isSelected = selectedId === entry.id;
                     const isDDay = entry.date === '1944-06-06';
-                    const hasNote = !!entry.historicalNote;
+                    const hasNote = !!(entry.historicalNote || entry.pilotNotes);
                     
                     return (
                         <tr
