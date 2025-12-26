@@ -17,6 +17,7 @@ export const LOCATIONS = {
   WARMWELL: { lat: 50.683, lng: -2.350, name: "RAF Warmwell" },
   POOLE: { lat: 50.715, lng: -1.987, name: "Poole" },
   JERSEY: { lat: 49.214, lng: -2.131, name: "Jersey" },
+  GUERNSEY: { lat: 49.459, lng: -2.536, name: "St Peter Port, Guernsey" },
   LITTLE_RISSINGTON: { lat: 51.867, lng: -1.733, name: "Little Rissington" },
   TEALING: { lat: 56.527, lng: -2.972, name: "RAF Tealing" },
 
@@ -62,6 +63,7 @@ export const LOCATIONS = {
   BARODA: { lat: 22.332, lng: 73.226, name: "Baroda" },
   RANCHI: { lat: 23.314, lng: 85.322, name: "Ranchi" },
   MAHARAJPUR: { lat: 26.293, lng: 78.228, name: "Maharajpur (Gwalior)" },
+  CAWNPORE: { lat: 26.414, lng: 80.353, name: "Cawnpore (Kanpur)" },
 };
 
 const BASE_ASSET_URL = import.meta.env.BASE_URL;
@@ -481,15 +483,7 @@ export const FLIGHT_LOG: LogEntry[] = [
         isSignificant: false,
         sourceDocument: '065.jpg',
         historicalNote: "After the intense combat of Normandy, 313 Squadron was redeployed to the Orkney Islands to defend Scapa Flow - the Royal Navy's main base. A quieter posting, but still on alert for German reconnaissance aircraft. While Robin's logbooks don't mention it, RAF 313 Squadron relocated to Skeabrae from Lympne on July 11th, 1944, per accounts from other 313 Squadron pilots. \n\n Scapa Flow is the main base for the Royal Navy's fleet of aircraft carriers and battleships. As the main naval base it had immense strategic value, and protecting it was a top priority for the Allies.",
-        pilotNotes: 'Looking down on the Fleet in Scapa Flow.',
-        missionBrief: {
-            slides: [
-                {
-                    image: `${BASE_ASSET_URL}scapa-flow.jpg`,
-                    text: "Looking down on the Fleet in Scapa Flow. (Apologies for the watermarks, it was the best photo I could find)"
-                }
-            ]
-        }
+
     },
     {
         id: 'c-065-2',
@@ -701,9 +695,125 @@ export const FLIGHT_LOG: LogEntry[] = [
         isSignificant: false,
         sourceDocument: '065.jpg',
         // historicalNote: "After the intense combat of Normandy, 313 Squadron was redeployed to the Orkney Islands to defend Scapa Flow - the Royal Navy's main base. A quieter posting, but still on alert for German reconnaissance aircraft.",
-        pilotNotes: 'Looking down on the Fleet in Scapa Flow.'
+        pilotNotes: 'Looking down on the Fleet in Scapa Flow.',
+        missionBrief: {
+            slides: [
+                {
+                    image: `${BASE_ASSET_URL}scapa-flow.jpg`,
+                    text: "Looking down on the Fleet in Scapa Flow. (Photo found online, not from Robin)"
+                }
+            ]
+        }
     },
-     // October 1944 - Moves to NORTH WEALD
+     // September 1944 - Continued Defense Patrols at SKEABRAE
+    {
+        id: 'c-066-1',
+        date: '1944-09-02',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire V',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'Cine Gun',
+        time: '0:20',
+        remarks: 'Gunnery training.',
+        origin: LOCATIONS.SKEABRAE,
+        destination: LOCATIONS.SKEABRAE,
+        isSignificant: false,
+        historicalNote: "The G45 Ciné Gun is what pilots today would call a \"gun camera\" - a camera mounted on the aircraft that records video of the aircraft's flight. The camera was connected to the machine guns, and when the pilot would 'fire' it would record for a few seconds. It's likely Robin was using this for dogfighting practice, with the camera being proof that Robin would scored a hit on his practice partner.",
+        missionBrief: {
+            slides: [
+                {
+                    image: `${BASE_ASSET_URL}cine-gun.jpg`,
+                    text: "An advertisment for the G45 Ciné Gun."
+                }
+            ]
+        },
+        sourceDocument: '066.jpg'
+    },
+    {
+        id: 'c-066-2',
+        date: '1944-09-02',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire V',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'Night Flying',
+        time: '1:00',
+        remarks: 'Night flying practice.',
+        origin: LOCATIONS.SKEABRAE,
+        destination: LOCATIONS.SKEABRAE,
+        isSignificant: false,
+        sourceDocument: '066.jpg'
+    },
+    {
+        id: 'c-066-3',
+        date: '1944-09-06',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire V',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'Dusk PATROL',
+        time: '0:40',
+        remarks: 'Evening patrol over Scapa Flow.',
+        origin: LOCATIONS.SKEABRAE,
+        destination: LOCATIONS.SKEABRAE,
+        isSignificant: false,
+        sourceDocument: '066.jpg'
+    },
+    {
+        id: 'c-066-4',
+        date: '1944-09-09',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire V',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'Dusk PATROL',
+        time: '0:50',
+        remarks: 'Evening patrol.',
+        origin: LOCATIONS.SKEABRAE,
+        destination: LOCATIONS.SKEABRAE,
+        isSignificant: false,
+        sourceDocument: '066.jpg'
+    },
+    {
+        id: 'c-066-5',
+        date: '1944-09-11',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire V',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'Dusk PATROL',
+        time: '0:45',
+        remarks: 'Evening patrol.',
+        origin: LOCATIONS.SKEABRAE,
+        destination: LOCATIONS.SKEABRAE,
+        isSignificant: false,
+        sourceDocument: '066.jpg'
+    },
+    {
+        id: 'c-066-6',
+        date: '1944-09-12',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire V',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'Dusk PATROL',
+        time: '1:00',
+        remarks: 'Evening patrol.',
+        origin: LOCATIONS.SKEABRAE,
+        destination: LOCATIONS.SKEABRAE,
+        isSignificant: false,
+        sourceDocument: '066.jpg'
+    },
+    {
+        id: 'c-066-7',
+        date: '1944-09-12',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire V',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'Squadron Formation',
+        time: '1:05',
+        remarks: 'Large formation practice. The squadron would typically be around 12-20 aircraft.',
+        origin: LOCATIONS.SKEABRAE,
+        destination: LOCATIONS.SKEABRAE,
+        isSignificant: false,
+        sourceDocument: '066.jpg'
+    },
+    // October 1944 - Moves to NORTH WEALD
     {
         id: 'c-067-1',
         date: '1944-10-13',
@@ -802,6 +912,21 @@ export const FLIGHT_LOG: LogEntry[] = [
     },
     {
         id: 'c-068-5',
+        date: '1944-11-29',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire IX',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'BOMBER ESCORT (Dortmund)',
+        time: '0:25',
+        remarks: 'Escort to industrial target.',
+        origin: LOCATIONS.NORTH_WEALD,
+        target: LOCATIONS.DORTMUND,
+        destination: LOCATIONS.NORTH_WEALD,
+        isSignificant: false,
+        sourceDocument: '068.jpg'
+    },
+    {
+        id: 'c-068-6',
         date: '1944-11-30',
         phase: Phase.COMBAT,
         aircraftType: 'Spitfire IX',
@@ -832,6 +957,78 @@ export const FLIGHT_LOG: LogEntry[] = [
         historicalNote: "A harrowing mission during rapidly deteriorating weather. Robin was tasked with relaying radio messages from the Wing Commander at 15,000 feet over Brussels. Of the 37 Spitfires in the wing, only two made it back across the sea to England - a testament to both skill and luck.",
         sourceDocument: '069.jpg',
         pilotNotes: "My mission was to fly over Brussels at 15,000' to relay radio messages from Wing Commander. I passed on a message to abort the operational mission on account of rapid deteriorating weather. The weather was too bad for bombers and fighters, mission was for Germany. Of the 37 Spitfires in our wing, I was one of only two who made it across the sea back to England. I made it to Bradwell Bay. Flight Commander actually got back to North Weald."
+    },
+    {
+        id: 'c-069-2',
+        date: '1944-12-09',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire IX',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'BOMBER ESCORT (Duisburg)',
+        time: '2:55',
+        remarks: 'Deep penetration escort to Ruhr.',
+        origin: LOCATIONS.BRADWELL_BAY,
+        target: LOCATIONS.DUISBURG,
+        destination: LOCATIONS.BRADWELL_BAY,
+        isSignificant: false,
+        sourceDocument: '069.jpg'
+    },
+    // January 1945 - Base: BRADWELL BAY
+    {
+        id: 'c-070-1',
+        date: '1945-01-04',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire IX',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'Air Test',
+        time: '1:20',
+        remarks: 'Aircraft serviceability check.',
+        origin: LOCATIONS.BRADWELL_BAY,
+        destination: LOCATIONS.BRADWELL_BAY,
+        isSignificant: false,
+        sourceDocument: '070.jpg'
+    },
+    {
+        id: 'c-070-2',
+        date: '1945-01-14',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire IX',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'Formation',
+        time: '1:25',
+        remarks: 'Formation flying practice.',
+        origin: LOCATIONS.BRADWELL_BAY,
+        destination: LOCATIONS.BRADWELL_BAY,
+        isSignificant: false,
+        sourceDocument: '070.jpg'
+    },
+    {
+        id: 'c-070-3',
+        date: '1945-01-22',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire IX',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'X-Country',
+        time: '0:20',
+        remarks: 'Cross-country navigation.',
+        origin: LOCATIONS.BRADWELL_BAY,
+        destination: LOCATIONS.BRADWELL_BAY,
+        isSignificant: false,
+        sourceDocument: '070.jpg'
+    },
+    {
+        id: 'c-070-4',
+        date: '1945-01-23',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire IX',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'Formation',
+        time: '1:15',
+        remarks: 'Formation flying.',
+        origin: LOCATIONS.BRADWELL_BAY,
+        destination: LOCATIONS.BRADWELL_BAY,
+        isSignificant: false,
+        sourceDocument: '070.jpg'
     },
     // March 1945 - Base: BRADWELL BAY
     {
@@ -865,6 +1062,21 @@ export const FLIGHT_LOG: LogEntry[] = [
         sourceDocument: '071.jpg'
     },
     {
+        id: 'c-071-2b',
+        date: '1945-03-04',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire IX',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'Bomber Escort (Bottrop)',
+        time: '2:35',
+        remarks: 'Escort to oil targets.',
+        origin: LOCATIONS.BRADWELL_BAY,
+        target: LOCATIONS.BOTTROP,
+        destination: LOCATIONS.BRADWELL_BAY,
+        isSignificant: false,
+        sourceDocument: '071.jpg'
+    },
+    {
         id: 'c-071-3',
         date: '1945-03-17',
         phase: Phase.COMBAT,
@@ -875,6 +1087,21 @@ export const FLIGHT_LOG: LogEntry[] = [
         remarks: 'Escort mission.',
         origin: LOCATIONS.BRADWELL_BAY,
         target: LOCATIONS.GELSENKIRCHEN,
+        destination: LOCATIONS.BRADWELL_BAY,
+        isSignificant: false,
+        sourceDocument: '071.jpg'
+    },
+    {
+        id: 'c-071-3b',
+        date: '1945-03-19',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire IX',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'Bomber Escort (Recklinghausen)',
+        time: '2:30',
+        remarks: 'Escort to industrial target.',
+        origin: LOCATIONS.BRADWELL_BAY,
+        target: LOCATIONS.RECKLINGHAUSEN,
         destination: LOCATIONS.BRADWELL_BAY,
         isSignificant: false,
         sourceDocument: '071.jpg'
@@ -954,6 +1181,51 @@ export const FLIGHT_LOG: LogEntry[] = [
             ]
         }
     },
+    {
+        id: 'c-073-2',
+        date: '1945-05-22',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire IX',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'To St Peter Port, Guernsey',
+        time: '1:30',
+        remarks: 'Solo trip to deliver urgent package.',
+        origin: LOCATIONS.BRADWELL_BAY,
+        destination: LOCATIONS.GUERNSEY,
+        isSignificant: true,
+        historicalNote: "Just weeks after VE Day, Robin flew solo to the recently liberated Channel Islands to deliver an urgent package. The Channel Islands had been under German occupation since 1940 and were only liberated on May 9, 1945.",
+        sourceDocument: '073.jpg',
+        pilotNotes: 'This trip I did alone - to take an urgent package.'
+    },
+    {
+        id: 'c-073-3',
+        date: '1945-05-22',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire IX',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'From Guernsey',
+        time: '1:30',
+        remarks: 'Return from Channel Islands.',
+        origin: LOCATIONS.GUERNSEY,
+        destination: LOCATIONS.BRADWELL_BAY,
+        isSignificant: false,
+        sourceDocument: '073.jpg'
+    },
+    {
+        id: 'c-073-4',
+        date: '1945-05-29',
+        phase: Phase.COMBAT,
+        aircraftType: 'Spitfire IX',
+        aircraftCategory: AircraftCategory.FIGHTER,
+        duty: 'Scramble',
+        time: '1:00',
+        remarks: 'Two scramble flights.',
+        origin: LOCATIONS.BRADWELL_BAY,
+        destination: LOCATIONS.BRADWELL_BAY,
+        isSignificant: false,
+        historicalNote: "Even after VE Day, squadrons maintained readiness with scramble exercises. \n\n Scrambling meant taking off immediately due to a threat, like enemy bombers.",
+        sourceDocument: '073.jpg'
+    },
     // June 1945 - Victory & Escort
     {
         id: 'c-074-1',
@@ -1026,6 +1298,63 @@ export const FLIGHT_LOG: LogEntry[] = [
         isSignificant: true,
         pilotNotes: "This trip ended rather disastrously. Flew at zero feet through a monsoon storm and on landing the whole aerodrome was under inches of water. This got into my brakes and I before I finally stopped I'd written off my Lysander, a Beautifighter and seriously damaged a spitfire! Luckily, the war had just finished.",
         sourceDocument: '077.jpg',
+    },
+    // September 1945 - Ferry flights continue
+    {
+        id: 'f-079-1',
+        date: '1945-09-18',
+        phase: Phase.FERRY,
+        aircraftType: 'Spitfire XIV',
+        aircraftCategory: AircraftCategory.TRANSPORT,
+        duty: 'Ferry: Karachi - Jodhpur',
+        time: '1:50',
+        remarks: 'First Spitfire XIV ferry.',
+        origin: LOCATIONS.KARACHI,
+        destination: LOCATIONS.JODHPUR,
+        isSignificant: false,
+        sourceDocument: '079.jpg'
+    },
+    {
+        id: 'f-079-2',
+        date: '1945-09-21',
+        phase: Phase.FERRY,
+        aircraftType: 'Spitfire XIV',
+        aircraftCategory: AircraftCategory.TRANSPORT,
+        duty: 'Ferry: Jodhpur - Cawnpore',
+        time: '2:10',
+        remarks: 'Delivery to Cawnpore.',
+        origin: LOCATIONS.JODHPUR,
+        destination: LOCATIONS.CAWNPORE,
+        isSignificant: false,
+        sourceDocument: '079.jpg'
+    },
+    {
+        id: 'f-079-3',
+        date: '1945-10-06',
+        phase: Phase.FERRY,
+        aircraftType: 'Spitfire XIV',
+        aircraftCategory: AircraftCategory.TRANSPORT,
+        duty: 'Ferry: Karachi - Jodhpur',
+        time: '1:30',
+        remarks: 'Continuing ferry operations.',
+        origin: LOCATIONS.KARACHI,
+        destination: LOCATIONS.JODHPUR,
+        isSignificant: false,
+        sourceDocument: '079.jpg'
+    },
+    {
+        id: 'f-079-4',
+        date: '1945-10-12',
+        phase: Phase.FERRY,
+        aircraftType: 'Spitfire XIV',
+        aircraftCategory: AircraftCategory.TRANSPORT,
+        duty: 'Ferry: Delhi - Karachi',
+        time: '3:00',
+        remarks: 'Long haul ferry.',
+        origin: LOCATIONS.DELHI,
+        destination: LOCATIONS.KARACHI,
+        isSignificant: false,
+        sourceDocument: '079.jpg'
     },
     {
         id: 'f-080-1',
@@ -1114,6 +1443,79 @@ export const FLIGHT_LOG: LogEntry[] = [
         historicalNote: "Delivering a Spitfire to Kohat, just 50 miles from the legendary Khyber Pass on the North West Frontier - the gateway between Afghanistan and the Indian subcontinent, rich with military history.",
         sourceDocument: '080.jpg',
         pilotNotes: 'Kohat - about 50 miles from the Khyber Pass.'
+    },
+    // December 1945 - Second Bangkok delivery
+    {
+        id: 'f-081-1',
+        date: '1945-12-01',
+        phase: Phase.FERRY,
+        aircraftType: 'Spitfire XIV',
+        aircraftCategory: AircraftCategory.TRANSPORT,
+        duty: 'Ferry: Calcutta - Akyab',
+        time: '1:30',
+        remarks: 'Beginning second Bangkok delivery route.',
+        origin: LOCATIONS.CALCUTTA,
+        destination: LOCATIONS.AKYAB,
+        isSignificant: false,
+        sourceDocument: '081.jpg'
+    },
+    {
+        id: 'f-081-2',
+        date: '1945-12-02',
+        phase: Phase.FERRY,
+        aircraftType: 'Spitfire XIV',
+        aircraftCategory: AircraftCategory.TRANSPORT,
+        duty: 'Ferry: Akyab - Rangoon',
+        time: '1:30',
+        remarks: 'Continuing to Rangoon.',
+        origin: LOCATIONS.AKYAB,
+        destination: LOCATIONS.RANGOON,
+        isSignificant: false,
+        sourceDocument: '081.jpg'
+    },
+    {
+        id: 'f-081-3',
+        date: '1945-12-03',
+        phase: Phase.FERRY,
+        aircraftType: 'Spitfire XIV',
+        aircraftCategory: AircraftCategory.TRANSPORT,
+        duty: 'Ferry: Rangoon - Bangkok',
+        time: '1:30',
+        remarks: 'Second delivery to Thailand.',
+        origin: LOCATIONS.RANGOON,
+        destination: LOCATIONS.BANGKOK,
+        isSignificant: true,
+        historicalNote: "Robin's second ferry delivery to Bangkok. The RAF was steadily repositioning aircraft throughout South-East Asia in the months following Japan's surrender.",
+        sourceDocument: '081.jpg',
+        pilotNotes: 'Developed engine trouble (!) in Calcutta - so took the train to Ranchi for Christmas. (Who could ask for anything more) (And when I got back to base on New Years Eve they asked why I hadn\'t stayed with my family for an extra week!)'
+    },
+    {
+        id: 'f-081-4',
+        date: '1945-12-17',
+        phase: Phase.FERRY,
+        aircraftType: 'Spitfire XIV',
+        aircraftCategory: AircraftCategory.TRANSPORT,
+        duty: 'Ferry: Jodhpur - Allahabad',
+        time: '2:15',
+        remarks: 'Continuing ferry operations.',
+        origin: LOCATIONS.JODHPUR,
+        destination: LOCATIONS.ALLAHABAD,
+        isSignificant: false,
+        sourceDocument: '081.jpg'
+    },
+    {
+        id: 'f-081-5',
+        date: '1945-12-18',
+        phase: Phase.FERRY,
+        aircraftType: 'Spitfire XIV',
+        aircraftCategory: AircraftCategory.TRANSPORT,
+        duty: 'Ferry: Allahabad - Calcutta',
+        time: '2:00',
+        remarks: 'Ferry to Calcutta.',
+        origin: LOCATIONS.ALLAHABAD,
+        destination: LOCATIONS.CALCUTTA,
+        isSignificant: false,
+        sourceDocument: '081.jpg'
     },
     {
         id: 'f-082-1',
