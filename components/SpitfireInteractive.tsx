@@ -13,12 +13,11 @@ const PROPELLER_POSITION = {
   height: '20%',     // height of propeller area
 };
 
-// Radiator flap positioning - under the wing
+// Radiator flap positioning - under the wing (use TOP positioning, not bottom)
 const RADIATOR_POSITION = {
-  left: '39%',       // horizontal position from left edge
-  bottom: '16%',     // position from bottom
-  width: '7%',       // width of radiator flap area
-  height: '8%',      // height when open
+  left: '35%',       // horizontal position from left edge
+  top: '59%',        // position from top (places it on the radiator housing under wing)
+  width: '6%',       // width of radiator flap area
 };
 
 // ============================================================================
@@ -326,9 +325,204 @@ const CockpitGauge: React.FC<GaugeProps> = ({
 // COCKPIT PANEL COMPONENT
 // ============================================================================
 
+// ============================================================================
+// THROTTLE QUADRANT LEVER COMPONENT
+// ============================================================================
+
+interface LeverProps {
+  label: string;
+  value: number; // 0-100
+  onChange: (value: number) => void;
+  color: 'red' | 'blue' | 'amber';
+  disabled?: boolean;
+}
+
+const ThrottleLever: React.FC<LeverProps> = ({ label, value, onChange, color, disabled }) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const trackRef = React.useRef<HTMLDivElement>(null);
+  
+  const colorClasses = {
+    red: { knob: 'bg-red-600', track: 'from-red-900 to-red-700', glow: 'shadow-red-500/30' },
+    blue: { knob: 'bg-sky-600', track: 'from-sky-900 to-sky-700', glow: 'shadow-sky-500/30' },
+    amber: { knob: 'bg-amber-600', track: 'from-amber-900 to-amber-700', glow: 'shadow-amber-500/30' },
+  };
+  const colors = colorClasses[color];
+  
+  const calculateValue = (clientY: number) => {
+    if (!trackRef.current || disabled) return;
+    const rect = trackRef.current.getBoundingClientRect();
+    const y = clientY - rect.top;
+    const percentage = Math.max(0, Math.min(100, 100 - (y / rect.height) * 100));
+    onChange(Math.round(percentage));
+  };
+  
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (disabled) return;
+    setIsDragging(true);
+    calculateValue(e.clientY);
+  };
+  
+  const handleMouseMove = (e: MouseEvent) => {
+    if (isDragging) {
+      calculateValue(e.clientY);
+    }
+  };
+  
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+  
+  // Add/remove global mouse listeners for dragging
+  React.useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDragging]);
+  
+  return (
+    <div className={`flex flex-col items-center ${disabled ? 'opacity-40' : ''}`}>
+      <span className="text-[9px] text-stone-500 uppercase tracking-wider mb-1">{label}</span>
+      <div 
+        ref={trackRef}
+        className={`relative w-6 h-32 bg-gradient-to-b ${colors.track} rounded-lg border border-stone-600 
+          ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'} select-none`}
+        onMouseDown={handleMouseDown}
+      >
+        {/* Track markings */}
+        {[0, 25, 50, 75, 100].map(mark => (
+          <div 
+            key={mark}
+            className="absolute left-0 right-0 h-px bg-stone-500/50"
+            style={{ bottom: `${mark}%` }}
+          >
+            <span className="absolute -left-4 -translate-y-1/2 text-[7px] text-stone-600">
+              {mark === 100 ? 'MAX' : mark === 0 ? 'MIN' : ''}
+            </span>
+          </div>
+        ))}
+        
+        {/* Lever knob */}
+        <div 
+          className={`absolute left-1/2 -translate-x-1/2 w-8 h-4 ${colors.knob} rounded border border-white/20 
+            shadow-lg ${colors.glow} ${isDragging ? '' : 'transition-all duration-150'} 
+            ${disabled ? 'cursor-not-allowed' : 'cursor-grab'} ${isDragging ? 'cursor-grabbing' : ''}`}
+          style={{ bottom: `calc(${value}% - 8px)` }}
+        >
+          <div className="absolute inset-x-1 top-1/2 -translate-y-1/2 h-0.5 bg-white/30 rounded" />
+        </div>
+      </div>
+      <span className="text-[10px] text-stone-400 mt-1 font-mono">{value}%</span>
+    </div>
+  );
+};
+
+// ============================================================================
+// DIRECTIONAL GYRO (HEADING INDICATOR) COMPONENT
+// ============================================================================
+
+interface HeadingIndicatorProps {
+  heading: number; // 0-360
+}
+
+const HeadingIndicator: React.FC<HeadingIndicatorProps> = ({ heading }) => {
+  // Compass cardinal directions
+  const cardinals = [
+    { deg: 0, label: 'N' },
+    { deg: 30, label: '3' },
+    { deg: 60, label: '6' },
+    { deg: 90, label: 'E' },
+    { deg: 120, label: '12' },
+    { deg: 150, label: '15' },
+    { deg: 180, label: 'S' },
+    { deg: 210, label: '21' },
+    { deg: 240, label: '24' },
+    { deg: 270, label: 'W' },
+    { deg: 300, label: '30' },
+    { deg: 330, label: '33' },
+  ];
+  
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative w-24 h-24 rounded-full bg-stone-950 border-2 border-stone-600 shadow-lg overflow-hidden">
+        {/* Outer ring */}
+        <div className="absolute inset-1 rounded-full bg-gradient-to-b from-stone-800 to-stone-900 border border-stone-700">
+          {/* Rotating compass card */}
+          <div 
+            className="absolute inset-2 rounded-full transition-transform duration-300"
+            style={{ transform: `rotate(${-heading}deg)` }}
+          >
+            {/* Cardinal and intercardinal markings */}
+            {cardinals.map(({ deg, label }) => (
+              <div
+                key={deg}
+                className="absolute left-1/2 top-1/2 origin-center"
+                style={{ transform: `translate(-50%, -50%) rotate(${deg}deg)` }}
+              >
+                <span 
+                  className={`absolute left-1/2 -translate-x-1/2 text-[8px] font-bold
+                    ${label === 'N' ? 'text-amber-400' : label === 'S' || label === 'E' || label === 'W' ? 'text-stone-300' : 'text-stone-500'}`}
+                  style={{ 
+                    top: '2px',
+                    transform: `rotate(${-deg}deg)` 
+                  }}
+                >
+                  {label}
+                </span>
+              </div>
+            ))}
+            
+            {/* Tick marks every 10 degrees */}
+            {[...Array(36)].map((_, i) => {
+              const deg = i * 10;
+              const isMajor = deg % 30 === 0;
+              return (
+                <div
+                  key={deg}
+                  className="absolute left-1/2 top-0 origin-bottom"
+                  style={{ 
+                    transform: `translateX(-50%) rotate(${deg}deg)`,
+                    height: '50%',
+                  }}
+                >
+                  <div className={`${isMajor ? 'w-0.5 h-2' : 'w-px h-1'} bg-stone-500 mx-auto`} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        
+        {/* Fixed aircraft symbol (lubber line) */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          {/* Aircraft shape */}
+          <div className="relative">
+            <div className="w-1 h-6 bg-amber-500 rounded-sm" />
+            <div className="absolute top-3 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-amber-500 rounded" />
+            <div className="absolute top-5 left-1/2 -translate-x-1/2 w-2 h-0.5 bg-amber-500 rounded" />
+          </div>
+        </div>
+        
+        {/* Top lubber mark */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0 h-0 
+          border-l-[6px] border-r-[6px] border-t-[8px] 
+          border-l-transparent border-r-transparent border-t-amber-500" />
+      </div>
+      <span className="text-[10px] text-stone-500 mt-1 uppercase tracking-wider font-mono">
+        HDG {Math.round(heading).toString().padStart(3, '0')}°
+      </span>
+    </div>
+  );
+};
+
 interface CockpitPanelProps {
   isEngineRunning: boolean;
   radiatorOpen: boolean;
+  throttle: number;
+  propPitch: number;
   gaugeValues: {
     rpm: number;
     boost: number;
@@ -338,19 +532,28 @@ interface CockpitPanelProps {
     fuel: number;
     speed: number;
     altitude: number;
+    climbRate: number;
+    heading: number;
   };
   onToggleEngine: () => void;
   onToggleRadiator: () => void;
+  onThrottleChange: (value: number) => void;
+  onPropPitchChange: (value: number) => void;
 }
 
 const CockpitPanel: React.FC<CockpitPanelProps> = ({
   isEngineRunning,
   radiatorOpen,
+  throttle,
+  propPitch,
   gaugeValues,
   onToggleEngine,
   onToggleRadiator,
+  onThrottleChange,
+  onPropPitchChange,
 }) => {
   const showTempWarning = isEngineRunning && gaugeValues.coolantTemp > 100 && !radiatorOpen;
+  const showBoostWarning = isEngineRunning && throttle > propPitch + 20;
   
   return (
     <div className="w-full bg-gradient-to-b from-stone-900 via-stone-800 to-stone-900 rounded-2xl border border-stone-700 shadow-2xl overflow-hidden">
@@ -378,148 +581,222 @@ const CockpitPanel: React.FC<CockpitPanelProps> = ({
         </div>
       )}
       
-      <div className="p-4 md:p-6">
-        {/* Controls row */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 pb-6 border-b border-stone-700/50">
-          {/* Engine starter button */}
-          <button
-            onClick={onToggleEngine}
-            className={`relative group flex items-center gap-3 px-6 py-3 rounded-xl border-2 transition-all duration-300 ${
-              isEngineRunning
-                ? 'bg-red-500/20 border-red-500 shadow-lg shadow-red-500/30'
-                : 'bg-stone-800/80 border-stone-600 hover:border-amber-500/50 hover:bg-stone-700/50'
-            }`}
-          >
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
-              isEngineRunning 
-                ? 'bg-red-500 shadow-lg shadow-red-500/50' 
-                : 'bg-stone-700 group-hover:bg-amber-500/20'
-            }`}>
-              <Power className={`w-5 h-5 ${isEngineRunning ? 'text-white' : 'text-stone-400 group-hover:text-amber-400'}`} />
-            </div>
-            <div className="text-left">
-              <p className={`text-sm font-medium uppercase tracking-wider ${
-                isEngineRunning ? 'text-red-400' : 'text-stone-300'
-              }`}>
-                {isEngineRunning ? 'Stop Engine' : 'Start Engine'}
-              </p>
-              <p className="text-[10px] text-stone-500 uppercase">Magneto Switch</p>
-            </div>
-          </button>
-          
-          {/* Radiator lever */}
-          <div className="flex items-center gap-3 px-4 py-2 bg-stone-800/50 rounded-xl border border-stone-700">
-            <span className="text-stone-500 text-xs uppercase tracking-wider">Radiator</span>
-            <button
-              onClick={onToggleRadiator}
-              className={`relative w-16 h-8 rounded-full transition-all duration-300 ${
-                radiatorOpen 
-                  ? 'bg-emerald-500/30 border-2 border-emerald-500' 
-                  : 'bg-stone-700 border-2 border-stone-600'
-              }`}
-            >
-              <div 
-                className={`absolute top-1 w-6 h-6 rounded-full transition-all duration-300 ${
-                  radiatorOpen 
-                    ? 'left-9 bg-emerald-400 shadow-lg shadow-emerald-500/50' 
-                    : 'left-1 bg-stone-500'
-                }`}
-              />
-            </button>
-            <span className={`text-xs uppercase tracking-wider w-12 ${
-              radiatorOpen ? 'text-emerald-400' : 'text-stone-500'
-            }`}>
-              {radiatorOpen ? 'Open' : 'Closed'}
-            </span>
-          </div>
+      {/* Boost warning - throttle ahead of RPM */}
+      {showBoostWarning && (
+        <div className="bg-amber-500/20 border-b border-amber-500/50 px-4 py-2">
+          <p className="text-amber-400 text-xs text-center font-mono">
+            ⚠ INCREASE PROP RPM BEFORE THROTTLE — Risk of over-boosting! ⚠
+          </p>
         </div>
-        
-        {/* Instruments grid - matches Spitfire IX layout */}
-        <div className="grid grid-cols-4 md:grid-cols-8 gap-3 md:gap-4">
-          {/* Top row - Flight instruments */}
-          <div className="col-span-2 flex flex-col items-center">
-            <CockpitGauge 
-              label="Airspeed" 
-              value={gaugeValues.speed} 
-              max={500} 
-              unit=" mph" 
-              size="lg"
-            />
-          </div>
-          <div className="col-span-2 flex flex-col items-center">
-            <CockpitGauge 
-              label="Altitude" 
-              value={gaugeValues.altitude} 
-              max={45000} 
-              unit=" ft" 
-              size="lg"
-            />
-          </div>
-          <div className="col-span-2 flex flex-col items-center">
-            <CockpitGauge 
-              label="RPM" 
-              value={gaugeValues.rpm} 
-              max={3600} 
-              unit="" 
-              size="lg"
-              dangerThreshold={3200}
-            />
-          </div>
-          <div className="col-span-2 flex flex-col items-center">
-            <CockpitGauge 
-              label="Boost" 
-              value={gaugeValues.boost} 
-              max={18} 
-              unit=" psi" 
-              size="lg"
-              warningThreshold={12}
-              dangerThreshold={15}
-            />
+      )}
+      
+      <div className="p-4 md:p-6">
+        {/* Main cockpit layout - Throttle on left, instruments center/right */}
+        <div className="flex flex-col lg:flex-row gap-6">
+          
+          {/* Left side - Throttle Quadrant and Controls */}
+          <div className="flex flex-col items-center lg:items-start gap-4 lg:border-r lg:border-stone-700/50 lg:pr-6">
+            {/* Throttle Quadrant */}
+            <div className="flex flex-col items-center">
+              <span className="text-stone-500 text-[10px] uppercase tracking-[0.2em] mb-3">Throttle Quadrant</span>
+              <div className="flex items-end gap-4 px-4 py-3 bg-stone-950/50 rounded-xl border border-stone-700">
+                <ThrottleLever 
+                  label="Prop RPM" 
+                  value={propPitch} 
+                  onChange={onPropPitchChange}
+                  color="blue"
+                  disabled={!isEngineRunning}
+                />
+                <ThrottleLever 
+                  label="Throttle" 
+                  value={throttle} 
+                  onChange={onThrottleChange}
+                  color="red"
+                  disabled={!isEngineRunning}
+                />
+              </div>
+              {/* Hint text */}
+              <p className="text-stone-600 text-[9px] mt-2 max-w-[160px] text-center leading-relaxed">
+                Tip: Increase Prop RPM before Throttle
+              </p>
+            </div>
+            
+            {/* Engine and Radiator controls */}
+            <div className="flex flex-col gap-2 w-full">
+              {/* Engine starter button */}
+              <button
+                onClick={onToggleEngine}
+                className={`relative group flex items-center gap-3 px-4 py-2 rounded-xl border-2 transition-all duration-300 ${
+                  isEngineRunning
+                    ? 'bg-red-500/20 border-red-500 shadow-lg shadow-red-500/30'
+                    : 'bg-stone-800/80 border-stone-600 hover:border-amber-500/50 hover:bg-stone-700/50'
+                }`}
+              >
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 ${
+                  isEngineRunning 
+                    ? 'bg-red-500 shadow-lg shadow-red-500/50' 
+                    : 'bg-stone-700 group-hover:bg-amber-500/20'
+                }`}>
+                  <Power className={`w-3.5 h-3.5 ${isEngineRunning ? 'text-white' : 'text-stone-400 group-hover:text-amber-400'}`} />
+                </div>
+                <div className="text-left">
+                  <p className={`text-[11px] font-medium uppercase tracking-wider ${
+                    isEngineRunning ? 'text-red-400' : 'text-stone-300'
+                  }`}>
+                    {isEngineRunning ? 'Stop' : 'Start'}
+                  </p>
+                </div>
+              </button>
+              
+              {/* Radiator lever */}
+              <div className="flex items-center justify-between gap-2 px-3 py-2 bg-stone-800/50 rounded-xl border border-stone-700">
+                <span className="text-stone-500 text-[9px] uppercase tracking-wider">Rad</span>
+                <button
+                  onClick={onToggleRadiator}
+                  className={`relative w-12 h-6 rounded-full transition-all duration-300 ${
+                    radiatorOpen 
+                      ? 'bg-emerald-500/30 border-2 border-emerald-500' 
+                      : 'bg-stone-700 border-2 border-stone-600'
+                  }`}
+                >
+                  <div 
+                    className={`absolute top-0.5 w-4 h-4 rounded-full transition-all duration-300 ${
+                      radiatorOpen 
+                        ? 'left-6 bg-emerald-400 shadow-lg shadow-emerald-500/50' 
+                        : 'left-0.5 bg-stone-500'
+                    }`}
+                  />
+                </button>
+              </div>
+            </div>
           </div>
           
-          {/* Bottom row - Engine instruments */}
-          <div className="col-span-2 flex flex-col items-center">
-            <CockpitGauge 
-              label="Coolant" 
-              value={gaugeValues.coolantTemp} 
-              max={130} 
-              unit="°C" 
-              size="md"
-              warningThreshold={100}
-              dangerThreshold={110}
-            />
-          </div>
-          <div className="col-span-2 flex flex-col items-center">
-            <CockpitGauge 
-              label="Oil Temp" 
-              value={gaugeValues.oilTemp} 
-              max={120} 
-              unit="°C" 
-              size="md"
-              warningThreshold={90}
-              dangerThreshold={105}
-            />
-          </div>
-          <div className="col-span-2 flex flex-col items-center">
-            <CockpitGauge 
-              label="Oil Press" 
-              value={gaugeValues.oilPressure} 
-              max={100} 
-              unit=" psi" 
-              size="md"
-              warningThreshold={30}
-            />
-          </div>
-          <div className="col-span-2 flex flex-col items-center">
-            <CockpitGauge 
-              label="Fuel" 
-              value={gaugeValues.fuel} 
-              max={85} 
-              unit=" gal" 
-              size="md"
-              warningThreshold={20}
-              dangerThreshold={10}
-            />
+          {/* Right side - Instruments */}
+          <div className="flex-1 space-y-4">
+            {/* Panel label */}
+            <div className="text-center">
+              <span className="text-stone-600 text-[10px] uppercase tracking-[0.3em]">Blind Flying Panel</span>
+            </div>
+            
+            {/* Flight Instruments - 2x2 grid */}
+            <div className="bg-stone-800/50 rounded-xl p-4 border border-stone-700/50">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 items-center justify-items-center">
+                {/* Airspeed */}
+                <div className="flex flex-col items-center">
+                  <CockpitGauge 
+                    label="Airspeed" 
+                    value={gaugeValues.speed} 
+                    max={460} 
+                    unit=" mph" 
+                    size="lg"
+                  />
+                </div>
+                {/* Altitude */}
+                <div className="flex flex-col items-center">
+                  <CockpitGauge 
+                    label="Altitude" 
+                    value={gaugeValues.altitude} 
+                    max={45000} 
+                    unit=" ft" 
+                    size="lg"
+                  />
+                </div>
+                {/* Climb Rate */}
+                <div className="flex flex-col items-center">
+                  <CockpitGauge 
+                    label="Climb" 
+                    value={Math.abs(gaugeValues.climbRate)} 
+                    max={5000} 
+                    unit={gaugeValues.climbRate >= 0 ? '↑' : '↓'} 
+                    size="lg"
+                  />
+                </div>
+                {/* Heading - Custom directional gyro */}
+                <div className="flex flex-col items-center">
+                  <HeadingIndicator heading={gaugeValues.heading} />
+                </div>
+              </div>
+            </div>
+          
+            {/* Engine Instruments - separate panel below */}
+            <div className="text-center">
+              <span className="text-stone-600 text-[10px] uppercase tracking-[0.3em]">Engine Instruments</span>
+            </div>
+          
+            <div className="bg-stone-800/50 rounded-xl p-4 border border-stone-700/50">
+              <div className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
+                {/* RPM */}
+                <div className="flex flex-col items-center">
+                  <CockpitGauge 
+                    label="RPM" 
+                    value={gaugeValues.rpm} 
+                    max={3600} 
+                    unit="" 
+                    size="md"
+                    dangerThreshold={3200}
+                  />
+                </div>
+                {/* Boost */}
+                <div className="flex flex-col items-center">
+                  <CockpitGauge 
+                    label="Boost" 
+                    value={gaugeValues.boost} 
+                    max={18} 
+                    unit=" psi" 
+                    size="md"
+                    warningThreshold={12}
+                    dangerThreshold={15}
+                  />
+                </div>
+                {/* Coolant Temp - critical! */}
+                <div className="flex flex-col items-center">
+                  <CockpitGauge 
+                    label="Coolant" 
+                    value={gaugeValues.coolantTemp} 
+                    max={130} 
+                    unit="°C" 
+                    size="md"
+                    warningThreshold={100}
+                    dangerThreshold={110}
+                  />
+                </div>
+                {/* Oil Temp */}
+                <div className="flex flex-col items-center">
+                  <CockpitGauge 
+                    label="Oil Temp" 
+                    value={gaugeValues.oilTemp} 
+                    max={120} 
+                    unit="°C" 
+                    size="md"
+                    warningThreshold={90}
+                    dangerThreshold={105}
+                  />
+                </div>
+                {/* Oil Pressure */}
+                <div className="flex flex-col items-center">
+                  <CockpitGauge 
+                    label="Oil Press" 
+                    value={gaugeValues.oilPressure} 
+                    max={100} 
+                    unit=" psi" 
+                    size="md"
+                    warningThreshold={30}
+                  />
+                </div>
+                {/* Fuel */}
+                <div className="flex flex-col items-center">
+                  <CockpitGauge 
+                    label="Fuel" 
+                    value={gaugeValues.fuel} 
+                    max={85} 
+                    unit=" gal" 
+                    size="md"
+                    warningThreshold={20}
+                    dangerThreshold={10}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -539,6 +816,10 @@ export const SpitfireInteractive: React.FC = () => {
   const [filterCategory, setFilterCategory] = useState<string | null>(null);
   const [introComplete, setIntroComplete] = useState(false);
   
+  // Throttle quadrant controls
+  const [throttle, setThrottle] = useState(0);       // 0-100%
+  const [propPitch, setPropPitch] = useState(0);     // 0-100% (controls prop RPM)
+  
   // Gauge values that animate when engine is running
   const [gaugeValues, setGaugeValues] = useState({
     rpm: 0,
@@ -549,50 +830,131 @@ export const SpitfireInteractive: React.FC = () => {
     fuel: 85,
     speed: 0,
     altitude: 0,
+    climbRate: 0,
+    heading: 270, // Start facing west
   });
 
-  // Simulate engine gauge movements
+  // Simulate engine gauge movements based on throttle and prop pitch
   useEffect(() => {
     if (isEngineRunning) {
       const interval = setInterval(() => {
         setGaugeValues(prev => {
-          // Temperature rises faster when radiator is closed
-          const tempRise = radiatorOpen ? 0.5 : 2;
-          const targetCoolant = radiatorOpen ? 90 : 115;
-          const newCoolant = prev.coolantTemp < targetCoolant 
-            ? Math.min(prev.coolantTemp + tempRise, targetCoolant + Math.random() * 5)
-            : Math.max(prev.coolantTemp - 1, targetCoolant);
-            
+          // Spitfire IX specs:
+          // - Max speed: 408 mph at 25,000 ft
+          // - Service ceiling: 43,000 ft
+          // - Rate of climb: 4,580 ft/min at sea level, decreasing with altitude
+          // - Stall speed: ~73 mph (clean)
+          
+          // RPM is controlled by prop pitch lever (idle ~800, max ~3000)
+          const idleRpm = 800;
+          const maxRpm = 3000;
+          const targetRpm = idleRpm + (propPitch / 100) * (maxRpm - idleRpm);
+          const newRpm = prev.rpm + (targetRpm - prev.rpm) * 0.3 + (Math.random() - 0.5) * 50;
+          
+          // Boost is controlled by throttle, but limited by RPM
+          const maxBoostAtRpm = (propPitch / 100) * 12;
+          const requestedBoost = (throttle / 100) * 12;
+          const actualBoost = Math.min(requestedBoost, maxBoostAtRpm + 3) + (Math.random() - 0.5) * 0.5;
+          
+          // ========================================
+          // FLIGHT DYNAMICS
+          // ========================================
+          
+          // Maximum ceiling is 43,000 ft
+          const serviceCeiling = 43000;
+          
+          // Thrust/power output (0-1) based on throttle and RPM efficiency
+          const powerOutput = (throttle / 100) * (propPitch / 100);
+          
+          // Altitude effect on performance (decreases at higher altitude)
+          const altitudeFactor = Math.max(0, 1 - (prev.altitude / serviceCeiling));
+          
+          // Target airspeed: builds with power, max ~408 mph at optimal altitude
+          // More power = more speed, but also altitude affects this
+          const maxSpeed = 408;
+          const minFlyingSpeed = 75; // Roughly stall speed
+          const targetSpeed = powerOutput > 0.1 
+            ? minFlyingSpeed + powerOutput * (maxSpeed - minFlyingSpeed) * (0.7 + 0.3 * altitudeFactor)
+            : 0;
+          
+          // Smooth speed changes
+          const newSpeed = prev.speed + (targetSpeed - prev.speed) * 0.05 + (Math.random() - 0.5) * 2;
+          
+          // Climb rate: Max ~4,580 ft/min at sea level, decreases with altitude
+          // Only climb if we have excess power (throttle > what's needed for level flight)
+          const maxClimbRate = 4580;
+          const excessPower = Math.max(0, powerOutput - 0.3); // Need 30% power for level flight
+          const targetClimbRate = excessPower * maxClimbRate * altitudeFactor;
+          
+          // At service ceiling, climb rate goes to 0
+          const climbCeiling = prev.altitude >= serviceCeiling ? 0 : targetClimbRate;
+          
+          // Smooth climb rate changes
+          const newClimbRate = prev.climbRate + (climbCeiling - prev.climbRate) * 0.1;
+          
+          // Update altitude based on climb rate (ft/min -> ft per 200ms tick)
+          const altitudeChange = newClimbRate * (200 / 60000);
+          const newAltitude = Math.max(0, Math.min(serviceCeiling, prev.altitude + altitudeChange));
+          
+          // Slow heading drift (simulates slight yaw)
+          const headingDrift = (Math.random() - 0.5) * 0.5;
+          const newHeading = (prev.heading + headingDrift + 360) % 360;
+          
+          // Temperature rises with throttle, faster when radiator closed
+          const heatGeneration = (throttle / 100) * 2;
+          const cooling = radiatorOpen ? 1.5 : 0.3;
+          const targetCoolant = 60 + (throttle / 100) * 40 + (radiatorOpen ? 0 : 20);
+          const newCoolant = prev.coolantTemp + (targetCoolant - prev.coolantTemp) * 0.1 + heatGeneration - cooling;
+          
+          // Oil temp and pressure scale with RPM
+          const targetOilTemp = 50 + (propPitch / 100) * 30;
+          const targetOilPressure = 30 + (propPitch / 100) * 45;
+          
+          // Fuel consumption scales with throttle
+          const fuelConsumption = 0.005 + (throttle / 100) * 0.03;
+          
           return {
-            rpm: 2400 + Math.random() * 200,
-            boost: 7 + Math.random() * 2,
-            coolantTemp: newCoolant,
-            oilTemp: 70 + Math.random() * 10,
-            oilPressure: 60 + Math.random() * 15,
-            fuel: Math.max(0, prev.fuel - 0.02),
-            speed: 0, // Stationary on ground
-            altitude: 0,
+            rpm: Math.max(idleRpm, Math.min(maxRpm + 200, newRpm)),
+            boost: Math.max(0, actualBoost),
+            coolantTemp: Math.max(15, Math.min(130, newCoolant)),
+            oilTemp: targetOilTemp + (Math.random() - 0.5) * 5,
+            oilPressure: targetOilPressure + (Math.random() - 0.5) * 5,
+            fuel: Math.max(0, prev.fuel - fuelConsumption),
+            speed: Math.max(0, newSpeed),
+            altitude: newAltitude,
+            climbRate: Math.round(newClimbRate),
+            heading: newHeading,
           };
         });
-      }, 500);
+      }, 200);
       return () => clearInterval(interval);
     } else {
       // Engine off - gradual cooldown
       const cooldown = setInterval(() => {
         setGaugeValues(prev => ({
-          rpm: 0,
-          boost: 0,
-          coolantTemp: Math.max(15, prev.coolantTemp - 2),
-          oilTemp: Math.max(15, prev.oilTemp - 1),
-          oilPressure: 0,
+          rpm: Math.max(0, prev.rpm - 100),
+          boost: Math.max(0, prev.boost - 0.5),
+          coolantTemp: Math.max(15, prev.coolantTemp - 1),
+          oilTemp: Math.max(15, prev.oilTemp - 0.5),
+          oilPressure: Math.max(0, prev.oilPressure - 5),
           fuel: prev.fuel,
-          speed: 0,
-          altitude: 0,
+          speed: Math.max(0, prev.speed - 5),
+          altitude: Math.max(0, prev.altitude - 100), // Descend when engine off
+          climbRate: prev.altitude > 0 ? -500 : 0,
+          heading: prev.heading,
         }));
-      }, 500);
+      }, 200);
       return () => clearInterval(cooldown);
     }
-  }, [isEngineRunning, radiatorOpen]);
+  }, [isEngineRunning, radiatorOpen, throttle, propPitch]);
+  
+  // Reset levers when engine stops
+  useEffect(() => {
+    if (!isEngineRunning) {
+      setThrottle(0);
+      setPropPitch(0);
+    }
+  }, [isEngineRunning]);
 
   // Intro animation
   useEffect(() => {
@@ -713,74 +1075,60 @@ export const SpitfireInteractive: React.FC = () => {
 
             {/* Radiator flap - visible opening animation */}
             <div 
-              className="absolute z-20 transition-all duration-700"
+              className="absolute z-20 transition-all duration-500"
               style={{ 
                 left: RADIATOR_POSITION.left, 
-                bottom: RADIATOR_POSITION.bottom,
+                top: RADIATOR_POSITION.top,
                 width: RADIATOR_POSITION.width,
               }}
             >
-              {/* Radiator housing */}
+              {/* Radiator scoop visualization */}
               <div className="relative">
-                {/* Flap that opens */}
+                {/* The flap itself */}
                 <div 
-                  className="relative transition-all duration-500 origin-top"
+                  className={`relative transition-all duration-500 overflow-visible`}
                   style={{
-                    height: radiatorOpen ? '40px' : '8px',
+                    transformOrigin: 'top center',
                   }}
                 >
-                  {/* Closed state - flush with airframe */}
+                  {/* Radiator intake outline - always visible */}
                   <div 
-                    className={`absolute top-0 left-0 right-0 h-2 bg-gradient-to-b from-stone-500 to-stone-600 rounded-sm transition-opacity duration-300 ${
-                      radiatorOpen ? 'opacity-0' : 'opacity-100'
+                    className={`w-full h-4 rounded-sm transition-all duration-500 ${
+                      radiatorOpen 
+                        ? 'bg-stone-900/80 border-2 border-emerald-500/60' 
+                        : 'bg-stone-700/40 border border-stone-600/40'
                     }`}
                   />
                   
-                  {/* Open state - flap angled down */}
+                  {/* Open flap - drops down */}
                   <div 
-                    className={`absolute top-0 left-0 right-0 transition-all duration-500 ${
-                      radiatorOpen ? 'opacity-100' : 'opacity-0'
+                    className={`absolute top-full left-0 right-0 transition-all duration-500 origin-top ${
+                      radiatorOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'
                     }`}
                   >
-                    {/* Opening gap showing dark interior */}
-                    <div className="h-3 bg-stone-900 rounded-t-sm border-x border-t border-stone-700" />
-                    
-                    {/* Angled flap */}
+                    {/* Flap angled down */}
                     <div 
-                      className="h-6 bg-gradient-to-b from-stone-500 to-stone-600 rounded-b-sm border border-stone-700 origin-top"
+                      className="h-5 bg-gradient-to-b from-stone-500 to-stone-600 rounded-b border-x border-b border-stone-600"
                       style={{
-                        transform: 'perspective(100px) rotateX(-25deg)',
-                        boxShadow: '0 4px 8px rgba(0,0,0,0.5)',
+                        transform: 'perspective(80px) rotateX(-30deg)',
+                        boxShadow: '0 3px 6px rgba(0,0,0,0.6)',
                       }}
                     />
                     
-                    {/* Airflow lines */}
-                    {radiatorOpen && (
-                      <div className="absolute top-1 left-0 right-0 flex justify-around">
-                        {[0, 1, 2].map(i => (
-                          <div 
-                            key={i}
-                            className="w-px h-8 bg-gradient-to-b from-emerald-400/60 to-transparent"
-                            style={{
-                              animation: `airflow 0.8s ease-out infinite`,
-                              animationDelay: `${i * 0.2}s`,
-                            }}
-                          />
-                        ))}
-                      </div>
-                    )}
+                    {/* Airflow indicator - horizontal, matching aircraft direction */}
+                    <div className="absolute top-0 -left-2 -right-2 h-full flex flex-col justify-around pointer-events-none overflow-hidden">
+                      {[0, 1, 2].map(i => (
+                        <div 
+                          key={i}
+                          className="h-0.5 w-8 bg-gradient-to-r from-emerald-400/60 via-emerald-400/30 to-transparent rounded-full"
+                          style={{
+                            animation: `airflowHorizontal 0.5s ease-out infinite`,
+                            animationDelay: `${i * 0.12}s`,
+                          }}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </div>
-                
-                {/* Status indicator */}
-                <div 
-                  className={`absolute -bottom-6 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded text-[8px] uppercase tracking-wider transition-all duration-300 ${
-                    radiatorOpen 
-                      ? 'bg-emerald-500/30 text-emerald-400 border border-emerald-500/50' 
-                      : 'bg-stone-800/50 text-stone-500 border border-stone-700/50'
-                  }`}
-                >
-                  {radiatorOpen ? 'Open' : 'Closed'}
                 </div>
               </div>
             </div>
@@ -863,9 +1211,13 @@ export const SpitfireInteractive: React.FC = () => {
           <CockpitPanel
             isEngineRunning={isEngineRunning}
             radiatorOpen={radiatorOpen}
+            throttle={throttle}
+            propPitch={propPitch}
             gaugeValues={gaugeValues}
             onToggleEngine={toggleEngine}
             onToggleRadiator={toggleRadiator}
+            onThrottleChange={setThrottle}
+            onPropPitchChange={setPropPitch}
           />
         </div>
 
@@ -1014,6 +1366,20 @@ export const SpitfireInteractive: React.FC = () => {
           100% {
             opacity: 0;
             transform: translateY(20px);
+          }
+        }
+        
+        @keyframes airflowHorizontal {
+          0% {
+            opacity: 0;
+            transform: translateX(-10px);
+          }
+          20% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+            transform: translateX(30px);
           }
         }
       `}</style>
