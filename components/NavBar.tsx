@@ -30,6 +30,9 @@ export const NavBar: React.FC = () => {
           <NavLink to="/journey" className={navLinkClass}>
             ROBIN'S JOURNEY
           </NavLink>
+          <NavLink to="/spitfire" className={navLinkClass}>
+            THE SPITFIRE
+          </NavLink>
           <NavLink to="/gallery" className={navLinkClass}>
             GALLERY
           </NavLink>
@@ -55,7 +58,7 @@ export const NavBar: React.FC = () => {
       {/* Mobile Nav Menu */}
       <div
         className={`overflow-hidden transition-all duration-300 ease-in-out md:hidden ${
-          isMobileMenuOpen ? 'max-h-48 border-t border-stone-800' : 'max-h-0'
+          isMobileMenuOpen ? 'max-h-64 border-t border-stone-800' : 'max-h-0'
         }`}
       >
         <div className="py-2 bg-stone-950">
@@ -72,6 +75,13 @@ export const NavBar: React.FC = () => {
             onClick={() => setIsMobileMenuOpen(false)}
           >
             ROBIN'S JOURNEY
+          </NavLink>
+          <NavLink 
+            to="/spitfire" 
+            className={mobileNavLinkClass}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            THE SPITFIRE
           </NavLink>
           <NavLink 
             to="/gallery" 

@@ -323,3 +323,150 @@
   animation: fadeIn 0.4s ease-out;
 }
 
+/* Spitfire Interactive Page Styles */
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+/* Propeller spin animation */
+@keyframes propeller-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.propeller-spinning {
+  animation: propeller-spin 0.08s linear infinite;
+}
+
+/* Hotspot pulse animation */
+@keyframes hotspot-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 currentColor;
+    opacity: 1;
+  }
+  50% { 
+    box-shadow: 0 0 20px 4px currentColor;
+    opacity: 0.8;
+  }
+}
+
+.hotspot-pulse {
+  animation: hotspot-pulse 2s ease-in-out infinite;
+}
+
+/* Gauge needle animation */
+@keyframes gauge-wobble {
+  0%, 100% { transform: translateX(-50%) rotate(var(--gauge-angle)); }
+  25% { transform: translateX(-50%) rotate(calc(var(--gauge-angle) + 2deg)); }
+  75% { transform: translateX(-50%) rotate(calc(var(--gauge-angle) - 2deg)); }
+}
+
+.gauge-needle-running {
+  animation: gauge-wobble 0.5s ease-in-out infinite;
+}
+
+/* Engine vibration effect */
+@keyframes engine-vibrate {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(0.5px, -0.5px); }
+  50% { transform: translate(-0.5px, 0.5px); }
+  75% { transform: translate(0.5px, 0.5px); }
+}
+
+.engine-running {
+  animation: engine-vibrate 0.05s linear infinite;
+}
+
+/* Exhaust glow animation */
+@keyframes exhaust-glow {
+  0%, 100% { opacity: 0.3; filter: blur(12px); }
+  50% { opacity: 0.6; filter: blur(16px); }
+}
+
+.exhaust-glow {
+  animation: exhaust-glow 0.3s ease-in-out infinite;
+}
+
+/* Radiator airflow animation */
+@keyframes airflow {
+  0% { transform: translateX(0) scaleX(1); opacity: 0.6; }
+  100% { transform: translateX(20px) scaleX(1.5); opacity: 0; }
+}
+
+.airflow-particle {
+  animation: airflow 0.8s linear infinite;
+}
+
+/* Spotlight sweep effect */
+@keyframes spotlight-sweep {
+  0%, 100% { opacity: 0.1; transform: translateX(-10%); }
+  50% { opacity: 0.2; transform: translateX(10%); }
+}
+
+.spotlight-sweep {
+  animation: spotlight-sweep 8s ease-in-out infinite;
+}
+
+/* Cinematic reveal animation */
+@keyframes cinematic-reveal {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+.cinematic-reveal {
+  animation: cinematic-reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Info panel slide-in */
+@keyframes slide-up-fade {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up-fade {
+  animation: slide-up-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Temperature warning flash */
+@keyframes temp-warning {
+  0%, 100% { background-color: rgba(239, 68, 68, 0.2); }
+  50% { background-color: rgba(239, 68, 68, 0.4); }
+}
+
+.temp-warning {
+  animation: temp-warning 0.5s ease-in-out infinite;
+}
+
+/* Reduced motion preferences for Spitfire page */
+@media (prefers-reduced-motion: reduce) {
+  .propeller-spinning,
+  .hotspot-pulse,
+  .gauge-needle-running,
+  .engine-running,
+  .exhaust-glow,
+  .airflow-particle,
+  .spotlight-sweep,
+  .temp-warning {
+    animation: none;
+  }
+  
+  .cinematic-reveal,
+  .slide-up-fade {
+    animation-duration: 0.01ms;
+  }
+}
+

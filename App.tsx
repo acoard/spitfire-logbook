@@ -5,6 +5,7 @@ import { NavBar } from './components/NavBar';
 import { Gallery } from './components/Gallery';
 import { HeroJourney } from './components/HeroJourney';
 import FlightBookView from './components/FlightBookView';
+import { SpitfireInteractive } from './components/SpitfireInteractive';
 
 const App: React.FC = () => {
   const [isAssetsLoading, setIsAssetsLoading] = useState(true);
@@ -31,6 +32,7 @@ const App: React.FC = () => {
               <Routes>
                 <Route path="/" element={<FlightBookView />} />
                 <Route path="/journey" element={<HeroJourney />} />
+                <Route path="/spitfire" element={<SpitfireInteractive />} />
                 <Route path="/gallery" element={<Gallery />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
