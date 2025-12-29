@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Info, ChevronRight, Gauge, Wind, Plane, Target, Cog, Thermometer, Power, Lightbulb } from 'lucide-react';
+import { X, Info, ChevronRight, Gauge, Wind, Plane, Target, Cog, Thermometer, Power, Lightbulb, Volume2 } from 'lucide-react';
 
 // ============================================================================
 // POSITIONING CONSTANTS - Adjust these values to fine-tune overlay positions
@@ -615,61 +615,84 @@ const CockpitPanel: React.FC<CockpitPanelProps> = ({
                   disabled={!isEngineRunning}
                 />
               </div>
-              {/* Hint text */}
-              <p className="text-stone-600 text-[9px] mt-2 max-w-[160px] text-center leading-relaxed">
-                Tip: Increase Prop RPM before Throttle
+            {/* Hint text */}
+            <div className="text-stone-500 text-[8px] mt-2 max-w-[160px] text-center leading-relaxed space-y-1">
+              <p className="text-amber-500/80">
+                ✦ Increase Prop RPM (blue) before advancing Throttle (red)
+              </p>
+              <p className="text-stone-600">
+                Drag the levers up/down to adjust
               </p>
             </div>
+          </div>
             
             {/* Engine and Radiator controls */}
             <div className="flex flex-col gap-2 w-full">
-              {/* Engine starter button */}
+            {/* Engine starter button - Magnetos */}
+            <button
+              onClick={onToggleEngine}
+              className={`relative group flex items-center gap-3 px-4 py-2 rounded-xl border-2 transition-all duration-300 ${
+                isEngineRunning
+                  ? 'bg-red-500/20 border-red-500 shadow-lg shadow-red-500/30'
+                  : 'bg-stone-800/80 border-stone-600 hover:border-amber-500/50 hover:bg-stone-700/50'
+              }`}
+            >
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 ${
+                isEngineRunning 
+                  ? 'bg-red-500 shadow-lg shadow-red-500/50' 
+                  : 'bg-stone-700 group-hover:bg-amber-500/20'
+              }`}>
+                <Power className={`w-3.5 h-3.5 ${isEngineRunning ? 'text-white' : 'text-stone-400 group-hover:text-amber-400'}`} />
+              </div>
+              <div className="text-left">
+                <p className={`text-[11px] font-medium uppercase tracking-wider ${
+                  isEngineRunning ? 'text-red-400' : 'text-stone-300'
+                }`}>
+                  {isEngineRunning ? 'Mags Off' : 'Mags On'}
+                </p>
+                <p className="text-[8px] text-stone-500">{isEngineRunning ? 'Cut Engine' : 'Start Engine'}</p>
+              </div>
+            </button>
+            
+            {/* Radiator lever */}
+            <div className={`flex items-center justify-between gap-2 px-3 py-2 rounded-xl border transition-all duration-300 ${
+              showTempWarning 
+                ? 'bg-red-500/20 border-red-500 animate-pulse' 
+                : 'bg-stone-800/50 border-stone-700'
+            }`}>
+              <span className={`text-[9px] uppercase tracking-wider transition-colors ${
+                showTempWarning ? 'text-red-400 font-medium' : 'text-stone-500'
+              }`}>Radiator</span>
               <button
-                onClick={onToggleEngine}
-                className={`relative group flex items-center gap-3 px-4 py-2 rounded-xl border-2 transition-all duration-300 ${
-                  isEngineRunning
-                    ? 'bg-red-500/20 border-red-500 shadow-lg shadow-red-500/30'
-                    : 'bg-stone-800/80 border-stone-600 hover:border-amber-500/50 hover:bg-stone-700/50'
+                onClick={onToggleRadiator}
+                className={`relative w-12 h-6 rounded-full transition-all duration-300 ${
+                  radiatorOpen 
+                    ? 'bg-emerald-500/30 border-2 border-emerald-500' 
+                    : showTempWarning
+                      ? 'bg-red-500/30 border-2 border-red-500'
+                      : 'bg-stone-700 border-2 border-stone-600'
                 }`}
               >
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 ${
-                  isEngineRunning 
-                    ? 'bg-red-500 shadow-lg shadow-red-500/50' 
-                    : 'bg-stone-700 group-hover:bg-amber-500/20'
-                }`}>
-                  <Power className={`w-3.5 h-3.5 ${isEngineRunning ? 'text-white' : 'text-stone-400 group-hover:text-amber-400'}`} />
-                </div>
-                <div className="text-left">
-                  <p className={`text-[11px] font-medium uppercase tracking-wider ${
-                    isEngineRunning ? 'text-red-400' : 'text-stone-300'
-                  }`}>
-                    {isEngineRunning ? 'Stop' : 'Start'}
-                  </p>
-                </div>
-              </button>
-              
-              {/* Radiator lever */}
-              <div className="flex items-center justify-between gap-2 px-3 py-2 bg-stone-800/50 rounded-xl border border-stone-700">
-                <span className="text-stone-500 text-[9px] uppercase tracking-wider">Rad</span>
-                <button
-                  onClick={onToggleRadiator}
-                  className={`relative w-12 h-6 rounded-full transition-all duration-300 ${
+                <div 
+                  className={`absolute top-0.5 w-4 h-4 rounded-full transition-all duration-300 ${
                     radiatorOpen 
-                      ? 'bg-emerald-500/30 border-2 border-emerald-500' 
-                      : 'bg-stone-700 border-2 border-stone-600'
+                      ? 'left-6 bg-emerald-400 shadow-lg shadow-emerald-500/50' 
+                      : 'left-0.5 bg-stone-500'
                   }`}
-                >
-                  <div 
-                    className={`absolute top-0.5 w-4 h-4 rounded-full transition-all duration-300 ${
-                      radiatorOpen 
-                        ? 'left-6 bg-emerald-400 shadow-lg shadow-emerald-500/50' 
-                        : 'left-0.5 bg-stone-500'
-                    }`}
-                  />
-                </button>
-              </div>
+                />
+              </button>
             </div>
+            
+            {/* Sound toggle (placeholder) */}
+            <button
+              onClick={() => alert('Engine sound coming soon! The Merlin\'s distinctive roar will be available in a future update.')}
+              className="flex items-center gap-2 px-3 py-2 bg-stone-800/50 rounded-xl border border-stone-700 hover:border-stone-600 transition-colors"
+            >
+              <Volume2 className="w-4 h-4 text-stone-500" />
+              <span className="text-[9px] text-stone-500 uppercase tracking-wider">Sound</span>
+            </button>
           </div>
+        </div>
           
           {/* Right side - Instruments */}
           <div className="flex-1 space-y-4">
@@ -701,15 +724,18 @@ const CockpitPanel: React.FC<CockpitPanelProps> = ({
                     size="lg"
                   />
                 </div>
-                {/* Climb Rate */}
+                {/* Climb Rate - Vertical Speed Indicator */}
                 <div className="flex flex-col items-center">
                   <CockpitGauge 
-                    label="Climb" 
+                    label="V/S" 
                     value={Math.abs(gaugeValues.climbRate)} 
                     max={5000} 
-                    unit={gaugeValues.climbRate >= 0 ? '↑' : '↓'} 
+                    unit=" ft/min" 
                     size="lg"
                   />
+                  <span className={`text-[9px] mt-0.5 ${gaugeValues.climbRate > 0 ? 'text-emerald-400' : gaugeValues.climbRate < 0 ? 'text-red-400' : 'text-stone-500'}`}>
+                    {gaugeValues.climbRate > 0 ? '▲ Climbing' : gaugeValues.climbRate < 0 ? '▼ Descending' : '— Level'}
+                  </span>
                 </div>
                 {/* Heading - Custom directional gyro */}
                 <div className="flex flex-col items-center">
@@ -794,6 +820,58 @@ const CockpitPanel: React.FC<CockpitPanelProps> = ({
                     warningThreshold={20}
                     dangerThreshold={10}
                   />
+                </div>
+              </div>
+            </div>
+            
+            {/* Dynamic Tips Section */}
+            <div className="mt-4 p-3 bg-stone-950/50 rounded-lg border border-stone-800">
+              <div className="flex items-start gap-2">
+                <Lightbulb className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+                <div className="text-[10px] text-stone-400 leading-relaxed">
+                  {!isEngineRunning && (
+                    <p>
+                      <span className="text-amber-400">Ready to fly?</span> Click "Mags On" to start the Merlin engine. 
+                      The magnetos provide the electrical spark to ignite the fuel-air mixture.
+                    </p>
+                  )}
+                  {isEngineRunning && throttle < 20 && propPitch < 20 && (
+                    <p>
+                      <span className="text-amber-400">Engine running at idle.</span> To build up speed and climb, 
+                      first increase Prop RPM (blue lever), then advance Throttle (red lever). 
+                      This prevents over-boosting the supercharger.
+                    </p>
+                  )}
+                  {isEngineRunning && propPitch >= 20 && throttle < propPitch && (
+                    <p>
+                      <span className="text-emerald-400">Good technique!</span> You've increased RPM first. 
+                      Now advance the throttle to build power. Watch your airspeed and altitude climb!
+                    </p>
+                  )}
+                  {isEngineRunning && throttle > propPitch + 20 && (
+                    <p>
+                      <span className="text-red-400">Caution!</span> Throttle is ahead of RPM—this can over-boost the engine. 
+                      Increase Prop RPM to match or exceed throttle setting.
+                    </p>
+                  )}
+                  {isEngineRunning && throttle >= 50 && propPitch >= 50 && gaugeValues.altitude < 1000 && (
+                    <p>
+                      <span className="text-sky-400">Gaining altitude!</span> The Spitfire Mk IX could climb at nearly 
+                      5,000 ft/min at sea level. At higher altitudes, the two-stage supercharger maintains power.
+                    </p>
+                  )}
+                  {isEngineRunning && gaugeValues.altitude >= 30000 && (
+                    <p>
+                      <span className="text-purple-400">High altitude!</span> Above 30,000 ft, the air is thin. 
+                      The Merlin's supercharger automatically shifts to high gear, maintaining power where other engines fail.
+                    </p>
+                  )}
+                  {showTempWarning && (
+                    <p>
+                      <span className="text-red-400">Overheating!</span> Open the radiator flap immediately. 
+                      The underwing radiator uses a glycol-water coolant mix. Overheating can cause engine seizure.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
