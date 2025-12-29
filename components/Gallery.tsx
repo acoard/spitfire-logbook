@@ -23,6 +23,71 @@ const LOGBOOK_PAGES = Array.from({ length: 29 }, (_, i) => {
   };
 });
 
+// Virtualized logbook page component - only loads image when in viewport
+const LogbookPageItem: React.FC<{
+  page: typeof LOGBOOK_PAGES[0];
+  onClick: () => void;
+}> = React.memo(({ page, onClick }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' } // Start loading 200px before visible
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      id={`logbook-page-${page.id}`}
+      className="cursor-pointer bg-stone-800 rounded-lg overflow-hidden border border-stone-700 hover:border-amber-500/50 scroll-mt-24"
+      onClick={onClick}
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px' }}
+    >
+      <div className="relative" style={{ aspectRatio: '1.414' }}>
+        {isVisible ? (
+          <>
+            <img
+              src={page.src}
+              alt={page.label}
+              className={`w-full h-full object-cover ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+              onLoad={() => setIsLoaded(true)}
+              decoding="async"
+            />
+            {!isLoaded && (
+              <div className="absolute inset-0 bg-stone-700 animate-pulse flex items-center justify-center">
+                <span className="text-stone-500 font-mono text-sm">{page.id}</span>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="absolute inset-0 bg-stone-700 flex items-center justify-center">
+            <span className="text-stone-500 font-mono text-sm">{page.id}</span>
+          </div>
+        )}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 flex items-center justify-between">
+          <span className="text-stone-200 font-mono text-xs sm:text-sm">{page.label}</span>
+          <span className="text-stone-400 font-mono text-xs">{page.id}.jpg</span>
+        </div>
+      </div>
+    </div>
+  );
+});
+
 // Historical videos about WW2 Spitfires and RAF operations
 const HISTORICAL_VIDEOS = [
   {
@@ -208,26 +273,37 @@ export const Gallery: React.FC = () => {
                   Original handwritten pages from 1944-1946. Tap any page to view full size.
                 </p>
               </div>
+
+              {/* Quick Jump Page Selector - NOT sticky for performance */}
+              <div className="mb-6 bg-stone-800 rounded-xl border border-stone-700 p-3 sm:p-4">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                  <span className="text-stone-400 text-xs sm:text-sm font-medium shrink-0">Jump to:</span>
+                  <select
+                    onChange={(e) => {
+                      const pageElement = document.getElementById(`logbook-page-${e.target.value}`);
+                      pageElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }}
+                    className="bg-stone-700 border border-stone-600 rounded-lg px-3 py-2 text-stone-200 font-mono text-sm focus:outline-none focus:border-amber-500"
+                    defaultValue=""
+                  >
+                    <option value="" disabled>Select page...</option>
+                    {LOGBOOK_PAGES.map((page) => (
+                      <option key={page.id} value={page.id}>
+                        {page.id}.jpg - {page.label}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="text-stone-500 text-xs ml-auto">{LOGBOOK_PAGES.length} pages</span>
+                </div>
+              </div>
               
               <div className="space-y-3 sm:space-y-4">
                 {LOGBOOK_PAGES.map((page, index) => (
-                  <div
+                  <LogbookPageItem
                     key={page.id}
-                    className="group cursor-pointer bg-stone-800 rounded-lg overflow-hidden border border-stone-700 hover:border-amber-500/50 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.99] transition-transform"
+                    page={page}
                     onClick={() => setSelectedLogbookIndex(index)}
-                  >
-                    <div className="relative">
-                      <img
-                        src={page.src}
-                        alt={page.label}
-                        className="w-full h-auto opacity-90 group-hover:opacity-100 transition-opacity duration-300"
-                        loading="lazy"
-                      />
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 sm:p-4">
-                        <span className="text-stone-200 font-mono text-xs sm:text-sm">{page.label}</span>
-                      </div>
-                    </div>
-                  </div>
+                  />
                 ))}
               </div>
             </div>
@@ -410,29 +486,43 @@ export const Gallery: React.FC = () => {
       {/* Logbook Fullscreen Viewer */}
       {selectedLogbookIndex !== null && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm touch-none"
+          className="fixed inset-0 z-50 flex flex-col bg-black/95 backdrop-blur-sm touch-none"
           onClick={() => setSelectedLogbookIndex(null)}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
+          {/* Top bar with filename and controls */}
           <div 
-            className="relative w-full h-full flex items-center justify-center p-2 sm:p-4"
+            className="shrink-0 flex items-center justify-between px-3 sm:px-6 py-2 sm:py-3 bg-black/80 border-b border-stone-800"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button - larger touch target on mobile */}
-            <button
-              onClick={() => setSelectedLogbookIndex(null)}
-              className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 p-2.5 sm:p-2 bg-black/60 hover:bg-black/80 rounded-full text-stone-200 hover:text-white transition-colors"
-              aria-label="Close"
-            >
-              <X size={20} className="sm:w-6 sm:h-6" />
-            </button>
-
-            {/* Page counter */}
-            <div className="absolute top-2 sm:top-4 left-1/2 -translate-x-1/2 bg-black/60 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-stone-200 font-mono text-xs sm:text-sm">
-              {selectedLogbookIndex + 1} / {LOGBOOK_PAGES.length}
+            <div className="flex items-center gap-3 sm:gap-4">
+              <span className="text-amber-500 font-mono text-sm sm:text-base font-medium">
+                {LOGBOOK_PAGES[selectedLogbookIndex].id}.jpg
+              </span>
+              <span className="text-stone-500 text-xs sm:text-sm hidden sm:inline">
+                {LOGBOOK_PAGES[selectedLogbookIndex].label}
+              </span>
             </div>
+            <div className="flex items-center gap-2 sm:gap-4">
+              <span className="text-stone-400 font-mono text-xs sm:text-sm">
+                {selectedLogbookIndex + 1} / {LOGBOOK_PAGES.length}
+              </span>
+              <button
+                onClick={() => setSelectedLogbookIndex(null)}
+                className="p-2 bg-stone-800/60 hover:bg-stone-700 rounded-lg text-stone-200 hover:text-white transition-colors"
+                aria-label="Close"
+              >
+                <X size={20} />
+              </button>
+            </div>
+          </div>
 
+          {/* Main image area */}
+          <div 
+            className="relative flex-1 flex items-center justify-center p-2 sm:p-4 min-h-0"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Navigation buttons - hidden on mobile (use swipe), visible on tablet+ */}
             <button
               onClick={(e) => {
@@ -440,7 +530,7 @@ export const Gallery: React.FC = () => {
                 setSelectedLogbookIndex(Math.max(0, selectedLogbookIndex - 1));
               }}
               disabled={selectedLogbookIndex === 0}
-              className="hidden sm:block absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 bg-black/60 hover:bg-black/80 disabled:opacity-30 disabled:cursor-not-allowed rounded-full text-stone-200 hover:text-white transition-colors"
+              className="hidden sm:flex absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 bg-black/60 hover:bg-black/80 disabled:opacity-30 disabled:cursor-not-allowed rounded-full text-stone-200 hover:text-white transition-colors items-center justify-center"
               aria-label="Previous page"
             >
               <ChevronLeft size={24} className="sm:w-8 sm:h-8" />
@@ -451,51 +541,69 @@ export const Gallery: React.FC = () => {
                 setSelectedLogbookIndex(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1));
               }}
               disabled={selectedLogbookIndex === LOGBOOK_PAGES.length - 1}
-              className="hidden sm:block absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 bg-black/60 hover:bg-black/80 disabled:opacity-30 disabled:cursor-not-allowed rounded-full text-stone-200 hover:text-white transition-colors"
+              className="hidden sm:flex absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 bg-black/60 hover:bg-black/80 disabled:opacity-30 disabled:cursor-not-allowed rounded-full text-stone-200 hover:text-white transition-colors items-center justify-center"
               aria-label="Next page"
             >
               <ChevronRight size={24} className="sm:w-8 sm:h-8" />
             </button>
 
-            {/* Mobile navigation buttons - at bottom for easy thumb access */}
-            <div className="sm:hidden absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-6 bg-black/60 rounded-full px-4 py-2">
+            {/* Image - fills available space */}
+            <img
+              src={LOGBOOK_PAGES[selectedLogbookIndex].src}
+              alt={LOGBOOK_PAGES[selectedLogbookIndex].label}
+              className="max-h-full max-w-[95vw] sm:max-w-[85vw] object-contain shadow-2xl rounded-lg"
+            />
+          </div>
+
+          {/* Bottom navigation bar */}
+          <div 
+            className="shrink-0 bg-black/90 border-t border-stone-800 py-2 sm:py-3 px-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-center gap-3 sm:gap-4">
+              {/* Prev button */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   setSelectedLogbookIndex(Math.max(0, selectedLogbookIndex - 1));
                 }}
                 disabled={selectedLogbookIndex === 0}
-                className="p-2 disabled:opacity-30 disabled:cursor-not-allowed text-stone-200 active:text-amber-500 transition-colors"
+                className="p-2 bg-stone-800 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg text-stone-200 hover:bg-stone-700"
                 aria-label="Previous page"
               >
-                <ChevronLeft size={28} />
+                <ChevronLeft size={20} />
               </button>
-              <span className="text-stone-400 text-xs font-mono min-w-[4rem] text-center">
-                {selectedLogbookIndex + 1} / {LOGBOOK_PAGES.length}
-              </span>
+
+              {/* Page selector dropdown */}
+              <select
+                value={selectedLogbookIndex}
+                onChange={(e) => setSelectedLogbookIndex(Number(e.target.value))}
+                className="bg-stone-800 border border-stone-600 rounded-lg px-3 py-2 text-stone-200 font-mono text-sm focus:outline-none focus:border-amber-500"
+              >
+                {LOGBOOK_PAGES.map((page, index) => (
+                  <option key={page.id} value={index}>
+                    {page.id}.jpg
+                  </option>
+                ))}
+              </select>
+
+              {/* Next button */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   setSelectedLogbookIndex(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1));
                 }}
                 disabled={selectedLogbookIndex === LOGBOOK_PAGES.length - 1}
-                className="p-2 disabled:opacity-30 disabled:cursor-not-allowed text-stone-200 active:text-amber-500 transition-colors"
+                className="p-2 bg-stone-800 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg text-stone-200 hover:bg-stone-700"
                 aria-label="Next page"
               >
-                <ChevronRight size={28} />
+                <ChevronRight size={20} />
               </button>
-            </div>
 
-            {/* Image - fills available space */}
-            <img
-              src={LOGBOOK_PAGES[selectedLogbookIndex].src}
-              alt={LOGBOOK_PAGES[selectedLogbookIndex].label}
-              className="max-h-[85vh] sm:max-h-[90vh] max-w-[95vw] sm:max-w-[90vw] object-contain shadow-2xl rounded-lg"
-            />
-
-            {/* Keyboard hint - desktop only */}
-            <div className="hidden md:block absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 rounded-full px-4 py-2 text-stone-400 text-xs">
-              Use ← → arrow keys to navigate • ESC to close
+              {/* Desktop keyboard hint */}
+              <span className="hidden md:inline text-stone-500 text-xs ml-4">
+                ← → keys • ESC close
+              </span>
             </div>
           </div>
         </div>
