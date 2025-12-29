@@ -455,7 +455,7 @@ export const FLIGHT_LOG: LogEntry[] = [
         phase: Phase.COMBAT,
         aircraftType: 'Spitfire IX',
         aircraftCategory: AircraftCategory.FIGHTER,
-        duty: 'Ramrod',
+        duty: 'Ranger',
         time: '1:25',
         remarks: 'Low level sweep N. France.',
         origin: LOCATIONS.LYMPNE,
@@ -463,9 +463,10 @@ export const FLIGHT_LOG: LogEntry[] = [
         targetIsApproximate: true,
         destination: LOCATIONS.LYMPNE,
         isSignificant: true,
-        historicalNote: "Ramrod was another name for a bombing escort mission. Usually bombing escorts were high altitude, but this time Robin reports going low and hitting an anti-air site. Attacking anti-air was one of the most dangerous missions for a pilot.",
+        historicalNote: "A 'ranger' mission was an offensive sweep into enemy territory without a fixed target. Robin found a Luftwaffe base and took out one of the most dangerous targets for a pilot: anti-aircraft. This would be incredibly brave.",
+        // historicalNote: "Ramrod was another name for a bombing escort mission. Usually bombing escorts were high altitude, but this time Robin reports going low and hitting an anti-air site. Attacking anti-air was one of the most dangerous missions for a pilot.",
         sourceDocument: '064.jpg',
-        pilotNotes: 'Just one flight (low level sweep in N. France). We flew well into occupied France at about 15,000ft and flew low level sweep in open formation. At one point we swept across an airfield and I wiped out the crew of an A.A. post scrambling to train their guns on the landing planes.'
+        pilotNotes: "Just one flight (4 planes) we flew well into occupied France at about 15,000' and dove down for a low level sweep in open formation. At one point we swept across a Luftwaffe airfield and I wiped out the crew of an A.A. post scrambling to train their gun on the leading planes."
     },
     // August 1944: SKEABRAE (Orkneys) & SUMBURGH (Shetlands) - defense patrols
     // First period at Skeabrae

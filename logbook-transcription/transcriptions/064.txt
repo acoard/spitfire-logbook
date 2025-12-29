@@ -22,7 +22,7 @@ Lympne
 | " | 4 | " | Z | " | Lympne - Tangmere | .30 |
 | " | 6 | " | R | " | Bomber Escort | 1.20 |
 | " | 8 | " | W | " | " | 1.25 |
-| " | 31 | " | F | " | Ranber | 1.25 |
+| " | 31 | " | F | " | Ranger | 1.25 |
 | " | 31 | " | F | " | Air Test | .05 |
 
 # TOTALS MONTH
@@ -34,7 +34,7 @@ Lympne
 
 # NOTES
 - Right page, July 2nd: The V.1 A.A.F (German show) 700-800 per hour daylight-raids on Caen. The pattern bombing was devastating. So was the ack ack.
-- Right page, July 8th: Just one flight (low level sweep in N. France) We flew well into occupied France at about 15.000ft and flew low level sweep in open formation. At one point we swept across a airfield and I wiped out the crew of an A.A. port scrambling to train landing planes.
+- Right page, July 8th: "Just one flight (4 planes) we flew well into occupied France at about 15,000' and dove down for a low level sweep in open formation. At one point we swept across a Luftwaffe airfield and I wiped out the crew of an A.A. post scrambling to train their gun on the leading planes."
 - Mid-right page: Masaryk
 - Mid-right page below Masaryk: F/Lt OC B Flight
 - Mid-right page below F/Lt OC B Flight: Hochmalek 9/20 oc. 313 Sqdn.
