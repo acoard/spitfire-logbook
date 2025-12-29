@@ -33,7 +33,9 @@ const App: React.FC = () => {
                 <Route path="/" element={<FlightBookView />} />
                 <Route path="/journey" element={<HeroJourney />} />
                 <Route path="/spitfire" element={<SpitfireInteractive />} />
-                <Route path="/gallery" element={<Gallery />} />
+                <Route path="/gallery" element={<Navigate to="/gallery/photos" replace />} />
+                <Route path="/gallery/:tab" element={<Gallery />} />
+                <Route path="/gallery/:tab/:itemId" element={<Gallery />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </div>

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, TouchEvent } from 'react';
+import { useParams, useNavigate, Link, Navigate } from 'react-router-dom';
 import { FLIGHT_LOG } from '../services/flightData';
 import { MissionBriefSlide } from '../types';
 import { X, ChevronLeft, ChevronRight, Images, BookOpen, Film, Play, ArrowLeft } from 'lucide-react';
@@ -110,11 +111,13 @@ const HISTORICAL_VIDEOS = [
   },
 ];
 
+const VALID_TABS: GalleryTab[] = ['photos', 'logbook', 'videos'];
+
 export const Gallery: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<GalleryTab>('photos');
-  const [selectedSlide, setSelectedSlide] = useState<GalleryItem | null>(null);
-  const [selectedLogbookIndex, setSelectedLogbookIndex] = useState<number | null>(null);
-  const [expandedVideoId, setExpandedVideoId] = useState<string | null>(null);
+  const { tab, itemId } = useParams<{ tab: string; itemId?: string }>();
+  const navigate = useNavigate();
+  const activeTab = (VALID_TABS.includes(tab as GalleryTab) ? tab : 'photos') as GalleryTab;
+  
   const logbookContainerRef = useRef<HTMLDivElement>(null);
   
   // Touch handling for swipe gestures
@@ -131,9 +134,41 @@ export const Gallery: React.FC = () => {
     }));
   });
 
-  const tabClass = (tab: GalleryTab) =>
-    `flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2.5 text-xs sm:text-sm font-medium tracking-wide transition-all duration-200 border-b-2 flex-1 sm:flex-initial ${
-      activeTab === tab
+  // Derive selected items from URL
+  const selectedSlide = activeTab === 'photos' && itemId 
+    ? galleryItems.find(item => item.id === itemId) || null 
+    : null;
+  
+  const selectedLogbookIndex = activeTab === 'logbook' && itemId 
+    ? LOGBOOK_PAGES.findIndex(page => page.id === itemId)
+    : -1;
+  const hasSelectedLogbook = selectedLogbookIndex >= 0;
+  
+  const expandedVideoId = activeTab === 'videos' && itemId 
+    ? HISTORICAL_VIDEOS.find(v => v.id === itemId)?.youtubeId || null
+    : null;
+
+  // Navigation helpers
+  const openPhoto = (photo: GalleryItem) => navigate(`/gallery/photos/${photo.id}`);
+  const closePhoto = () => navigate('/gallery/photos');
+  
+  const openLogbook = (index: number) => navigate(`/gallery/logbook/${LOGBOOK_PAGES[index].id}`);
+  const closeLogbook = () => navigate('/gallery/logbook');
+  const navigateLogbook = (newIndex: number) => {
+    if (newIndex >= 0 && newIndex < LOGBOOK_PAGES.length) {
+      navigate(`/gallery/logbook/${LOGBOOK_PAGES[newIndex].id}`, { replace: true });
+    }
+  };
+  
+  const openVideo = (videoId: string) => {
+    const video = HISTORICAL_VIDEOS.find(v => v.youtubeId === videoId);
+    if (video) navigate(`/gallery/videos/${video.id}`);
+  };
+  const closeVideo = () => navigate('/gallery/videos');
+
+  const tabClass = (tabName: GalleryTab) =>
+    `flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2.5 text-xs sm:text-sm font-medium tracking-wide border-b-2 flex-1 sm:flex-initial ${
+      activeTab === tabName
         ? 'text-amber-500 border-amber-500 bg-stone-800/50'
         : 'text-stone-400 border-transparent hover:text-stone-200 hover:bg-stone-800/30'
     }`;
@@ -143,27 +178,29 @@ export const Gallery: React.FC = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         if (expandedVideoId) {
-          setExpandedVideoId(null);
-        } else if (selectedLogbookIndex !== null) {
-          setSelectedLogbookIndex(null);
+          closeVideo();
+        } else if (hasSelectedLogbook) {
+          closeLogbook();
+        } else if (selectedSlide) {
+          closePhoto();
         }
         return;
       }
       
-      if (selectedLogbookIndex === null) return;
+      if (!hasSelectedLogbook) return;
       
       if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
         e.preventDefault();
-        setSelectedLogbookIndex(Math.max(0, selectedLogbookIndex - 1));
+        navigateLogbook(Math.max(0, selectedLogbookIndex - 1));
       } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         e.preventDefault();
-        setSelectedLogbookIndex(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1));
+        navigateLogbook(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1));
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedLogbookIndex, expandedVideoId]);
+  }, [selectedLogbookIndex, hasSelectedLogbook, expandedVideoId, selectedSlide]);
 
   // Touch handlers for swipe navigation in logbook viewer
   const handleTouchStart = (e: TouchEvent) => {
@@ -172,7 +209,7 @@ export const Gallery: React.FC = () => {
   };
 
   const handleTouchEnd = (e: TouchEvent) => {
-    if (touchStartX.current === null || touchStartY.current === null || selectedLogbookIndex === null) return;
+    if (touchStartX.current === null || touchStartY.current === null || !hasSelectedLogbook) return;
     
     const touchEndX = e.changedTouches[0].clientX;
     const touchEndY = e.changedTouches[0].clientY;
@@ -183,10 +220,10 @@ export const Gallery: React.FC = () => {
     if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
       if (deltaX > 0) {
         // Swipe right - go to previous
-        setSelectedLogbookIndex(Math.max(0, selectedLogbookIndex - 1));
+        navigateLogbook(Math.max(0, selectedLogbookIndex - 1));
       } else {
         // Swipe left - go to next
-        setSelectedLogbookIndex(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1));
+        navigateLogbook(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1));
       }
     }
     
@@ -194,34 +231,39 @@ export const Gallery: React.FC = () => {
     touchStartY.current = null;
   };
 
+  // Redirect to valid tab if invalid
+  if (!VALID_TABS.includes(tab as GalleryTab)) {
+    return <Navigate to="/gallery/photos" replace />;
+  }
+
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-stone-900">
       {/* Tab Navigation */}
       <div className="flex border-b border-stone-700 bg-stone-950 shrink-0 overflow-x-auto">
-        <button
-          onClick={() => setActiveTab('photos')}
+        <Link
+          to="/gallery/photos"
           className={tabClass('photos')}
           aria-label="Photos"
         >
           <Images size={18} className="shrink-0" />
           <span className="truncate">Photos</span>
-        </button>
-        <button
-          onClick={() => setActiveTab('logbook')}
+        </Link>
+        <Link
+          to="/gallery/logbook"
           className={tabClass('logbook')}
           aria-label="Logbook"
         >
           <BookOpen size={18} className="shrink-0" />
           <span className="truncate">Logbook</span>
-        </button>
-        <button
-          onClick={() => setActiveTab('videos')}
+        </Link>
+        <Link
+          to="/gallery/videos"
           className={tabClass('videos')}
           aria-label="Videos"
         >
           <Film size={18} className="shrink-0" />
           <span className="truncate">Videos</span>
-        </button>
+        </Link>
       </div>
 
       {/* Tab Content */}
@@ -234,7 +276,7 @@ export const Gallery: React.FC = () => {
                 <div
                   key={item.id}
                   className="group relative flex flex-col bg-stone-800 rounded-lg overflow-hidden border border-stone-700 hover:border-amber-500/50 transition-colors cursor-pointer shadow-lg active:scale-[0.98] transition-transform"
-                  onClick={() => setSelectedSlide(item)}
+                  onClick={() => openPhoto(item)}
                 >
                   <div className="aspect-video w-full overflow-hidden bg-black">
                     <img
@@ -302,7 +344,7 @@ export const Gallery: React.FC = () => {
                   <LogbookPageItem
                     key={page.id}
                     page={page}
-                    onClick={() => setSelectedLogbookIndex(index)}
+                    onClick={() => openLogbook(index)}
                   />
                 ))}
               </div>
@@ -343,7 +385,7 @@ export const Gallery: React.FC = () => {
                     <div className="animate-fadeIn">
                       {/* Back Button */}
                       <button
-                        onClick={() => setExpandedVideoId(null)}
+                        onClick={() => closeVideo()}
                         className="flex items-center gap-2 mb-4 text-stone-400 hover:text-amber-500 transition-colors group"
                       >
                         <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
@@ -390,7 +432,7 @@ export const Gallery: React.FC = () => {
                   {HISTORICAL_VIDEOS.map((video, index) => (
                     <div
                       key={video.id}
-                      onClick={() => setExpandedVideoId(video.youtubeId)}
+                      onClick={() => openVideo(video.youtubeId)}
                       className="group cursor-pointer bg-stone-800 rounded-lg overflow-hidden border border-stone-700 hover:border-amber-500/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
                       style={{ 
                         animationDelay: `${index * 100}ms`,
@@ -436,7 +478,7 @@ export const Gallery: React.FC = () => {
               className={`fixed inset-0 bg-black/60 -z-10 transition-opacity duration-500 ${
                 expandedVideoId ? 'opacity-100' : 'opacity-0 pointer-events-none'
               }`}
-              onClick={() => setExpandedVideoId(null)}
+              onClick={() => closeVideo()}
             />
           </div>
         )}
@@ -446,7 +488,7 @@ export const Gallery: React.FC = () => {
       {selectedSlide && (
         <div 
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-2 sm:p-4 backdrop-blur-sm" 
-          onClick={() => setSelectedSlide(null)}
+          onClick={() => closePhoto()}
         >
           <div 
             className="relative bg-stone-800 rounded-lg w-full max-w-5xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border border-stone-600"
@@ -454,7 +496,7 @@ export const Gallery: React.FC = () => {
           >
             {/* Close button - larger touch target on mobile */}
             <button
-              onClick={() => setSelectedSlide(null)}
+              onClick={() => closePhoto()}
               className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 p-2 sm:p-2 bg-black/60 hover:bg-black/80 rounded-full text-stone-200 hover:text-white transition-colors"
               aria-label="Close"
             >
@@ -484,10 +526,10 @@ export const Gallery: React.FC = () => {
       )}
 
       {/* Logbook Fullscreen Viewer */}
-      {selectedLogbookIndex !== null && (
+      {hasSelectedLogbook && (
         <div 
           className="fixed inset-0 z-50 flex flex-col bg-black/95 backdrop-blur-sm touch-none"
-          onClick={() => setSelectedLogbookIndex(null)}
+          onClick={() => closeLogbook()}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
@@ -509,7 +551,7 @@ export const Gallery: React.FC = () => {
                 {selectedLogbookIndex + 1} / {LOGBOOK_PAGES.length}
               </span>
               <button
-                onClick={() => setSelectedLogbookIndex(null)}
+                onClick={() => closeLogbook()}
                 className="p-2 bg-stone-800/60 hover:bg-stone-700 rounded-lg text-stone-200 hover:text-white transition-colors"
                 aria-label="Close"
               >
@@ -527,7 +569,7 @@ export const Gallery: React.FC = () => {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                setSelectedLogbookIndex(Math.max(0, selectedLogbookIndex - 1));
+                navigateLogbook(Math.max(0, selectedLogbookIndex - 1));
               }}
               disabled={selectedLogbookIndex === 0}
               className="hidden sm:flex absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 bg-black/60 hover:bg-black/80 disabled:opacity-30 disabled:cursor-not-allowed rounded-full text-stone-200 hover:text-white transition-colors items-center justify-center"
@@ -538,7 +580,7 @@ export const Gallery: React.FC = () => {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                setSelectedLogbookIndex(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1));
+                navigateLogbook(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1));
               }}
               disabled={selectedLogbookIndex === LOGBOOK_PAGES.length - 1}
               className="hidden sm:flex absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 bg-black/60 hover:bg-black/80 disabled:opacity-30 disabled:cursor-not-allowed rounded-full text-stone-200 hover:text-white transition-colors items-center justify-center"
@@ -565,7 +607,7 @@ export const Gallery: React.FC = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setSelectedLogbookIndex(Math.max(0, selectedLogbookIndex - 1));
+                  navigateLogbook(Math.max(0, selectedLogbookIndex - 1));
                 }}
                 disabled={selectedLogbookIndex === 0}
                 className="p-2 bg-stone-800 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg text-stone-200 hover:bg-stone-700"
@@ -577,7 +619,7 @@ export const Gallery: React.FC = () => {
               {/* Page selector dropdown */}
               <select
                 value={selectedLogbookIndex}
-                onChange={(e) => setSelectedLogbookIndex(Number(e.target.value))}
+                onChange={(e) => navigateLogbook(Number(e.target.value))}
                 className="bg-stone-800 border border-stone-600 rounded-lg px-3 py-2 text-stone-200 font-mono text-sm focus:outline-none focus:border-amber-500"
               >
                 {LOGBOOK_PAGES.map((page, index) => (
@@ -591,7 +633,7 @@ export const Gallery: React.FC = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setSelectedLogbookIndex(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1));
+                  navigateLogbook(Math.min(LOGBOOK_PAGES.length - 1, selectedLogbookIndex + 1));
                 }}
                 disabled={selectedLogbookIndex === LOGBOOK_PAGES.length - 1}
                 className="p-2 bg-stone-800 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg text-stone-200 hover:bg-stone-700"
